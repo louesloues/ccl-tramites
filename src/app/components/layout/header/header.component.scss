@@ -1,0 +1,40 @@
+@use '@angular/material' as mat; // Para acceder a variables y mixins de Material
+
+mat-toolbar {
+  // El color="primary" ya usa el color primario del tema que definimos en _theme.scss.
+  // Podemos ajustar la altura si es necesario, o el padding.
+  // Por defecto, MatToolbar tiene una altura adecuada, pero se puede sobreescribir:
+  // height: 56px; // Material spec para mobile, 64px para desktop.
+  // padding: 0 16px;
+
+  &.mat-toolbar-single-row {
+    // Asegura que los elementos dentro de la toolbar estén bien alineados
+    display: flex;
+    align-items: center;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto; // Este es un truco común para empujar elementos a los extremos.
+}
+
+mat-tool-bar{
+  background-color: #ddf4ff;
+}
+// Ejemplo si tuviéramos un logo:
+// .header-logo {
+//   height: 32px; // o el tamaño que necesites
+//   margin-right: 16px;
+//   vertical-align: middle; // Para alinear bien con el texto si lo hay
+// }
+
+// Ejemplo si quisiéramos cambiar el color del título u otros elementos de texto:
+// span:not(.spacer) {
+//   // Para obtener el color de texto que contrasta con el fondo primario:
+//   color: mat.get-color-from-palette(mat.$grey-palette, 50); // Un gris claro si el primario es oscuro
+//   // O podrías usar las funciones de tema de Material para obtener el color de texto apropiado
+//   // color: mat.get-theme-color($mi-plugin-theme, primary-text); // Necesitaría pasar el tema}
+// Si quieres que el título sea un poco más prominente:
+// span:not(.spacer) {
+//   font-size: 1.25rem; // Ajusta según necesidad
+// }
