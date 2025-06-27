@@ -1,0 +1,188 @@
+/* Estilos para el StepperComponent */
+.wizard-container {
+  padding-top: 10px;
+  background: #fff;
+  position: relative;
+}
+
+.wizard-step {
+  padding: 0;
+  position: relative;
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 100px; /* Ajusta según sea necesario */
+}
+
+.nav-tabs {
+  border-bottom: none; /* Remover línea inferior de tabs por defecto */
+}
+
+.nav-tabs .nav-link {
+  border: 1px solid transparent;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  color: #495057; /* Color de texto por defecto */
+  text-align: center;
+  padding: 1rem; /* Ajusta el padding según sea necesario */
+}
+
+.nav-tabs .nav-link.active {
+  color: #007bff; /* Color de texto para el tab activo */
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  border-bottom: 3px solid #007bff !important; /* Línea azul debajo del tab activo */
+}
+
+.nav-tabs .nav-link:not(.active) {
+    border-bottom: 3px solid #dee2e6 !important; /* Línea gris para tabs inactivos */
+}
+
+
+.nav-tabs .nav-link.completed {
+  /* Estilos para pasos completados si es necesario */
+}
+
+
+.step-title {
+  font-size: 0.9rem; /* Ajusta el tamaño de fuente según sea necesario */
+  font-weight: bold;
+}
+
+/* Estilos para deshabilitar pointer-events en pasos futuros */
+.nav-item[style*="pointer-events: none;"] .nav-link {
+  color: #adb5bd; /* Color más claro para indicar deshabilitado */
+  cursor: not-allowed;
+}
+
+.tab-content > .tab-pane {
+  display: none;
+}
+
+.tab-content > .active {
+  display: block;
+}
+
+/* Ajustes para la línea de progreso (opcional, si se quiere replicar el efecto visual) */
+.wizard-container::before {
+  content: "";
+  position: absolute;
+  top: 50px; /* Ajusta para alinear con los títulos de los pasos */
+  left: 0;
+  right: 0;
+  height: 3px; /* Grosor de la línea */
+  background-color: #dee2e6; /* Color de la línea base */
+  z-index: 1;
+}
+
+.nav-tabs .nav-link.active::after,
+.nav-tabs .nav-link.completed::after {
+  content: "";
+  position: absolute;
+  bottom: -3px; /* Para que la línea del paso sobreescriba la línea base */
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #007bff; /* Color para pasos activos/completados */
+  z-index: 3; /* Asegura que esté sobre la línea base */
+}
+
+/* Para que los títulos de los pasos estén por encima de la línea de progreso */
+.nav-tabs .nav-link {
+    position: relative;
+    z-index: 2;
+}
+
+/* Iconos (si se usan) */
+.fa {
+    margin-left: 5px;
+}
+
+/* Contenedores de formulario */
+.default-container {
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: .25rem;
+}
+
+.div_gris {
+    background-color: #f8f9fa; /* Un gris claro */
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: bold;
+}
+
+.default-form-label {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.gray-small-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.div-info-blue {
+    background-color: #e7f3ff;
+    border-left: 3px solid #007bff;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.bold-gray-label {
+    font-weight: bold;
+    color: #495057;
+}
+
+.radio_input {
+    margin-right: 5px;
+}
+
+.btn-primary {
+    background-color: #9d2449 !important; /* Color primario del cliente */
+    border-color: #9d2449 !important;
+}
+
+.btn-success-custom {
+    background-color: #28a745 !important; /* Verde para botones de éxito */
+    color: white;
+}
+
+.modal-header.header-default {
+    background-color: #6c757d; /* Gris para cabeceras de modal */
+    color: white;
+    font-size: 1rem;
+}
+
+.Iconclose-circle-fill {
+    cursor: pointer;
+}
+
+.info-yellow {
+    color: #ffc107; /* Amarillo para enlaces de información */
+    text-decoration: none;
+}
+.info-yellow:hover {
+    color: #e0a800;
+}
+
+/* Estilos para los popovers (básico) */
+.popover_default {
+    cursor: pointer;
+}
+
+/* Wizard step titles alignment and spacing */
+.wizard-step .nav-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Asegura que todos los links tengan la misma altura */
+    line-height: 1.2; /* Ajusta el interlineado */
+}
+
+/* Ensure tab content takes up space */
+.tab-content {
+    min-height: 300px; /* Ajusta según el contenido esperado */
+}
