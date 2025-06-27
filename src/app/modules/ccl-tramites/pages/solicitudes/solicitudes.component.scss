@@ -1,1 +1,94 @@
-// Estilos para SolicitudesComponent
+.solicitudes-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    
+    .main-card {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .step-form {
+      padding: 20px 0;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .form-row mat-form-field {
+      flex: 1;
+    }
+    
+    .full-width {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    
+    .step-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+    
+    .final-actions {
+      justify-content: space-between;
+    }
+    
+    .resumen-container {
+      padding: 20px 0;
+    }
+    
+    .resumen-subtitle {
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .resumen-card {
+      margin-bottom: 16px;
+      border-left: 4px solid #3f51b5;
+    }
+    
+    .resumen-card mat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .resumen-card mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .resumen-card p {
+      margin: 8px 0;
+    }
+    
+    h3 {
+      color: #3f51b5;
+      margin-bottom: 16px;
+    }
+    
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .solicitudes-container {
+        margin: 10px;
+        padding: 10px;
+      }
+    }
