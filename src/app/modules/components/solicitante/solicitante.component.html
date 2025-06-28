@@ -1,0 +1,67 @@
+<form [formGroup]="solicitanteForm" class="step-form">
+  <h3>Datos del Solicitante</h3>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" placeholder="Ingrese su nombre">
+      <mat-error *ngIf="solicitanteForm.get('nombre')?.hasError('required')">
+        El nombre es requerido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Apellido Paterno</mat-label>
+      <input matInput formControlName="apellidoPaterno" placeholder="Apellido paterno">
+      <mat-error *ngIf="solicitanteForm.get('apellidoPaterno')?.hasError('required')">
+        El apellido paterno es requerido
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Apellido Materno</mat-label>
+      <input matInput formControlName="apellidoMaterno" placeholder="Apellido materno">
+      <mat-error *ngIf="solicitanteForm.get('apellidoMaterno')?.hasError('required')">
+        El apellido materno es requerido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono" placeholder="Número de teléfono">
+      <mat-error *ngIf="solicitanteForm.get('telefono')?.hasError('required')">
+        El teléfono es requerido
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" type="email" placeholder="correo@ejemplo.com">
+    <mat-error *ngIf="solicitanteForm.get('email')?.hasError('required')">
+      El email es requerido
+    </mat-error>
+    <mat-error *ngIf="solicitanteForm.get('email')?.hasError('email')">
+      Ingrese un email válido
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Dirección</mat-label>
+    <textarea matInput formControlName="direccion" rows="3" placeholder="Dirección completa"></textarea>
+    <mat-error *ngIf="solicitanteForm.get('direccion')?.hasError('required')">
+      La dirección es requerida
+    </mat-error>
+  </mat-form-field>
+
+  <div class="step-actions">
+    <button mat-raised-button color="primary"
+            [disabled]="!solicitanteForm.valid"
+            (click)="guardarSolicitante()">
+      Siguiente
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+  </div>
+</form>

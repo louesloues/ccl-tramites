@@ -12,17 +12,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SolicitanteComponent } from "../../../components/solicitante/solicitante.component";
+import { PrecapturaPersona } from '../../../../models/persona.model';
 
 
-/* Contantes quitar TODO */
-export interface SolicitanteData {
-  nombre: string;
-  apellidoPaterno: string;
-  apellidoMaterno: string;
-  telefono: string;
-  email: string;
-  direccion: string;
-}
+
 
 export interface SolicitudData {
   tipoSolicitud: string;
@@ -60,8 +54,9 @@ export interface CitadoData {
     MatCardModule,
     MatIconModule,
     MatDividerModule,
-    MatCheckboxModule
-  ],
+    MatCheckboxModule,
+    SolicitanteComponent
+],
   templateUrl: './solicitudes.component.html',
   styleUrls: ['./solicitudes.component.scss']
 })
@@ -70,9 +65,9 @@ export class SolicitudesComponent implements OnInit {
   solicitanteForm!: FormGroup;
   solicitudForm!: FormGroup;
   citadoForm!: FormGroup;
-  
+
   datosCompletos = {
-    solicitante: {} as SolicitanteData,
+    solicitante: {} as PrecapturaPersona,
     solicitud: {} as SolicitudData,
     citado: {} as CitadoData
   };
@@ -112,18 +107,13 @@ export class SolicitudesComponent implements OnInit {
     });
   }
 
-  guardarSolicitante() {
-    if (this.solicitanteForm.valid) {
-      this.datosCompletos.solicitante = this.solicitanteForm.value;
-      console.log('Datos del solicitante guardados:', this.datosCompletos.solicitante);
-    }
-  }
+
 
   guardarSolicitud() {
-    if (this.solicitudForm.valid) {
-      this.datosCompletos.solicitud = this.solicitudForm.value;
-      console.log('Datos de la solicitud guardados:', this.datosCompletos.solicitud);
-    }
+  //   if (this.solicitudForm.valid) {
+  //     this.datosCompletos.solicitud = this.solicitudForm.value;
+  //     console.log('Datos de la solicitud guardados:', this.datosCompletos.solicitud);
+  //   }
   }
 
   guardarCitado() {
