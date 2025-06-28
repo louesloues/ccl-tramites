@@ -12,7 +12,7 @@ import { withInterceptors } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
   providers: [
     // {provide:LOCALE_ID,'es-MX'},
-    provideExperimentalZonelessChangeDetection(),
+    // provideExperimentalZonelessChangeDetection(),
     provideRouter(routes),
     // provideHttpClient(
     //   withInterceptors([authInterceptor)
@@ -24,7 +24,4 @@ export const appConfig: ApplicationConfig = {
 
   ]
 };
-function provideExperimentalZonelessChangeDetection(): import("@angular/core").Provider | import("@angular/core").EnvironmentProviders {
-  throw new Error('Function not implemented.');
-}
 
