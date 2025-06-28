@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component'; // Ajusta la ruta si es necesario
-
+import { HomeComponent } from './pages/home/home.component';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
+    HomeComponent,
     HeaderComponent // <-- Añadir HeaderComponent aquí
   ],
   templateUrl: './app.component.html',

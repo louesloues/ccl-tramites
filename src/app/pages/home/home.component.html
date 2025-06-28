@@ -1,1 +1,40 @@
-<p>home works!</p>
+<!-- home.component.html -->
+<div class="home-container">
+    
+    <div class="options-grid">
+      <div 
+        class="option-card" 
+        *ngFor="let option of menuOptions"
+        (click)="onOptionClick(option)"
+        [attr.data-title]="option.title"
+      >
+      <div class="card-header">
+        <div class="window-controls">
+          <span class="control minimize"></span>
+          <span class="control maximize"></span>
+          <span class="control close"></span>
+        </div>
+      </div>
+      
+      <div class="card-content recalculated-layout">
+        <!-- Imagen o icono grande a la izquierda -->
+        <div class="icon-container">
+          <span class="option-icon" style="font-size: 3rem;">{{ option.icon }}</span>
+        </div>
+        <!-- Información, con icono y título + subtítulo -->
+        <div class="info-section">
+          <h3 class="option-title">
+            {{ option.title }}
+            <!-- Icono de información al lado del título -->
+            <span class="info-icon" style="font-size: 1.2rem;">&#128240;</span> <!-- emoji de periódico -->
+          </h3>
+          <p class="option-subtitle" style="margin-top: 1rem;">Información</p>
+          <p class="option-description">{{ option.description }}</p>
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <div class="status-bar"></div>
+      </div>
+    </div>
+  </div>
