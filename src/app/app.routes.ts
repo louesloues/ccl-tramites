@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 import { SolicitudesComponent } from './modules/ccl-tramites/pages/solicitudes/solicitudes.component';
 import { StepperComponent } from './modules/ccl-tramites/components/stepper/stepper.component';
+import { HomeComponent } from './pages/home/home.component';
+import { NotfoundComponent } from './pages/notfound/notfound.component';
 
 export const routes: Routes = [
    // Ruta por defecto: Redirige la ruta vacía a '/solicitud'
   {
     path: '',
-    redirectTo: 'solicitud',
-    pathMatch: 'full' // Asegura que la URL sea exactamente vacía
+    component: HomeComponent
   },
   {
     path: 'solicitud',
@@ -37,8 +38,5 @@ export const routes: Routes = [
   },
   */
   // Ruta comodín: Si ninguna de las rutas anteriores coincide, redirige a '/solicitud'
-  {
-    path: '**',
-    redirectTo: 'solicitud'
-  }
+  { path: '**', component: NotfoundComponent }
 ];

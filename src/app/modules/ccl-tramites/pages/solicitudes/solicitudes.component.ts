@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { SolicitanteComponent } from "../../../components/solicitante/solicitante.component";
+import { SolicitanteComponent } from "../../components/solicitante/solicitante.component";
 import { PrecapturaPersona } from '../../../../models/persona.model';
 
 
