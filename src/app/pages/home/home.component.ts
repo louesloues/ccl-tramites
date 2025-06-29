@@ -1,6 +1,7 @@
 // home.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router'; // Importar Router
 
 @Component({
   selector: 'app-home',
@@ -14,33 +15,37 @@ export class HomeComponent {
   menuOptions = [
     {
       title: 'Solicitud',
-      icon: '📄',
-      description: 'Crear nueva solicitud',
-      route: '/solicitud'
+      description: '',
+      route: '/solicitud',
+      icon:'../../assets/images/descarga.png' // Añadir imagen para la opción
     },
     {
       title: 'Ratificación',
-      icon: '✅',
-      description: 'Ratificar documentos',
-      route: '/ratificacion'
+      //icon: '✅',
+      description: '',
+      route: '/ratificacion',
+      icon: '../../assets/images/ratificacion.png' 
     },
     {
       title: 'Trámite Online',
-      icon: '💻',
-      description: 'Gestión en línea',
-      route: '/tramite-online'
+      //icon: '💻', 
+      description: '',
+      route: '/tramite-online',
+      icon: '../../assets/images/tramite-online.png' // Añadir imagen para la opción
     },
     {
       title: 'Buzón Electrónico',
-      icon: '📧',
-      description: 'Mensajes y notificaciones',
-      route: '/buzon'
+      //icon: '📧',
+      description: '',
+      route: '/buzon',
+      icon: '../../assets/images/buzon-electronico.png' // Añadir imagen para la opción
     }
   ];
 
+  constructor(private router: Router) {} // Inyectar Router
+
   onOptionClick(option: any) {
     console.log('Navegando a:', option.route);
-    // Aquí puedes agregar la navegación con Router
-    // this.router.navigate([option.route]);
+    this.router.navigate([option.route]); // Usar Router para navegar
   }
 }
