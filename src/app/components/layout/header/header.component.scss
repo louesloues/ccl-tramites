@@ -1,40 +1,88 @@
-@use '@angular/material' as mat; // Para acceder a variables y mixins de Material
+@use '@angular/material' as mat;
+
+:host {
+  display: block; // Asegura que el componente ocupa el espacio asignado
+}
 
 mat-toolbar {
-  // El color="primary" ya usa el color primario del tema que definimos en _theme.scss.
-  // Podemos ajustar la altura si es necesario, o el padding.
-  // Por defecto, MatToolbar tiene una altura adecuada, pero se puede sobreescribir:
-  // height: 56px; // Material spec para mobile, 64px para desktop.
-  // padding: 0 16px;
+  // Un fondo degradado elegante que combina azules y grises
+  background: linear-gradient(135deg, #e0e0e0 0%, #B0BEC5 100%); // Ajustado a tonos grises/azules claros
+  color: #333; // Texto oscuro para contraste con fondo claro
+  padding: 0 20px; // Espaciado horizontal
+  height: 64px; // Altura estándar para headers de escritorio
 
+  // Asegura que los elementos dentro de la toolbar estén bien alineados
   &.mat-toolbar-single-row {
-    // Asegura que los elementos dentro de la toolbar estén bien alineados
     display: flex;
     align-items: center;
+    justify-content: space-between; // Distribuye el espacio entre los contenedores
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+
+  .header-logo {
+    height: 40px; // Tamaño del logo
+    width: auto;
+    margin-right: 12px; // Espacio entre el logo y la etiqueta CCL
+    vertical-align: middle;
+  }
+
+  .ccl-label {
+    font-size: 1.5rem; // Tamaño de la etiqueta CCL
+    font-weight: bold;
+    color: #1565C0; // Un azul distintivo para CCL
+    vertical-align: middle;
   }
 }
 
 .spacer {
-  flex: 1 1 auto; // Este es un truco común para empujar elementos a los extremos.
+  flex: 1 1 auto; // Empuja los elementos a los extremos
 }
 
-mat-tool-bar{
-  background-color: #ddf4ff;
-}
-// Ejemplo si tuviéramos un logo:
-// .header-logo {
-//   height: 32px; // o el tamaño que necesites
-//   margin-right: 16px;
-//   vertical-align: middle; // Para alinear bien con el texto si lo hay
-// }
+.user-profile-container {
+  display: flex;
+  align-items: center;
 
-// Ejemplo si quisiéramos cambiar el color del título u otros elementos de texto:
-// span:not(.spacer) {
-//   // Para obtener el color de texto que contrasta con el fondo primario:
-//   color: mat.get-color-from-palette(mat.$grey-palette, 50); // Un gris claro si el primario es oscuro
-//   // O podrías usar las funciones de tema de Material para obtener el color de texto apropiado
-//   // color: mat.get-theme-color($mi-plugin-theme, primary-text); // Necesitaría pasar el tema}
-// Si quieres que el título sea un poco más prominente:
-// span:not(.spacer) {
-//   font-size: 1.25rem; // Ajusta según necesidad
-// }
+  .profile-icon {
+    height: 3rem; // Tamaño del icono de perfil
+    width: 3rem;
+    border-radius: 50%; // Para hacerlo circular si es una imagen de silueta
+    cursor: pointer;
+    object-fit: cover; // Asegura que la imagen cubra el espacio sin distorsionarse
+  }
+
+  .user-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 8px; // Espacio si se muestra el nombre junto a un icono (no es el caso aquí, pero útil)
+    color: #333; // Color del texto del nombre de usuario
+  }
+}
+
+// Ajustes responsivos si es necesario
+@media (max-width: 600px) {
+  mat-toolbar {
+    padding: 0 12px; // Menos padding en pantallas pequeñas
+    height: 56px; // Altura estándar para mobile
+  }
+
+  .header-logo {
+    height: 32px;
+  }
+
+  .ccl-label {
+    font-size: 1.2rem;
+  }
+
+  .profile-icon {
+    height: 30px;
+    width: 30px;
+  }
+
+  .user-name {
+    font-size: 0.9rem;
+  }
+}

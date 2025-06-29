@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component'; // Ajusta la ruta si es necesario
 import { HomeComponent } from './pages/home/home.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
     HomeComponent,
-    HeaderComponent // <-- Añadir HeaderComponent aquí
+    HeaderComponent, // <-- Añadir HeaderComponent aquí
+    BreadcrumbsComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'] // o .css si no usaste --style=scss

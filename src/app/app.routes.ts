@@ -4,38 +4,41 @@ import { StepperComponent } from './modules/ccl-tramites/components/stepper/step
 import { HomeComponent } from './pages/home/home.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { LoginComponent } from './pages/login/login.component';
+import { AuthGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
    // Ruta por defecto: Redirige la ruta vacía a '/solicitud'
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    data: { breadcrumb: 'Regresar' }
   },
   {
     path: 'solicitud',
-    component: SolicitudesComponent
+    component: SolicitudesComponent,
+    data: { breadcrumb: 'Solicitud' }
   },
   {
     path: 'ratificacion',
-    component: SolicitudesComponent // Aquí, si 'RatificacionesComponent' es diferente, deberías importarlo y usarlo.
+    component: SolicitudesComponent,
+    data: { breadcrumb: 'Ratificación' }
+    // Aquí, si 'RatificacionesComponent' es diferente, deberías importarlo y usarlo.
   },
   // Si tuvieras rutas para Online y Buzón que requieren login:
   
   {
-    path: 'online',
-    children: [
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
-      { path: 'login', component: LoginComponent },
-      // TODO { path: 'proceso', component: OnlineComponent }
-    ]
+    path: 'buzon',
+    // component: BuzonComponent, // Reemplazar con el componente real de Buzón
+    loadComponent: () => import('./pages/notfound/notfound.component').then(m => m.NotfoundComponent), // Placeholder, reemplazar con el componente real
+    canActivate: [AuthGuard],
+    data: { breadcrumb: 'Buzón' }
   },
   {
-    path: 'buzon',
-    children: [
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
-      { path: 'login', component: LoginComponent },
-      // TODO { path: 'proceso', component: BuzonComponent }
-    ]
+    path: 'tramiteonline',
+    // component: TramiteOnlineComponent, // Reemplazar con el componente real de Trámite Online
+    loadComponent: () => import('./pages/notfound/notfound.component').then(m => m.NotfoundComponent), // Placeholder, reemplazar con el componente real
+    canActivate: [AuthGuard],
+    data: { breadcrumb: 'Trámite Online' }
   },
   
   // Ruta comodín: Si ninguna de las rutas anteriores coincide, redirige a '/solicitud'

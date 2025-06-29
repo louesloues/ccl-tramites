@@ -1,16 +1,21 @@
-<mat-toolbar>
-  <span>Centro de conciliación laboral del estado de guanajuato.</span>
-  <!-- Podríamos añadir un logo aquí más tarde si es necesario -->
-  <!-- <img src="assets/logo.svg" alt="Logo" class="header-logo"> -->
+<mat-toolbar color="primary">
+  <div class="logo-container">
+    <!-- Asegúrate de tener un logo en 'src/assets/logo.png' o cambia la ruta -->
+    <img src="assets/images/logogtonew.png" alt="Logo" class="header-logo">
+    <span class="ccl-label">Centro de conciliación laboral del estado de guanajuato.</span>
+  </div>
 
-  <span class="spacer"></span> <!-- Para empujar elementos a la derecha -->
+  <span class="spacer"></span>
 
-  <!-- Ejemplo de botones o menú si se necesitan en el futuro -->
-  <!--
-  <button mat-icon-button aria-label="Example icon-button with a heart icon">
-    <mat-icon>favorite</mat-icon>
-  </button>
-  <button mat-button>Opción 1</button>
-  <button mat-button>Opción 2</button>
-  -->
+  <div class="user-profile-container">
+    <!-- Simulación de estado de login. Reemplaza con tu lógica de autenticación real -->
+    <ng-container *ngIf="isLoggedIn; else loggedOut">
+      <span class="user-name">{{ userName }}</span>
+      <!-- Podrías añadir un menú desplegable aquí para opciones de usuario -->
+    </ng-container>
+    <ng-template #loggedOut>
+      <!-- Asegúrate de tener una imagen de silueta en 'src/assets/profile-silhouette.png' o cambia la ruta -->
+      <img src="assets/images/profile-silhouette.jpeg" alt="Login" class="profile-icon">
+    </ng-template>
+  </div>
 </mat-toolbar>
