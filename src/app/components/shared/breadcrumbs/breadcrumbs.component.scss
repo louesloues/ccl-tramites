@@ -5,14 +5,15 @@
     background-color: #ffffff; // Un color de fondo suave, ajustar según el tema
     border: 0px; // Un borde sutil
   }
-  
+
   .breadcrumb-text {
-    margin-left: 8px;
-    font-size: 1rem; // Ajustar según sea necesario
+    margin-left:0.5rem;
     font-size: medium;
     color: #333; // Color de texto oscuro
+    font-size: large;
+    font-weight: bolder;
   }
-  
+
   // Estilos adicionales para el botón si es necesario,
   // aunque MatButtonModule ya proporciona estilos base.
   button[mat-icon-button] {
@@ -22,5 +23,14 @@
 
   mat-icon{
     font-weight: bolder;
+    color: gray;
   }
-  
+
+.breadcrumb-row{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    flex-direction: row;
+}
+

@@ -11,7 +11,7 @@ import { Router } from '@angular/router'; // Importar Router
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  
+
   menuOptions = [
     {
       title: 'Solicitud',
@@ -24,13 +24,13 @@ export class HomeComponent {
       //icon: '✅',
       description: '',
       route: '/ratificacion',
-      icon: '../../assets/images/ratificacion.png' 
+      icon: '../../assets/images/ratificacion.png'
     },
     {
       title: 'Trámite Online',
-      //icon: '💻', 
+      //icon: '💻',
       description: '',
-      route: '/tramite-online',
+      route: '/tramiteonline',
       icon: '../../assets/images/tramite-online.png' // Añadir imagen para la opción
     },
     {

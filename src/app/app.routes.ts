@@ -3,15 +3,15 @@ import { SolicitudesComponent } from './modules/solicitud/pages/solicitudes/soli
 import { StepperComponent } from './modules/solicitud/components/stepper/stepper.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
-import { LoginComponent } from './modules/auth/login/login.component'; 
+import { LoginComponent } from './modules/auth/login/login.component';
 import { AuthGuard } from './guard/auth.guard';
+import { Component } from '@angular/core';
 
 export const routes: Routes = [
    // Ruta por defecto: Redirige la ruta vacía a '/solicitud'
   {
     path: '',
     component: HomeComponent,
-    data: { breadcrumb: 'Regresar' }
   },
   {
     path: 'solicitud',
@@ -25,22 +25,25 @@ export const routes: Routes = [
     // Aquí, si 'RatificacionesComponent' es diferente, deberías importarlo y usarlo.
   },
   // Si tuvieras rutas para Online y Buzón que requieren login:
-  
+
   {
     path: 'buzon',
     // component: BuzonComponent, // Reemplazar con el componente real de Buzón
-    loadComponent: () => import('./modules/buzon/buzon.component').then(m => m.BuzonComponent),
-    canActivate: [AuthGuard],
+    component:LoginComponent,
+    // canActivate: [AuthGuard],
     data: { breadcrumb: 'Buzón' }
   },
   {
     path: 'tramiteonline',
-    // component: TramiteOnlineComponent, // Reemplazar con el componente real de Trámite Online
-    loadComponent: () => import('./pages/notfound/notfound.component').then(m => m.NotfoundComponent), // Placeholder, reemplazar con el componente real
-    canActivate: [AuthGuard],
+    component: LoginComponent, // Reemplazar con el componente real de Trámite Online
+    // canActivate: [AuthGuard],
     data: { breadcrumb: 'Trámite Online' }
   },
-  
+
   // Ruta comodín: Si ninguna de las rutas anteriores coincide, redirige a '/solicitud'
-  { path: '**', component: NotfoundComponent }
+  {
+    path: '**',
+    component: NotfoundComponent,
+    data: { breadcrumb: 'Pagina no encotrada' }
+   }
 ];

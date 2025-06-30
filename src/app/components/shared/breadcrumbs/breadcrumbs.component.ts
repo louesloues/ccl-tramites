@@ -14,6 +14,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 })
 export class BreadcrumbsComponent implements OnInit {
   breadcrumb: string = '';
+  ver_breadcrumb: boolean = true; // Controla la visibilidad del breadcrumb
 
   constructor(
     private router: Router,
@@ -35,6 +36,11 @@ export class BreadcrumbsComponent implements OnInit {
       map(data => data['breadcrumb'])
     ).subscribe(breadcrumb => {
       this.breadcrumb = breadcrumb;
+      if (!breadcrumb) {
+        this.ver_breadcrumb = false; // Si no hay breadcrumb, ocultarlo
+        this.breadcrumb = 'Inicio'; // Valor por defecto
+      }
+      else this.ver_breadcrumb = true; // Si hay breadcrumb, mostrarlo
     });
   }
 
