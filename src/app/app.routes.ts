@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { SolicitudesComponent } from './modules/ccl-tramites/pages/solicitudes/solicitudes.component';
-import { StepperComponent } from './modules/ccl-tramites/components/stepper/stepper.component';
+import { SolicitudesComponent } from './modules/solicitud/pages/solicitudes/solicitudes.component';
+import { StepperComponent } from './modules/solicitud/components/stepper/stepper.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
-import { LoginComponent } from './pages/login/login.component';
+import { LoginComponent } from './modules/auth/login/login.component'; 
 import { AuthGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
@@ -29,7 +29,7 @@ export const routes: Routes = [
   {
     path: 'buzon',
     // component: BuzonComponent, // Reemplazar con el componente real de Buzón
-    loadComponent: () => import('./pages/notfound/notfound.component').then(m => m.NotfoundComponent), // Placeholder, reemplazar con el componente real
+    loadComponent: () => import('./modules/buzon/buzon.component').then(m => m.BuzonComponent),
     canActivate: [AuthGuard],
     data: { breadcrumb: 'Buzón' }
   },

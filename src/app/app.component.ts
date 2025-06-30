@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component'; // Ajusta la ruta si es necesario
 import { HomeComponent } from './pages/home/home.component';
-import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { BreadcrumbsComponent } from './components/shared/breadcrumbs/breadcrumbs.component';
 @Component({
   selector: 'app-root',
   standalone: true,
