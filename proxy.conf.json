@@ -6,5 +6,10 @@
       "pathRewrite": {
         "^/api": ""
       }
+    },
+    "/API.CCL": {
+    "target": "https://sistemaconciliaciongto.guanajuato.gob.mx",
+    "secure": false,
+    "changeOrigin": true
     }
 }

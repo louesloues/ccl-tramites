@@ -20,7 +20,7 @@ export class AuthService {
   );
 
   private baseUrl = environment.apiUrl;
-
+  private baseUrlOld = environment.apiUrlOld;
 
 
 
@@ -75,6 +75,11 @@ export class AuthService {
         })
       );
   }
+
+forgotPassApi(clave:string){
+  return this.http.get(`${this.baseUrlOld}Buzon/v1/GetBuzonByUsuario/${clave}`);
+}
+
 
   register(userData: any): Observable<any> { // Debería devolver un tipo más específico
     // Lógica de registro simulada

@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   apiUrl: 'api/',
+  apiUrlOld: 'API.CCL/',
   firebaseConfig : {
       apiKey: "AIzaSyC98wrn8kOH6Y5FZQWaOWthAztWUs1P5xQ",
       authDomain: "ccl-login-afc54.firebaseapp.com",
