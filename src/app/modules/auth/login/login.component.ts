@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Importar
 import { environment } from '../../../../environments/environment.development';
 import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { AuthService } from '../../../services/auth.service';
+import { Token } from '../../../types/token';
 
 @Component({
   selector: 'app-login',
@@ -43,10 +44,49 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      console.log('Login Form Data:', this.loginForm.value);
-      this._authServices.login( this.loginForm['email'] , this.loginForm['password'])
-      // Aquí se llamaría al AuthService para el login
-    }
+      this._authServices.login(this.loginForm.value.email, this.loginForm.value.password, false)
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+              console.log('Login successful:', response.data);
+              this._authServices.setSessionInfo({ id: response.data.token, userId: response.data.userId });
+              localStorage.setItem('token', response.token);
+              console.log('Login successful, token stored.');
+              // Navigate to a different route or show success message
+            } else {
+              console.log('Login failed:', response.message);
+            }
+          },
+          error: (error) => {
+           if (error.status === 401) {
+              // Manejar error 401 (Unauthorized)
+              if (error.error && error.error.message) {
+                // Si el servidor proporciona un mensaje de error específico
+                console.log('Unauthorized:', error.error.message);
+                // Aquí puedes mostrar el mensaje al usuario o manejarlo de otra manera
+              } else {
+                console.log('Unauthorized: Access denied');
+                // Mensaje genérico si no hay un mensaje específico del servidor
+              }
+            } else if (error.status === 400) {
+              // Manejar error 400 (Bad Request)
+              console.log('Bad Request:', error.error.message || 'Invalid request');
+            } else if (error.status === 404) {
+              // Manejar error 404 (Not Found)
+              console.log('Not Found: The requested resource does not exist');
+            } else if (error.status === 500) {
+              // Manejar error 500 (Internal Server Error)
+              console.log('Server Error: Please try again later');
+            } else if (error.status === 0) {
+              // Error de red o servidor no alcanzable
+              console.log('Network Error: Unable to connect to the server');
+            } else {
+              // Otros errores
+              console.log('An unexpected error occurred:', error.message);
+            }
+                    }
+                  });
+          }
   }
 
   loginWithGoogle() {

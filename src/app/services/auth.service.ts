@@ -55,15 +55,16 @@ export class AuthService {
     return !!localStorage.getItem(this.TOKEN_NAME);
   }
 
-  login(email: string, password: string): Observable<any> { // Debería devolver un tipo más específico
+  login(Usr: string, Psw: string, Auth:boolean): Observable<any> { // Debería devolver un tipo más específico
     const body = {
-      email,
-      password,
-      ttl: 31449600,
+      Usr,
+      Psw,
+      Auth,
+      urlOrigin:''
     };
 
     return this.http
-      .post(`${this.baseUrl}/UsuarioWeb/LoginWebCCL/`, body, {
+      .post(`${this.baseUrl}UsuarioWeb/LoginWebCCL/`, body, {
         headers: this.headers,
       })
       .pipe(

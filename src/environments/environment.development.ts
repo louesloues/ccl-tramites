@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000/api/',
+  apiUrl: 'api/',
   firebaseConfig : {
       apiKey: "AIzaSyC98wrn8kOH6Y5FZQWaOWthAztWUs1P5xQ",
       authDomain: "ccl-login-afc54.firebaseapp.com",
