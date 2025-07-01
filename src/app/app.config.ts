@@ -11,6 +11,7 @@ import { withInterceptors } from '@angular/common/http';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideHttpClient } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -25,6 +26,13 @@ export const appConfig: ApplicationConfig = {
     // )
     provideClientHydration(),
     provideAnimationsAsync('noop'),
+     importProvidersFrom(ToastrModule.forRoot({
+      timeOut: 3000, // Duración de la notificación en milisegundos
+      positionClass: 'toast-top-right', // Posición de las notificaciones
+      preventDuplicates: true, // Evitar notificaciones duplicadas
+      closeButton: true, // Mostrar botón para cerrar la notificación
+      progressBar: true, // Mostrar barra de progreso
+    })), // Agrega ToastrModule aquí
     provideNativeDateAdapter(),
     provideHttpClient(),
     provideFirebaseApp(() => initializeApp({

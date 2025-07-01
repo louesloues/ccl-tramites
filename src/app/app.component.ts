@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component'; // Ajusta la ruta si es necesario
 import { HomeComponent } from './pages/home/home.component';
 import { BreadcrumbsComponent } from './components/shared/breadcrumbs/breadcrumbs.component';
+import { NotificationService } from './services/notification.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,4 +18,10 @@ import { BreadcrumbsComponent } from './components/shared/breadcrumbs/breadcrumb
 })
 export class AppComponent {
   title = 'ccl-tramites'; // O el nombre que tenga tu proyecto
+
+  constructor(private notificationService: NotificationService) {} // Inyecta NotificationService
+
+  ngOnInit(): void {
+    this.notificationService.showSuccess('¡Bienvenido!', 'Centro de conciliación laboral del estado de guanajuato');
+  }
 }
