@@ -54,7 +54,7 @@ export const routes: Routes = [
   },
   {
     path: 'tramiteonline', // Ruta padre para Buzón
-    component: LoginComponent, // El componente principal para /buzon (puede ser un layout o el login mismo)
+    loadComponent:()=>import('./modules/auth/login/login.component').then(c=>c.LoginComponent) , // El componente principal para /buzon (puede ser un layout o el login mismo)
     data: { breadcrumb: 'Tramite Online' },
     children: [
       {
@@ -70,7 +70,7 @@ export const routes: Routes = [
       {
         path: 'registro',
         loadComponent: ()=>import('./modules/auth/register/register.component').then(c=>c.default),
-        data: { breadcrumb: 'Registro Tramite Online' }
+        data: { breadcrumb: 'Registro Tramite Online333' }
       },
       {
         path: 'mitramite', // Ruta para las notificaciones (ej. /buzon/misnotificaciones)
@@ -86,5 +86,10 @@ export const routes: Routes = [
     path: '**',
     component: NotfoundComponent,
     data: { breadcrumb: 'Pagina no encotrada' }
-   }
+   },
+   {
+    path: 'auth/registro',
+    loadComponent: ()=>import('./modules/auth/register/register.component').then(c=>c.default),
+    data: { breadcrumb: 'Registro Tramite Online' }
+  }
 ];
