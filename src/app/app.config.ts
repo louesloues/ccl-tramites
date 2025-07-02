@@ -7,11 +7,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { withInterceptors } from '@angular/common/http';
+import { withInterceptors ,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideHttpClient } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { LoaderInterceptor } from './services/loader-interceptor';
 
 
 
@@ -34,7 +35,11 @@ export const appConfig: ApplicationConfig = {
       progressBar: true, // Mostrar barra de progreso
     })), // Agrega ToastrModule aquí
     provideNativeDateAdapter(),
+
+
     provideHttpClient(),
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }, // Añade el interceptor
+
     provideFirebaseApp(() => initializeApp({
                   projectId:"ccl-login-afc54",
                   appId:"1:780161636507:web:4ac8b4595149d588964e3e",

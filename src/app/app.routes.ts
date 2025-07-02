@@ -7,6 +7,7 @@ import { LoginComponent } from './modules/auth/login/login.component';
 import { AuthGuard } from './guard/auth.guard';
 import { Component } from '@angular/core';
 
+
 export const routes: Routes = [
    // Ruta por defecto: Redirige la ruta vacía a '/solicitud'
   {
@@ -15,29 +16,63 @@ export const routes: Routes = [
   },
   {
     path: 'solicitud',
-    component: SolicitudesComponent,
+    loadComponent : ()=> import('./modules/solicitud/pages/solicitudes/solicitudes.component').then(c => c.SolicitudesComponent), // Asegúrate que el nombre y la ruta coincidan con tu archivo real
     data: { breadcrumb: 'Solicitud' }
   },
   {
     path: 'ratificacion',
-    component: SolicitudesComponent,
+    loadComponent:()=> import('./modules/ratificacion/ratificacion.component').then(c => c.default), // Asegúrate que el nombre y la ruta coincidan con tu archivo real
     data: { breadcrumb: 'Ratificación' }
     // Aquí, si 'RatificacionesComponent' es diferente, deberías importarlo y usarlo.
   },
   // Si tuvieras rutas para Online y Buzón que requieren login:
 
+  // *** Configuración de Rutas Anidadas para 'buzon' ***
   {
-    path: 'buzon',
-    // component: BuzonComponent, // Reemplazar con el componente real de Buzón
-    component:LoginComponent,
-    // canActivate: [AuthGuard],
-    data: { breadcrumb: 'Buzón' }
+    path: 'buzon', // Ruta padre para Buzón
+    component: LoginComponent, // El componente principal para /buzon (puede ser un layout o el login mismo)
+    data: { breadcrumb: 'Buzón' },
+    children: [
+      {
+        path: '', // Redirige /buzon a /buzon/login
+        redirectTo: 'login',
+        pathMatch: 'full'
+      },
+      {
+        path: 'login', // Ruta para el login de Buzón (ej. /buzon/login)
+        component: LoginComponent, // Usa LoginComponent para esta ruta
+        data: { breadcrumb: 'Iniciar Sesión Buzón' }
+      },
+      {
+        path: 'misnotificaciones', // Ruta para las notificaciones (ej. /buzon/misnotificaciones)
+        loadComponent: ()=>import('./modules/buzon/buzon.component').then(c=>c.default) , // Componente que mostrará las notificaciones
+        data: { breadcrumb: 'Mis Notificaciones' }
+      }
+      // Puedes añadir más rutas hijas aquí para Buzón si es necesario
+    ]
   },
   {
-    path: 'tramiteonline',
-    component: LoginComponent, // Reemplazar con el componente real de Trámite Online
-    // canActivate: [AuthGuard],
-    data: { breadcrumb: 'Trámite Online' }
+    path: 'tramiteonline', // Ruta padre para Buzón
+    component: LoginComponent, // El componente principal para /buzon (puede ser un layout o el login mismo)
+    data: { breadcrumb: 'Tramite Online' },
+    children: [
+      {
+        path: '', // Redirige /buzon a /buzon/login
+        redirectTo: 'login',
+        pathMatch: 'full'
+      },
+      {
+        path: 'login', // Ruta para el login de Buzón (ej. /buzon/login)
+        component: LoginComponent, // Usa LoginComponent para esta ruta
+        data: { breadcrumb: 'Iniciar Sesión Buzón' }
+      },
+      {
+        path: 'mitramite', // Ruta para las notificaciones (ej. /buzon/misnotificaciones)
+        loadComponent: ()=>import('./modules/online/online.component').then(c=>c.OnlineComponent) , // Componente que mostrará las notificaciones
+        data: { breadcrumb: 'Mis Notificaciones' }
+      }
+      // Puedes añadir más rutas hijas aquí para Buzón si es necesario
+    ]
   },
 
   // Ruta comodín: Si ninguna de las rutas anteriores coincide, redirige a '/solicitud'

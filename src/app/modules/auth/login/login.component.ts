@@ -10,12 +10,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Importar para formularios reactivos
 import { environment } from '../../../../environments/environment.development';
-import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
+import { Auth, signInWithPopup, GoogleAuthProvider, UserCredential } from '@angular/fire/auth';
 import { AuthService } from '../../../services/auth.service';
 import { Token } from '../../../types/token';
 import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
 import { Toast } from 'ngx-toastr';
 import { NotificationService } from '../../../services/notification.service';
+import { LoaderService } from '../../../services/loader.service';
 
 @Component({
   selector: 'app-login',
@@ -42,9 +43,10 @@ export class LoginComponent {
     private fb: FormBuilder,
     private auth: Auth,
     private _authServices:AuthService,
+    private _notificationService: NotificationService,
+    private _loaderService: LoaderService, // Inyectar el servicio de notificaciones
     public dialog: MatDialog, // Inyectar MatDialog
     private route: ActivatedRoute,
-    private _notificationService: NotificationService
   ){
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -61,7 +63,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-
+      this._loaderService.show();
       if ( this.pageBreadcrumb === 'Buzón' && this.returnUrl.includes('buzon')) {
         // TODO: Implementar lógica para Buzón logueo al buzón.
 
@@ -69,7 +71,7 @@ export class LoginComponent {
 
       }
       else {
-        this._authServices.login(this.loginForm.value.email, this.loginForm.value.password, false)
+          this._authServices.login(this.loginForm.value.email, this.loginForm.value.password, false)
           .subscribe({
             next: (response) => {
               if (response.success) {
@@ -77,8 +79,10 @@ export class LoginComponent {
                 localStorage.setItem('token', response.token);
                 this._notificationService.showSuccess('Bienvenido.','CCL Tramites');
                 // Navigate to a different route or show success message
+                this._loaderService.hide();
               } else {
                  this._notificationService.showError('Login failed:', response.message);
+                this._loaderService.hide();
               }
             },
             error: (error) => {
@@ -108,8 +112,10 @@ export class LoginComponent {
                 // Otros errores
                 this._notificationService.showError('An unexpected error occurred:', error.message);
               }
+              this._loaderService.hide();
                       }
-                    });
+                  });
+
             }
       }
 
@@ -118,8 +124,25 @@ export class LoginComponent {
   loginWithGoogle() {
    const provider = new GoogleAuthProvider();
     signInWithPopup(this.auth, provider)
-      .then((result) => {
-        console.log('Usuario autenticado:', result.user);
+      .then((result:UserCredential) => {
+        console.log('Usuario autenticado:', result.user.email, result.user.photoURL,result.user.displayName);
+         this._authServices.login(result.user.email, "firebase", true)
+          .subscribe({
+            next: (response) => {
+              if (response.success) {
+                const token: Token = { id: response.data.token, userId: response.data.userId };
+                this._authServices.setSessionInfo(token);
+                localStorage.setItem('token', response.token);
+                this._notificationService.showSuccess('Bienvenido.','CCL Tramites');
+              } else {
+                this._notificationService.showError('Login failed:', response.message);
+              }
+            },
+            error: (error) => {
+              console.error('Error de autenticación:', error);
+              this._notificationService.showError('Error de autenticación:', error.message || 'Ocurrió un error al iniciar sesión.');
+            }
+          });
         // Aquí puedes redirigir al usuario o realizar otras acciones después del login
       })
       .catch((error) => {

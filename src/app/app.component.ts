@@ -8,6 +8,7 @@ import { LoaderComponent } from './components/shared/loader/loader.component';
 import { LoaderService } from './services/loader.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import RatificacionComponent from './modules/ratificacion/ratificacion.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,7 +18,8 @@ import { CommonModule } from '@angular/common';
     HomeComponent,
     HeaderComponent, // <-- Añadir HeaderComponent aquí
     BreadcrumbsComponent,
-    LoaderComponent
+    LoaderComponent,
+    RatificacionComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'] // o .css si no usaste --style=scss
