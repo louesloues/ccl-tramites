@@ -9,6 +9,7 @@ import { LoaderService } from './services/loader.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import RatificacionComponent from './modules/ratificacion/ratificacion.component';
+import RegisterComponent from './modules/auth/register/register.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -19,7 +20,8 @@ import RatificacionComponent from './modules/ratificacion/ratificacion.component
     HeaderComponent, // <-- Añadir HeaderComponent aquí
     BreadcrumbsComponent,
     LoaderComponent,
-    RatificacionComponent
+    RatificacionComponent,
+    RegisterComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'] // o .css si no usaste --style=scss

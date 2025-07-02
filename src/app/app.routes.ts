@@ -6,6 +6,7 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { LoginComponent } from './modules/auth/login/login.component';
 import { AuthGuard } from './guard/auth.guard';
 import { Component } from '@angular/core';
+import RegisterComponent from './modules/auth/register/register.component';
 
 
 export const routes: Routes = [
@@ -40,7 +41,7 @@ export const routes: Routes = [
       },
       {
         path: 'login', // Ruta para el login de Buzón (ej. /buzon/login)
-        component: LoginComponent, // Usa LoginComponent para esta ruta
+        loadComponent:()=>import('./modules/auth/login/login.component').then(c=>c.LoginComponent), // Usa LoginComponent para esta ruta
         data: { breadcrumb: 'Iniciar Sesión Buzón' }
       },
       {
@@ -63,8 +64,13 @@ export const routes: Routes = [
       },
       {
         path: 'login', // Ruta para el login de Buzón (ej. /buzon/login)
-        component: LoginComponent, // Usa LoginComponent para esta ruta
+        loadComponent:()=>import('./modules/auth/login/login.component').then(c=>c.LoginComponent) , // Usa LoginComponent para esta ruta
         data: { breadcrumb: 'Iniciar Sesión Buzón' }
+      },
+      {
+        path: 'registro',
+        loadComponent: ()=>import('./modules/auth/register/register.component').then(c=>c.default),
+        data: { breadcrumb: 'Registro Tramite Online' }
       },
       {
         path: 'mitramite', // Ruta para las notificaciones (ej. /buzon/misnotificaciones)

@@ -29,7 +29,7 @@ export function passwordMatchValidator(formGroup: FormGroup) {
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export default class RegisterComponent {
   registerForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
