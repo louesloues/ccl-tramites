@@ -4,9 +4,9 @@ import { StepperComponent } from './modules/solicitud/components/stepper/stepper
 import { HomeComponent } from './pages/home/home.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { LoginComponent } from './modules/auth/login/login.component';
+import RegisterComponent  from './modules/auth/register/register.component';
 import { AuthGuard } from './guard/auth.guard';
 import { Component } from '@angular/core';
-import RegisterComponent from './modules/auth/register/register.component';
 
 
 export const routes: Routes = [
@@ -31,7 +31,6 @@ export const routes: Routes = [
   // *** Configuración de Rutas Anidadas para 'buzon' ***
   {
     path: 'buzon', // Ruta padre para Buzón
-    component: LoginComponent, // El componente principal para /buzon (puede ser un layout o el login mismo)
     data: { breadcrumb: 'Buzón' },
     children: [
       {
@@ -54,11 +53,10 @@ export const routes: Routes = [
   },
   {
     path: 'tramiteonline', // Ruta padre para Buzón
-    loadComponent:()=>import('./modules/auth/login/login.component').then(c=>c.LoginComponent) , // El componente principal para /buzon (puede ser un layout o el login mismo)
     data: { breadcrumb: 'Tramite Online' },
     children: [
       {
-        path: '', // Redirige /buzon a /buzon/login
+        path: '',
         redirectTo: 'login',
         pathMatch: 'full'
       },
@@ -69,8 +67,13 @@ export const routes: Routes = [
       },
       {
         path: 'registro',
-        loadComponent: ()=>import('./modules/auth/register/register.component').then(c=>c.default),
-        data: { breadcrumb: 'Registro Tramite Online333' }
+        loadComponent: ()=>import('./modules/auth/register/register.component').then(c=>c.default) , // Componente que mostrará el registro
+        data: { breadcrumb: 'Registro Tramite Online' }
+      },
+      {
+        path: 'validar',
+        loadComponent: ()=>import('./modules/auth/validar/validar.component').then(c=>c.ValidarComponent) , // Componente que mostrará el registro
+        data: { breadcrumb: 'Registro Tramite Online' }
       },
       {
         path: 'mitramite', // Ruta para las notificaciones (ej. /buzon/misnotificaciones)
@@ -86,10 +89,5 @@ export const routes: Routes = [
     path: '**',
     component: NotfoundComponent,
     data: { breadcrumb: 'Pagina no encotrada' }
-   },
-   {
-    path: 'auth/registro',
-    loadComponent: ()=>import('./modules/auth/register/register.component').then(c=>c.default),
-    data: { breadcrumb: 'Registro Tramite Online' }
-  }
+   }
 ];

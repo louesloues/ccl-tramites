@@ -7,15 +7,6 @@
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <p>
             <mat-form-field appearance="fill">
-              <mat-label>Nombre Completo</mat-label>
-              <input matInput formControlName="fullName">
-              <mat-error *ngIf="registerForm.get('fullName')?.hasError('required')">
-                El nombre completo es requerido.
-              </mat-error>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
               <mat-label>Correo Electrónico</mat-label>
               <input matInput placeholder="usuario@ejemplo.com" formControlName="email">
               <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
@@ -53,7 +44,7 @@
           <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid">Registrarse</button>
         </form>
         <p class="login-link">
-          ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión aquí</a>
+          ¿Ya tienes cuenta? <a routerLink="../login">Inicia sesión aquí</a>
         </p>
       </mat-card-content>
     </mat-card>

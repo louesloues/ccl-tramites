@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { StorageService } from './storage.service';
+import { UserCredential } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -76,9 +77,32 @@ export class AuthService {
       );
   }
 
-forgotPassApi(clave:string){
-  return this.http.get(`${this.baseUrlOld}Buzon/v1/GetBuzonByUsuario/${clave}`);
-}
+  addUser(Correo:string,Psw:string){
+    // Construir el objeto UsuarioWeb
+    const body = {
+        Nombre: 'online' ,
+        PrimerApellido: 'online',
+        SegundoApellido: 'online', // Asegurarse de que sea null si no hay valor
+        Correo,
+        Usr: Correo,
+        Psw,
+        RolID: 0,
+        SedeID: 0,
+        TipoPersonaID:1,
+        Activo:false,
+        Auth:false,
+        PrecapturaPersonaID:null
+    };
+
+    return this.http.post(`${this.baseUrl}UsuarioWeb`, body, {
+        headers: this.headers,
+      });
+  }
+
+
+  forgotPassApi(clave:string){
+    return this.http.get(`${this.baseUrlOld}Buzon/v1/GetBuzonByUsuario/${clave}`);
+  }
 
 
   register(userData: any): Observable<any> { // Debería devolver un tipo más específico
