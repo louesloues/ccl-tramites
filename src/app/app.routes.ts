@@ -71,6 +71,11 @@ export const routes: Routes = [
         data: { breadcrumb: 'Registro Tramite Online' }
       },
       {
+        path: 'completar-registro',
+        loadComponent: ()=>import('./modules/online/pages/completar-registro/completar-registro.component').then(c=>c.CompletarRegistroComponent) , // Componente que mostrará el registro
+        data: { breadcrumb: 'Completar Registro' }
+      },
+      {
         path: 'validar',
         loadComponent: ()=>import('./modules/auth/validar/validar.component').then(c=>c.ValidarComponent) , // Componente que mostrará el registro
         data: { breadcrumb: 'Registro Tramite Online' }

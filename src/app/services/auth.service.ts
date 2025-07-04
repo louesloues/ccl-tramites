@@ -10,6 +10,7 @@ import { UserCredential } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   private headers = new HttpHeaders();
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
@@ -22,8 +23,6 @@ export class AuthService {
 
   private baseUrl = environment.apiUrl;
   private baseUrlOld = environment.apiUrlOld;
-
-
 
   constructor(
     private router: Router,
@@ -150,6 +149,8 @@ export class AuthService {
   setSessionInfo(token: Token): Token {
     try {
       this.storage.setItem('ccl:token', JSON.stringify(token.id));
+      this.storage.setItem('ccl:personaID', JSON.stringify(token.PrecapturaPersonaID));
+      this.storage.setItem('ccl:usuarioID', JSON.stringify(token.usuarioID));
     } catch (e) {
       console.log("Error: ",e);
     }

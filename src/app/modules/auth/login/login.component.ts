@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Importar para formularios reactivos
@@ -17,6 +17,8 @@ import { ForgotPasswordComponent } from '../components/forgot-password/forgot-pa
 import { Toast } from 'ngx-toastr';
 import { NotificationService } from '../../../services/notification.service';
 import { LoaderService } from '../../../services/loader.service';
+import { ApiResponse } from '../../../interfaces/api-response';
+import { LoginResponse } from '../../../interfaces/login-response';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +26,7 @@ import { LoaderService } from '../../../services/loader.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -47,6 +50,7 @@ export class LoginComponent {
     private _loaderService: LoaderService, // Inyectar el servicio de notificaciones
     public dialog: MatDialog, // Inyectar MatDialog
     private route: ActivatedRoute,
+    private router: Router
   ){
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -71,15 +75,25 @@ export class LoginComponent {
 
       }
       else {
+          console.log('Formulario de inicio de sesión válido tramite online:');
           this._authServices.login(this.loginForm.value.email, this.loginForm.value.password, false)
           .subscribe({
-            next: (response) => {
+            next: (response:ApiResponse<LoginResponse>) => {
               if (response.success) {
-                this._authServices.setSessionInfo({ id: response.data.token, userId: response.data.userId });
-                localStorage.setItem('token', response.token);
-                this._notificationService.showSuccess('Bienvenido.','CCL Tramites');
+                this._authServices.setSessionInfo({ id: response.data.token, usuarioID: response.data.usuarioID , PrecapturaPersonaID: response.data.PrecapturaPersonaID,correo: response.data.usr });
+                localStorage.setItem('token', response.data.token);
+                this._notificationService.showSuccess(response.message,'CCL Tramites');
                 // Navigate to a different route or show success message
                 this._loaderService.hide();
+                if (!response.data.PrecapturaPersonaID) {
+                  this._notificationService.showInfo('Debe completar registro para su carpeta ciudadana.','Carpeta de Ciudadano');
+                  this.router.navigate(['/tramiteonline/completar-registro']);
+                  this._loaderService.hide();
+                }
+                else if (response.data.PrecapturaPersonaID) {
+                  this.router.navigate(['/tramiteonline/mistramites']);
+                }
+
               } else {
                  this._notificationService.showError('Login failed:', response.message);
                 this._loaderService.hide();
@@ -125,12 +139,11 @@ export class LoginComponent {
    const provider = new GoogleAuthProvider();
     signInWithPopup(this.auth, provider)
       .then((result:UserCredential) => {
-        console.log('Usuario autenticado:', result.user.email, result.user.photoURL,result.user.displayName);
          this._authServices.login(result.user.email, "firebase", true)
           .subscribe({
             next: (response) => {
               if (response.success) {
-                const token: Token = { id: response.data.token, userId: response.data.userId };
+                const token: Token = { id: response.data.token, usuarioID: response.data.userId , correo: response.data.usr, PrecapturaPersonaID: response.data.PrecapturaPersonaID };
                 this._authServices.setSessionInfo(token);
                 localStorage.setItem('token', response.token);
                 this._notificationService.showSuccess('Bienvenido.','CCL Tramites');

@@ -39,13 +39,12 @@ export class ValidarComponent implements OnInit {
   isError = false;
   isResending = false;
   hasValidationParam = false;
+
   errorMessage = '';
   userEmail = '';
 
 
   private autentificarSubscription: Subscription | undefined;
-  private _loaderServices = inject(LoaderService);
-  private _authServices = inject(AuthService);
 
   constructor() {}
 
@@ -61,13 +60,13 @@ export class ValidarComponent implements OnInit {
 
       if (autentificarValue) {
         this.hasValidationParam = true;
-        this.validateAccount(autentificarValue);
+        // this.validateAccount(autentificarValue);
 
-        this._authServices.validateUser(autentificarValue).subscribe({
+        this._authService.validateUser(autentificarValue).subscribe({
           next: (response) => {
-            console.log('Response from validateUser:', response);
             if (response['success']) {
               this.isSuccess = true;
+              this.isError = false;
               // Guardar el email en sessionStorage o localStorage
               sessionStorage.setItem('registrationData', JSON.stringify({ email: this.userEmail }));
             } else {
@@ -104,28 +103,6 @@ export class ValidarComponent implements OnInit {
       }
     }
   }
-
- private async validateAccount(token: string) {
-  this.isError = false;
-  this.isSuccess = false;
-
-
-  this._authService.validateUser(token).subscribe((res)=>{
-      console.log('Response from validateUser:', res);
-      if (res['success']) {
-        this.isSuccess = true;
-        // this.userEmail = res.data.email || '';
-        // // Guardar el email en sessionStorage o localStorage
-        sessionStorage.setItem('registrationData', JSON.stringify({ email: this.userEmail }));
-      } else {
-        this.errorMessage = res['message'] || 'Error al validar la cuenta.';
-        this.isError = true;
-      }
-    });
-
-  }
-
-
 
   async resendEmail() {
     if (!this.userEmail) {
