@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://sistemaconciliaciongto.guanajuato.gob.mx/APICore.CCL/api/',
-  apiUrlOld: 'https://sistemaconciliaciongto.guanajuato.gob.mx/API.CCL/',
+  apiUrl: 'https://sistemaconciliaciongto.guanajuato.gob.mx/APICore.CCL/api',
+  apiUrlOld: 'https://sistemaconciliaciongto.guanajuato.gob.mx/API.CCL',
   firebaseConfig : {
       apiKey: "AIzaSyC98wrn8kOH6Y5FZQWaOWthAztWUs1P5xQ",
       authDomain: "ccl-login-afc54.firebaseapp.com",

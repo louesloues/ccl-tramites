@@ -99,6 +99,12 @@ export class AuthService {
       });
   }
 
+  validateUser(tokenAutentifica:string){
+    return this.http.get(`${this.baseUrl}UsuarioWeb/ValidaEmail/${tokenAutentifica}`, {
+      headers: this.headers});
+  }
+
+
 
   forgotPassApi(clave:string){
     return this.http.get(`${this.baseUrlOld}Buzon/v1/GetBuzonByUsuario/${clave}`);

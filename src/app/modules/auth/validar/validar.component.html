@@ -1,1 +1,65 @@
-<p>validar works!</p>
+ <div class="validation-container">
+      <div class="validation-card">
+        <!-- Success State -->
+        <div *ngIf="isSuccess" class="success-state">
+          <div class="success-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22,4 12,14.01 9,11.01"/>
+            </svg>
+          </div>
+          <h2>¡Cuenta validada exitosamente!</h2>
+          <p>Tu cuenta ha sido verificada correctamente. Ahora puedes iniciar sesión.</p>
+          <button (click)="goToLogin()" class="btn-primary">
+            Iniciar Sesión
+          </button>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="isError" class="error-state">
+          <div class="error-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+          </div>
+          <h2>Error de validación</h2>
+          <p>{{ errorMessage }}</p>
+          <div class="error-actions">
+            <button (click)="retry()" class="btn-secondary">
+              Reintentar
+            </button>
+            <button (click)="goToRegister()" class="btn-primary">
+              Registrarse nuevamente
+            </button>
+          </div>
+        </div>
+
+        <!-- Confirmation State (sin parámetro) -->
+        <div *ngIf="!hasValidationParam && !isSuccess && !isError" class="confirmation-state">
+          <div class="email-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <h2>Revisa tu correo electrónico</h2>
+          <p>Hemos enviado un enlace de validación a:</p>
+          <div class="email-display">
+            <strong>{{ userEmail || 'tu correo electrónico' }}</strong>
+          </div>
+          <p class="instruction">
+            Haz clic en el enlace del correo para validar tu cuenta y completar el registro.
+          </p>
+          <div class="confirmation-actions">
+            <button (click)="resendEmail()" class="btn-secondary" [disabled]="isResending">
+              {{ isResending ? 'Enviando...' : 'Reenviar correo' }}
+            </button>
+            <button (click)="goToLogin()" class="btn-link">
+              Ya tengo una cuenta
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
