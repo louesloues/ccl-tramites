@@ -2,13 +2,14 @@
   <div class="logo-container">
     <!-- Asegúrate de tener un logo en 'src/assets/logo.png' o cambia la ruta -->
     <img src="assets/images/logogtonew.png" alt="Logo" class="header-logo">
-    <span class="ccl-label">Centro de conciliación laboral del estado de guanajuato.</span>
+    <mat-icon routerLink="/">home</mat-icon>
   </div>
-
-  <span class="spacer"></span>
-
+  
+  
   <div class="user-profile-container">
+    <span class="ccl-label">Centro de conciliación laboral del estado de guanajuato.</span>
     <!-- Simulación de estado de login. Reemplaza con tu lógica de autenticación real -->
+    <span class="spacer"></span>
     <ng-container *ngIf="isLoggedIn; else loggedOut">
       <span class="user-name">{{ userName }}</span>
       <!-- Podrías añadir un menú desplegable aquí para opciones de usuario -->

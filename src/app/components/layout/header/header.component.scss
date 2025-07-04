@@ -19,32 +19,56 @@ mat-toolbar {
   }
 }
 
-.logo-container {
-  display: flex;
-  align-items: center;
-
-  .header-logo {
-    height: 40px; // Tamaño del logo
-    width: auto;
-    margin-right: 12px; // Espacio entre el logo y la etiqueta CCL
-    vertical-align: middle;
-  }
-
-  .ccl-label {
-    font-size: 1.5rem; // Tamaño de la etiqueta CCL
-    font-weight: bold;
-    color: #1565C0; // Un azul distintivo para CCL
-    vertical-align: middle;
-  }
+mat-icon{
+  margin-right: 0.5rem;
+  border: 0px !important;
+  color: white;
+  font-size: 1.8rem;
+  width: auto;
+  border-radius: 50%;
 }
+.ccl-label{
+  text-decoration:double;
+}
+
+.ccl-label-link:hover .ccl-label {
+  color: #0d47a1; // Oscurecer el color al pasar el mouse para un efecto sutil
+}
+
+
+mat-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05); // Ligero feedback visual al pasar el mouse
+  color: #333;
+}
+
+
+.logo-container {
+    flex: 0 0 30%; // flex-grow: 0, flex-shrink: 0, flex-basis: 30%
+    max-width: 30%; 
+    display: flex;
+    align-items: center;   // Centra verticalmente el contenido
+    // justify-content: center;
+}
+.header-logo {
+    height: 3.5rem; // Tamaño del logo
+    width: auto;
+    margin-right: 1rem; // Espacio entre el logo y la etiqueta CCL
+    vertical-align: middle;
+}
+  
+
 
 .spacer {
   flex: 1 1 auto; // Empuja los elementos a los extremos
 }
 
 .user-profile-container {
-  display: flex;
+  flex: 1 1 70%; 
   align-items: center;
+
+  display: flex;
+    align-items: center;   // Centra verticalmente el contenido
+    justify-content: center;
 
   .profile-icon {
     height: 3rem; // Tamaño del icono de perfil
@@ -57,7 +81,7 @@ mat-toolbar {
   .user-name {
     font-size: 1rem;
     font-weight: 500;
-    margin-left: 8px; // Espacio si se muestra el nombre junto a un icono (no es el caso aquí, pero útil)
+    margin-left: 0.5rem; // Espacio si se muestra el nombre junto a un icono (no es el caso aquí, pero útil)
     color: #333; // Color del texto del nombre de usuario
   }
 }
@@ -74,12 +98,21 @@ mat-toolbar {
   }
 
   .ccl-label {
-    font-size: 1.2rem;
+    display: none; // Ocultar la etiqueta CCL en pantallas pequeñas
   }
 
+  .ccl-label-link {
+    text-decoration: none; // Quitar subrayado del enlace
+    cursor: pointer; // Cambiar cursor al pasar sobre el título
+  }
+
+  .header-logo {
+    cursor: pointer; // Cambiar cursor al pasar sobre el logo
+  }
+ 
   .profile-icon {
-    height: 30px;
-    width: 30px;
+    height: 2.5rem;
+    width: 2.5rem;
   }
 
   .user-name {
