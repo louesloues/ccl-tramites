@@ -1,0 +1,107 @@
+.wrap-botones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%!important;
+  height: 100%;
+  background-color: var(--background-color);
+}
+
+.btn-wrapper{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    width: 100% !important;
+    height: 100%;
+    background-color: var(--background-color);
+    justify-content: space-around;
+}
+/* Navigation Buttons */
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+
+  .navigation-buttons button {
+    padding: 12px 32px;
+    font-size: 1.1rem;
+  }
+
+  .navigation-buttons mat-icon {
+    margin-left: 8px;
+  }
+
+    /* Person Cards */
+    .person-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        min-height: 280px;
+        display: flex;
+        align-items: center;
+        background: #fafafa;
+      }
+    
+      .person-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      }
+    
+      .worker-card {
+        border-color: #e3f2fd;
+      }
+    
+      .worker-card:hover {
+        border-color: #90caf9;
+        background: #f3f9ff;
+      }
+    
+      .worker-card.selected {
+        border-color: #1976d2;
+        background: #e3f2fd;
+      }
+    
+      .patron-card {
+        border-color: #f3e5f5;
+      }
+    
+      .patron-card:hover {
+        border-color: #ce93d8;
+        background: #fafafa;
+      }
+    
+      .patron-card.selected {
+        border-color: #7b1fa2;
+        background: #f3e5f5;
+      }
+    
+      .person-icon {
+        font-size: 4rem !important;
+        width: 4rem !important;
+        height: 4rem !important;
+        color: #666;
+      }
+    
+      .worker-card .person-icon {
+        color: #1976d2;
+      }
+    
+      .patron-card .person-icon {
+        color: #7b1fa2;
+      }
+    
+      .card-title {
+        color: #424242;
+        font-weight: 500;
+        margin-bottom: 1rem;
+      }
+    
+      .card-subtitle {
+        color: #757575;
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+    
+    

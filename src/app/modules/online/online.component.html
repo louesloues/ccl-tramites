@@ -1,1 +1,62 @@
-<p>online works!</p>
+<div class="container-fluid p-4">
+    <!-- Info Balloon para Trámites Pendientes -->
+    <div class="position-relative mb-4">
+      <div class="d-flex justify-content-end">
+        <div class="position-relative">
+          <button 
+            mat-icon-button
+            class="info-balloon-btn"
+            (click)="navigateToTramites()"
+            [class.pulse]="hasPendingTramites"
+            matTooltip="Trámites Pendientes"
+            matTooltipPosition="below">
+            <mat-icon 
+              [class.text-warning]="hasPendingTramites"
+              [class.text-muted]="!hasPendingTramites">
+              notifications
+            </mat-icon>
+            <span 
+              *ngIf="pendingTramitesCount > 0"
+              class="notification-badge">
+              {{ pendingTramitesCount }}
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Material Stepper -->
+    <mat-stepper [selectedIndex]="0" orientation="horizontal" #stepper>
+      <mat-step [stepControl]="tipoPersonaForm" [editable]="false">
+        <ng-template matStepLabel>Tipo Persona</ng-template>
+        
+        <!-- Contenido del Step -->
+        <div class="step-content">
+         <app-tipopersona></app-tipopersona>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="solicitanteForm" [editable]="false">
+        <ng-template matStepLabel>Solicitante</ng-template>
+        <div class="step-content">
+          <app-solicitante></app-solicitante>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="conflictoForm" [editable]="false">
+        <ng-template matStepLabel>Conflicto</ng-template>
+        <div class="step-content">
+          <h3>Descripción del Conflicto</h3>
+          <p>Contenido del paso 3...</p>
+        </div>
+      </mat-step>
+
+      <mat-step [stepControl]="citadoForm" [editable]="false">
+        <ng-template matStepLabel>Citado</ng-template>
+        <div class="step-content">
+          <h3>Datos del Citado</h3>
+          <p>Contenido del paso 4...</p>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>

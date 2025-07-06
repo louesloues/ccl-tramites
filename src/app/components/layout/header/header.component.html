@@ -1,21 +1,34 @@
 <mat-toolbar color="primary">
   <div class="logo-container">
-    <!-- Asegúrate de tener un logo en 'src/assets/logo.png' o cambia la ruta -->
     <img src="assets/images/logogtonew.png" alt="Logo" class="header-logo">
     <mat-icon routerLink="/">home</mat-icon>
   </div>
-  
-  
+
   <div class="user-profile-container">
     <span class="ccl-label">Centro de conciliación laboral del estado de guanajuato.</span>
-    <!-- Simulación de estado de login. Reemplaza con tu lógica de autenticación real -->
     <span class="spacer"></span>
-    <ng-container *ngIf="isLoggedIn; else loggedOut">
-      <span class="user-name">{{ userName }}</span>
-      <!-- Podrías añadir un menú desplegable aquí para opciones de usuario -->
+
+    <!-- Usamos el signal 'currentUser' del servicio de autenticación -->
+    <ng-container *ngIf="_authServices.currentUser() as user; else loggedOut">
+      <!-- Este botón muestra el nombre del usuario y abre el menú -->
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+        <mat-icon>account_circle</mat-icon>
+        <span class="user-name">{{ user.name }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <!-- Definición del menú desplegable -->
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+        <!-- Puedes agregar más opciones aquí (ej. "Mi Perfil") -->
+      </mat-menu>
     </ng-container>
+
+    <!-- Estado cuando el usuario no está logueado -->
     <ng-template #loggedOut>
-      <!-- Asegúrate de tener una imagen de silueta en 'src/assets/profile-silhouette.png' o cambia la ruta -->
       <img src="assets/images/profile-silhouette.jpeg" alt="Login" class="profile-icon">
     </ng-template>
   </div>

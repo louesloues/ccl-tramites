@@ -81,9 +81,9 @@ export const routes: Routes = [
         data: { breadcrumb: 'Registro Tramite Online' }
       },
       {
-        path: 'mitramite', // Ruta para las notificaciones (ej. /buzon/misnotificaciones)
+        path: 'mistramites', // Ruta para las notificaciones (ej. /buzon/misnotificaciones)
         loadComponent: ()=>import('./modules/online/online.component').then(c=>c.OnlineComponent) , // Componente que mostrará las notificaciones
-        data: { breadcrumb: 'Mis Notificaciones' }
+        data: { breadcrumb: 'Solicitud Tramite Online' }
       }
       // Puedes añadir más rutas hijas aquí para Buzón si es necesario
     ]

@@ -79,9 +79,10 @@ export class LoginComponent {
           this._authServices.login(this.loginForm.value.email, this.loginForm.value.password, false)
           .subscribe({
             next: (response:ApiResponse<LoginResponse>) => {
+              console.log('Respuesta del servidor:', response);
               if (response.success) {
                 this._authServices.setSessionInfo({ id: response.data.token, usuarioID: response.data.usuarioID , PrecapturaPersonaID: response.data.PrecapturaPersonaID,correo: response.data.usr });
-                localStorage.setItem('token', response.data.token);
+                //localStorage.setItem('token', response['token']);
                 this._notificationService.showSuccess(response.message,'CCL Tramites');
                 // Navigate to a different route or show success message
                 this._loaderService.hide();
