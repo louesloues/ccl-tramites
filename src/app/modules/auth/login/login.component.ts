@@ -81,7 +81,7 @@ export class LoginComponent {
             next: (response:ApiResponse<LoginResponse>) => {
               console.log('Respuesta del servidor:', response);
               if (response.success) {
-                this._authServices.setSessionInfo({ id: response.data.token, usuarioID: response.data.usuarioID , PrecapturaPersonaID: response.data.PrecapturaPersonaID,correo: response.data.usr });
+                this._authServices.setSession({ id: response.data.token, usuarioID: response.data.usuarioID , PrecapturaPersonaID: response.data.PrecapturaPersonaID,correo: response.data.usr });
                 //localStorage.setItem('token', response['token']);
                 this._notificationService.showSuccess(response.message,'CCL Tramites');
                 // Navigate to a different route or show success message
@@ -145,7 +145,7 @@ export class LoginComponent {
             next: (response) => {
               if (response.success) {
                 const token: Token = { id: response.data.token, usuarioID: response.data.userId , correo: response.data.usr, PrecapturaPersonaID: response.data.PrecapturaPersonaID };
-                this._authServices.setSessionInfo(token);
+                this._authServices.setSession(token);
                 localStorage.setItem('token', response.token);
                 this._notificationService.showSuccess('Bienvenido.','CCL Tramites');
               } else {

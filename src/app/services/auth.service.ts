@@ -64,7 +64,7 @@ export class AuthService {
    * Actualiza tanto el localStorage como el signal.
    * @param token El objeto Token recibido del login.
    */
-  private setSession(token: Token): void {
+  public setSession(token: Token): void {
     try {
       this.storage.setItem('currentUser', JSON.stringify(token));
       // Esta es la línea clave: actualiza el signal, lo que notificará
