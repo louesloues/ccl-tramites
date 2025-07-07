@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -21,13 +21,9 @@ import { MatStepperModule } from '@angular/material/stepper';
   styleUrl: './tipopersona.component.scss'
 })
 export class TipopersonaComponent {
+  @Output() tipoChange = new EventEmitter<string>();
+
   selectedTipo: string = '';
-  
-
-
-  selectTipoPersona(tipo: string) {
-    this.selectedTipo = tipo;
-  }
 
   continueToNext() {
     if (this.selectedTipo) {
@@ -36,5 +32,11 @@ export class TipopersonaComponent {
     } else {
       console.warn('Por favor, selecciona un tipo de persona antes de continuar.');
     }
+  }
+
+
+  onTipoPersonaChange(tipo: string): void {
+    this.selectedTipo = tipo;
+    this.tipoChange.emit(tipo);
   }
 }

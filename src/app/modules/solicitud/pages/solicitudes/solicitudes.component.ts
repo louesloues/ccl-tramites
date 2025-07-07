@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -63,6 +63,13 @@ export interface CitadoData {
   styleUrls: ['./solicitudes.component.scss']
 })
 export class SolicitudesComponent implements OnInit {
+  @ViewChild('stepper') stepper: MatStepper;
+
+  // Signals
+  tipoPersonaSeleccionada = signal<string | null>(null);
+
+  masterForm: FormGroup;
+
   tipopersonaForm!: FormGroup;
   solicitanteForm!: FormGroup;
   solicitudForm!: FormGroup;
@@ -81,7 +88,13 @@ export class SolicitudesComponent implements OnInit {
   }
 
   initForms() {
-    this.solicitanteForm = this.fb.group({
+    this.masterForm = this.fb.group({
+      tipoPersonaSeleccionada: [null, Validators.required]
+
+    });
+
+
+     this.solicitanteForm = this.fb.group({
       nombre: ['', Validators.required],
       apellidoPaterno: ['', Validators.required],
       apellidoMaterno: ['', Validators.required],
@@ -107,7 +120,26 @@ export class SolicitudesComponent implements OnInit {
       direccionCitado: ['', Validators.required],
       relacion: ['', Validators.required]
     });
+
   }
+
+
+
+
+  onTipoPersonaChange(tipo: string): void {
+    // 1. Actualizamos el valor en nuestro FormGroup principal.
+    this.masterForm.get('tipoPersona.tipo')?.setValue(tipo);
+
+    // 2. Actualizamos el signal para que la UI pueda reaccionar.
+    this.tipoPersonaSeleccionada.set(tipo);
+    setTimeout(() => {
+       this.stepper.next();
+    }, 150); //
+    console.log('Tipo de persona seleccionado en el padre:', this.tipoPersonaSeleccionada());
+    console.log('Estado del formulario:', this.masterForm.value);
+  }
+
+
 
 
 
