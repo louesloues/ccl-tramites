@@ -13,7 +13,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideHttpClient } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { LoaderInterceptor } from './services/loader-interceptor';
-
+import { AuthInterceptor } from './services/auth.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -38,7 +38,8 @@ export const appConfig: ApplicationConfig = {
 
 
     provideHttpClient(),
-    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }, // Añade el interceptor
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor,multi: true }, // Añade el interceptor
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 
     provideFirebaseApp(() => initializeApp({
                   projectId:"ccl-login-afc54",

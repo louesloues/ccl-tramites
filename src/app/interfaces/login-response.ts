@@ -4,5 +4,5 @@ export interface LoginResponse {
   token?:         string;
   tipoPersonaID?: number;
   urlOrigin?:     string;
-  PrecapturaPersonaID?: string;
+  precapturaPersonaID?: string;
 }

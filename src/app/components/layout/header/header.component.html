@@ -9,11 +9,11 @@
     <span class="spacer"></span>
 
     <!-- Usamos el signal 'currentUser' del servicio de autenticación -->
-    <ng-container *ngIf="_authServices.currentUser() as user; else loggedOut">
+    <ng-container *ngIf="_authServices.isLoggedIn; else loggedOut">
       <!-- Este botón muestra el nombre del usuario y abre el menú -->
       <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
         <mat-icon>account_circle</mat-icon>
-        <span class="user-name">{{ user.name }}</span>
+        <span class="user-name">{{ user }}</span>
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
 

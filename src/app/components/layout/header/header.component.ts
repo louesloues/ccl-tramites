@@ -18,17 +18,21 @@ import { AuthService } from '../../../services/auth.service';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule, // Necesario para mat-button
-    MatMenuModule    // Necesario para mat-menu
+    MatMenuModule,   // Necesario para mat-menu
+
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  user : string;
   // Inyectamos el servicio de autenticación para poder usarlo.
   // 'inject()' es la forma moderna de inyección de dependencias en Angular.
   // Lo hacemos público para poder acceder a él desde la plantilla HTML.
   public _authServices: AuthService = inject(AuthService);
-
+  constructor() {
+     this.user = this._authServices.getUserFromStorage();
+  }
   /**
    * Llama al método logout de nuestro servicio de autenticación.
    * La UI se actualizará automáticamente gracias a la reactividad de los signals.

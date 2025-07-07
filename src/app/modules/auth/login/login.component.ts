@@ -81,17 +81,17 @@ export class LoginComponent {
             next: (response:ApiResponse<LoginResponse>) => {
               console.log('Respuesta del servidor:', response);
               if (response.success) {
-                this._authServices.setSession({ id: response.data.token, usuarioID: response.data.usuarioID , PrecapturaPersonaID: response.data.PrecapturaPersonaID,correo: response.data.usr });
+                // this._authServices.setSession({ id: response.data.token, usuarioID: response.data.usuarioID , PrecapturaPersonaID: response.data.PrecapturaPersonaID,correo: response.data.usr });
                 //localStorage.setItem('token', response['token']);
                 this._notificationService.showSuccess(response.message,'CCL Tramites');
                 // Navigate to a different route or show success message
                 this._loaderService.hide();
-                if (!response.data.PrecapturaPersonaID) {
+                if (!response.data.precapturaPersonaID) {
                   this._notificationService.showInfo('Debe completar registro para su carpeta ciudadana.','Carpeta de Ciudadano');
                   this.router.navigate(['/tramiteonline/completar-registro']);
                   this._loaderService.hide();
                 }
-                else if (response.data.PrecapturaPersonaID) {
+                else if (response.data.precapturaPersonaID) {
                   this.router.navigate(['/tramiteonline/mistramites']);
                 }
 
@@ -136,35 +136,42 @@ export class LoginComponent {
 
   }
 
-  loginWithGoogle() {
-   const provider = new GoogleAuthProvider();
-    signInWithPopup(this.auth, provider)
-      .then((result:UserCredential) => {
-         this._authServices.login(result.user.email, "firebase", true)
-          .subscribe({
-            next: (response) => {
-              if (response.success) {
-                const token: Token = { id: response.data.token, usuarioID: response.data.userId , correo: response.data.usr, PrecapturaPersonaID: response.data.PrecapturaPersonaID };
-                this._authServices.setSession(token);
-                localStorage.setItem('token', response.token);
-                this._notificationService.showSuccess('Bienvenido.','CCL Tramites');
-              } else {
-                this._notificationService.showError('Login failed:', response.message);
-              }
-            },
-            error: (error) => {
-              console.error('Error de autenticación:', error);
-              this._notificationService.showError('Error de autenticación:', error.message || 'Ocurrió un error al iniciar sesión.');
-            }
-          });
-        // Aquí puedes redirigir al usuario o realizar otras acciones después del login
-      })
-      .catch((error) => {
-        console.error('Error de autenticación:', error);
-        // Manejo de errores
-      });
-  }
+  // En tu LoginComponent.ts
 
+loginWithGoogle() {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(this.auth, provider)
+    .then((result: UserCredential) => {
+      // Llamamos al login del servicio. Él se encargará de guardar la sesión.
+      this._authServices.login(result.user.email, "firebase", true)
+        .subscribe({
+          next: (response: ApiResponse<LoginResponse>) => {
+            if (response.success) {
+              this._notificationService.showSuccess('Bienvenido.', 'CCL Tramites');
+
+              // Agregamos la misma lógica de redirección que en el login normal.
+              if (!response.data.precapturaPersonaID) {
+                this._notificationService.showInfo('Debe completar registro para su carpeta ciudadana.', 'Carpeta de Ciudadano');
+                this.router.navigate(['/tramiteonline/completar-registro']);
+              } else {
+                this.router.navigate(['/tramiteonline/mistramites']);
+              }
+            } else {
+              this._notificationService.showError('Login failed:', response.message);
+            }
+          },
+          error: (error) => {
+            console.error('Error de autenticación en el backend:', error);
+            // Aquí puedes reusar tu lógica de manejo de errores de `onSubmit` si quieres.
+            this._notificationService.showError('Error de autenticación:', error.message || 'Ocurrió un error al iniciar sesión.');
+          }
+        });
+    })
+    .catch((error) => {
+      console.error('Error de autenticación con Google:', error);
+      this._notificationService.showError('Error de autenticación con Google:', 'No se pudo completar el inicio de sesión.');
+    });
+  }
 
     openForgotPasswordDialog(): void {
       let inputType: 'CURP' | 'RFC' = 'CURP'; // Por defecto CURP

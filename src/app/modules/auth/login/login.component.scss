@@ -12,16 +12,6 @@
   .login-card {
     width: 100%;
     max-width: 400px;
-    // padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-    mat-card-title {
-      text-align: center;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      margin-top: 1rem;
-      color: #333;
-    }
 
     mat-form-field {
       width: 100%;
@@ -108,18 +98,6 @@
   justify-content: center;
   align-items: center;
 
-  /* Fondo con overlay oscuro elegante */
-  // background:
-  //   radial-gradient(circle at 30% 20%, rgba(45, 55, 72, 0.95) 0%, transparent 50%),
-  //   radial-gradient(circle at 70% 80%, rgba(26, 32, 44, 0.9) 0%, transparent 50%),
-  //   linear-gradient(135deg, rgba(45, 55, 72, 0.85) 0%, rgba(26, 32, 44, 0.9) 100%);
-
-  // /* Efecto de cristal */
-  // backdrop-filter: blur(8px);
-  // -webkit-backdrop-filter: blur(8px);
-
-  // /* Animación de entrada */
-  // animation: fadeInOverlay 0.4s ease-out;
 }
 
 
@@ -139,37 +117,6 @@
 .login-card {
   position:relative;
   width: 100%;
-  // max-width: 420px;
-  // background: #ffffff !important;
- background:
-    /* Vetas principales de mármol */
-    radial-gradient(ellipse at 25% 15%, rgba(248, 246, 242, 0.9) 0%, transparent 45%),
-    radial-gradient(ellipse at 75% 85%, rgba(245, 242, 237, 0.8) 0%, transparent 50%),
-    radial-gradient(ellipse at 60% 30%, rgba(250, 248, 245, 0.7) 0%, transparent 40%),
-    radial-gradient(ellipse at 40% 70%, rgba(247, 244, 239, 0.6) 0%, transparent 35%),
-
-    /* Vetas secundarias más sutiles */
-    radial-gradient(ellipse at 80% 20%, rgba(242, 240, 235, 0.5) 0%, transparent 30%),
-    radial-gradient(ellipse at 20% 80%, rgba(245, 243, 238, 0.4) 0%, transparent 25%),
-
-    /* Gradiente base con transición suave */
-    linear-gradient(135deg,
-      rgba(250, 248, 245, 0.95) 0%,
-      rgba(248, 246, 242, 0.9) 25%,
-      rgba(245, 242, 237, 0.85) 50%,
-      rgba(247, 244, 239, 0.9) 75%,
-      rgba(250, 248, 245, 0.95) 100%
-    ),
-
-    /* Textura de mármol muy sutil */
-    linear-gradient(45deg,
-      rgba(240, 238, 233, 0.1) 0%,
-      transparent 25%,
-      rgba(238, 235, 230, 0.08) 50%,
-      transparent 75%,
-      rgba(240, 238, 233, 0.1) 100%
-    );
-
 
 
   /* Animación de entrada */
@@ -233,8 +180,6 @@
 .login-card mat-card-header {
   text-align: center;
   margin-bottom: 1.5rem;
-  // padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
 }
 
 /* Título principal */
@@ -251,7 +196,6 @@
 
 /* Subtítulo */
 .login-card mat-card-subtitle {
-  color: #4a5568 !important;
   font-size: 0.95rem !important;
   font-weight: 400 !important;
 }
@@ -267,46 +211,6 @@
   // margin-bottom: 1rem;
 }
 
-// /* Botones */
-// .login-card .mat-mdc-raised-button {
-//   width: 100%;
-//   height: 48px;
-//   border-radius: 8px;
-//   font-weight: 500;
-//   font-size: 1rem;
-//   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-//   transition: all 0.3s ease;
-// }
-
-// .login-card .mat-mdc-raised-button:hover {
-//   transform: translateY(-2px);
-//   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-// }
-
-/* Efecto de pulso en el botón principal */
-// .login-card .mat-mdc-raised-button.mat-primary {
-//   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-//   position: relative;
-//   overflow: hidden;
-// }
-
-// .login-card .mat-mdc-raised-button.mat-primary::before {
-//   content: '';
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   width: 0;
-//   height: 0;
-//   background: rgba(255, 255, 255, 0.3);
-//   border-radius: 50%;
-//   transform: translate(-50%, -50%);
-//   transition: width 0.3s, height 0.3s;
-// }
-
-// .login-card .mat-mdc-raised-button.mat-primary:active::before {
-//   width: 300px;
-//   height: 300px;
-// }
 
 /* Links y texto adicional */
 .login-card a {
@@ -367,10 +271,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image:
-    radial-gradient(circle at 20% 80%, rgba(120, 138, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 120, 178, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 255, 138, 0.1) 0%, transparent 50%);
   pointer-events: none;
   animation: float 6s ease-in-out infinite;
 }
