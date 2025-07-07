@@ -2,174 +2,139 @@
 
   <div *ngIf="isLoading" class="loading-indicator">
     <p>Cargando datos del solicitante...</p>
-    <!-- TODO: Add a spinner or better loading indicator -->
-  </div>
+    </div>
 
   <form [formGroup]="solicitanteForm" class="step-form" *ngIf="!isLoading">
-    <h3>Datos del Solicitante</h3>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre" placeholder="Ingrese su nombre" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('nombre')?.hasError('required') && solicitanteForm.get('nombre')?.touched">
-          El nombre es requerido
-        </mat-error>
-      </mat-form-field>
+    <mat-accordion>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Primer Apellido</mat-label>
-        <input matInput formControlName="primerApellido" placeholder="Primer apellido" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('primerApellido')?.hasError('required') && solicitanteForm.get('primerApellido')?.touched">
-          El primer apellido es requerido
-        </mat-error>
-      </mat-form-field>
-    </div>
+      <mat-expansion-panel [expanded]="true"> <mat-expansion-panel-header>
+          <mat-panel-title>
+            <strong>Datos del Solicitante</strong>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Segundo Apellido (Opcional)</mat-label>
-        <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
-      </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" placeholder="Ingrese su nombre" [readonly]="!isEditMode">
+            <mat-error *ngIf="solicitanteForm.get('nombre')?.hasError('required') && solicitanteForm.get('nombre')?.touched">
+              El nombre es requerido
+            </mat-error>
+          </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Teléfono Celular</mat-label>
-        <input matInput formControlName="telefonoCel" placeholder="Número de teléfono celular" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('telefonoCel')?.hasError('required') && solicitanteForm.get('telefonoCel')?.touched">
-          El teléfono es requerido
-        </mat-error>
-      </mat-form-field>
-    </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Primer Apellido</mat-label>
+            <input matInput formControlName="primerApellido" placeholder="Primer apellido" [readonly]="!isEditMode">
+            <mat-error *ngIf="solicitanteForm.get('primerApellido')?.hasError('required') && solicitanteForm.get('primerApellido')?.touched">
+              El primer apellido es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Correo Electrónico</mat-label>
-      <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
-      <mat-error *ngIf="solicitanteForm.get('correo')?.hasError('required') && solicitanteForm.get('correo')?.touched">
-        El email es requerido
-      </mat-error>
-      <mat-error *ngIf="solicitanteForm.get('correo')?.hasError('email') && solicitanteForm.get('correo')?.touched">
-        Ingrese un email válido
-      </mat-error>
-    </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Segundo Apellido (Opcional)</mat-label>
+            <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
+          </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Dirección</mat-label>
-      <textarea matInput formControlName="direccion" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
-      <mat-error *ngIf="solicitanteForm.get('direccion')?.hasError('required') && solicitanteForm.get('direccion')?.touched">
-        La dirección es requerida
-      </mat-error>
-    </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono Celular</mat-label>
+            <input matInput formControlName="telefonoCel" placeholder="Número de teléfono celular" [readonly]="!isEditMode">
+            <mat-error *ngIf="solicitanteForm.get('telefonoCel')?.hasError('required') && solicitanteForm.get('telefonoCel')?.touched">
+              El teléfono es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-    <mat-divider class="form-divider"></mat-divider>
-    <h3>Información Adicional del Solicitante</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Correo Electrónico</mat-label>
+          <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
+          </mat-form-field>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>CURP</mat-label>
-        <input matInput formControlName="curp" placeholder="Ingrese su CURP" [readonly]="!isEditMode">
-        <!-- TODO: Add CURP specific validator and error message if needed -->
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dirección</mat-label>
+          <textarea matInput formControlName="direccion" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
+          <mat-error *ngIf="solicitanteForm.get('direccion')?.hasError('required') && solicitanteForm.get('direccion')?.touched">
+            La dirección es requerida
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Fecha de Nacimiento</mat-label>
-        <input matInput [matDatepicker]="pickerFechaNacimiento" formControlName="fechaNacimiento" placeholder="YYYY-MM-DD" [readonly]="!isEditMode">
-        <mat-datepicker-toggle matSuffix [for]="pickerFechaNacimiento"></mat-datepicker-toggle>
-        <mat-datepicker #pickerFechaNacimiento [disabled]="!isEditMode"></mat-datepicker>
-        <mat-error *ngIf="solicitanteForm.get('fechaNacimiento')?.hasError('required') && solicitanteForm.get('fechaNacimiento')?.touched">
-          La fecha de nacimiento es requerida
-        </mat-error>
-      </mat-form-field>
-    </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+              <mat-label>Escolaridad ID</mat-label>
+              <input matInput type="number" formControlName="escolaridadID" placeholder="ID Escolaridad" [readonly]="!isEditMode">
+          </mat-form-field>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Tipo de Identificación ID</mat-label>
-        <input matInput type="number" formControlName="tipoIdentificacionID" placeholder="ID Tipo Identificación" [readonly]="!isEditMode">
-        <!-- In a real app, this would be a mat-select populated from a service -->
-      </mat-form-field>
+          <mat-form-field appearance="outline">
+              <mat-label>Estado Civil ID</mat-label>
+              <input matInput type="number" formControlName="estadoCivilID" placeholder="ID Estado Civil" [readonly]="!isEditMode">
+          </mat-form-field>
+        </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Número de Identificación</mat-label>
-        <input matInput formControlName="numeroIdentificacion" placeholder="Ingrese su No. de Identificación" [readonly]="!isEditMode">
-      </mat-form-field>
-    </div>
+      </mat-expansion-panel>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Nacionalidad ID</mat-label>
-        <input matInput type="number" formControlName="nacionalidadID" placeholder="ID Nacionalidad" [readonly]="!isEditMode">
-      </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Género ID</mat-label>
-        <input matInput type="number" formControlName="generoID" placeholder="ID Género" [readonly]="!isEditMode">
-      </mat-form-field>
-    </div>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <strong>Domicilio del solicitante</strong>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <mat-divider class="form-divider"></mat-divider>
-    <h3>Información Socioeconómica</h3>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>CURP</mat-label>
+                <input matInput formControlName="curp" placeholder="Ingrese su CURP" [readonly]="!isEditMode">
+            </mat-form-field>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Escolaridad ID</mat-label>
-        <input matInput type="number" formControlName="escolaridadID" placeholder="ID Escolaridad" [readonly]="!isEditMode">
-      </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Fecha de Nacimiento</mat-label>
+                <input matInput [matDatepicker]="pickerFechaNacimiento" formControlName="fechaNacimiento" placeholder="YYYY-MM-DD" [readonly]="!isEditMode">
+                <mat-datepicker-toggle matSuffix [for]="pickerFechaNacimiento"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFechaNacimiento [disabled]="!isEditMode"></mat-datepicker>
+            </mat-form-field>
+        </div>
+        </mat-expansion-panel>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Estado Civil ID</mat-label>
-        <input matInput type="number" formControlName="estadoCivilID" placeholder="ID Estado Civil" [readonly]="!isEditMode">
-      </mat-form-field>
-    </div>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Ocupación ID</mat-label>
-        <input matInput type="number" formControlName="ocupacionID" placeholder="ID Ocupación" [readonly]="!isEditMode">
-      </mat-form-field>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <strong>Información Socioeconómica</strong>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre de Ocupación</mat-label>
-        <input matInput formControlName="nombreOcupacion" placeholder="Describa su ocupación" [readonly]="!isEditMode">
-      </mat-form-field>
-    </div>
 
-    <div class="form-row">
-       <mat-form-field appearance="outline">
-        <mat-label>Grupo Vulnerable ID</mat-label>
-        <input matInput type="number" formControlName="grupoVulnerableID" placeholder="ID Grupo Vulnerable" [readonly]="!isEditMode">
-      </mat-form-field>
+        </mat-expansion-panel>
 
-      <div class="checkbox-field">
-          <mat-checkbox formControlName="esRepProcurador" [disabled]="!isEditMode">
-              ¿Es Representante o Procurador?
-          </mat-checkbox>
-      </div>
-    </div>
+    </mat-accordion>
 
     <div class="step-actions">
-      <button *ngIf="precapturaPersonaID && !isEditMode"
-              mat-stroked-button color="accent"
-              (click)="enableEditMode()"
-              class="edit-button">
-        <mat-icon>edit</mat-icon>
-        Habilitar Edición
-      </button>
+        <button *ngIf="precapturaPersonaID && !isEditMode"
+                mat-stroked-button color="accent"
+                (click)="enableEditMode()"
+                class="edit-button">
+            <mat-icon>edit</mat-icon>
+            Habilitar Edición
+        </button>
 
-      <button *ngIf="isEditMode"
-              mat-raised-button color="primary"
-              [disabled]="solicitanteForm.invalid"
-              (click)="guardarSolicitante()">
-        {{ precapturaPersonaID ? 'Guardar Cambios' : 'Siguiente' }}
-        <mat-icon>{{ precapturaPersonaID ? 'save' : 'navigate_next' }}</mat-icon>
-      </button>
+        <button *ngIf="isEditMode"
+                mat-raised-button color="primary"
+                [disabled]="solicitanteForm.invalid"
+                (click)="guardarSolicitante()">
+            {{ precapturaPersonaID ? 'Guardar Cambios' : 'Siguiente' }}
+            <mat-icon>{{ precapturaPersonaID ? 'save' : 'navigate_next' }}</mat-icon>
+        </button>
 
-      <button *ngIf="!precapturaPersonaID && !isEditMode"
-              mat-raised-button color="primary"
-              (click)="enableEditMode()"> <!-- This case might happen if loading fails and user needs to start over -->
-        Agregar Solicitante
-        <mat-icon>add</mat-icon>
-      </button>
+        <button *ngIf="!precapturaPersonaID && !isEditMode"
+                mat-raised-button color="primary"
+                (click)="enableEditMode()">
+            Agregar Solicitante
+            <mat-icon>add</mat-icon>
+        </button>
     </div>
+
   </form>
 
 </div>

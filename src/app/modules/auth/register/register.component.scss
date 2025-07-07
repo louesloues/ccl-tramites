@@ -1,24 +1,18 @@
+
 // login.component.scss
 
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  height: auto;
+  background-color: white!important;
+  margin: 0.5rem;
+  padding: 0!important;
 
   mat-card {
     width: 100%;
     max-width: 400px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-    mat-card-title {
-      text-align: center;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      color: #333;
-    }
 
     mat-form-field {
       width: 100%;
@@ -50,28 +44,6 @@
       }
     }
 
-    .google-btn {
-      width: 100%;
-      background-color: #fff;
-      color: #757575;
-      border: 1px solid #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 1rem;
-      height: 44px;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #f1f1f1;
-      }
-
-      img {
-        width: 18px;
-        margin-right: 0.5rem;
-      }
-    }
-
     .register-link {
       text-align: center;
       margin-top: 1rem;
@@ -88,4 +60,201 @@
       }
     }
   }
+}
+
+/* Estilos para el componente de login */
+
+/* Overlay que cubre toda la pantalla */
+.register-container {
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+/* Animación del overlay */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Tarjeta de login destacada */
+mat-card {
+  position:relative;
+  width: 100%;
+
+
+  /* Animación de entrada */
+  animation: fadeInOverlay 0.4s ease-out;
+
+  border-radius: 16px !important;
+  padding: 2rem !important;
+
+  /* Sombra dramática y elegante */
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 20px 40px -8px rgba(0, 0, 0, 0.4),
+    0 10px 20px -4px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+
+  /* Borde sutil */
+  border: 3px solid rgba(255, 255, 255, 0.2);
+
+  /* Animación de entrada */
+  animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Efecto de resplandor sutil */
+  // position: relative;
+  // overflow: hidden;
+}
+
+/* Efecto de brillo en la tarjeta */
+mat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.6s;
+}
+
+.login-card:hover::before {
+  left: 100%;
+}
+
+/* Animación de la tarjeta */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Estilos para el header de la tarjeta */
+mat-card mat-card-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Título principal */
+mat-card mat-card-title {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+  color: #1a202c !important;
+  margin-bottom: 0.5rem !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtítulo */
+mat-card mat-card-subtitle {
+  font-size: 0.95rem !important;
+  font-weight: 400 !important;
+}
+
+/* Contenido de la tarjeta */
+mat-card mat-card-content {
+  padding: 0 !important;
+}
+
+/* Campos de formulario */
+mat-card .mat-mdc-form-field {
+  width: 100%;
+  // margin-bottom: 1rem;
+}
+
+
+/* Links y texto adicional */
+mat-card a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+mat-card a:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+/* Elementos deshabilitados fuera de la tarjeta */
+.register-container ~ * {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .register-container {
+    padding: 15px;
+  }
+
+  mat-card {
+    max-width: 95%;
+    // padding: 1.5rem !important;
+  }
+
+  mat-card mat-card-title {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 10px;
+  }
+
+  mat-card {
+    max-width: 100%;
+    padding: 1.25rem !important;
+    border-radius: 12px !important;
+  }
+
+  mat-card mat-card-title {
+    font-size: 1.35rem !important;
+  }
+}
+
+/* Efecto adicional: partículas flotantes */
+.register-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }

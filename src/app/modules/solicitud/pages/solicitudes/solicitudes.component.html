@@ -11,6 +11,13 @@
         <mat-card-content>
           <mat-stepper [linear]="true" #stepper>
 
+            <!-- Paso 1: Tipo Persona -->
+            <mat-step [stepControl]="tipopersonaForm">
+              <ng-template matStepLabel>Tipo persona</ng-template>
+              <br/>
+              <app-tipopersona></app-tipopersona>
+            </mat-step>
+
             <!-- Paso 1: Solicitante -->
             <mat-step [stepControl]="solicitanteForm">
               <ng-template matStepLabel>Solicitante</ng-template>

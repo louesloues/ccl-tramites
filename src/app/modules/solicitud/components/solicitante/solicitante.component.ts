@@ -14,7 +14,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PrecapturaPersona } from '../../../../models/persona.model';
 import { PrecapturaPersonaService } from '../../../../services/precaptura-persona.service';
-// Import a placeholder service
+import {MatExpansionModule} from '@angular/material/expansion';// Import a placeholder service
 
 
 @Component({
@@ -33,7 +33,8 @@ import { PrecapturaPersonaService } from '../../../../services/precaptura-person
     MatCardModule,
     MatIconModule,
     MatDividerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule
   ],
   templateUrl: './solicitante.component.html',
   styleUrl: './solicitante.component.scss'

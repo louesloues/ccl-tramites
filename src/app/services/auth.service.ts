@@ -116,11 +116,12 @@ export class AuthService {
     this.storage.removeItem('ccl:token');
     this.storage.removeItem('ccl:personaID');
     this.storage.removeItem('ccl:usuarioID');
-
+    this.storage.removeItem('ccl:correo');
+    this.authToken.set(null);
     // Actualizamos el signal, lo que automáticamente actualizará `isLoggedIn`.
     this.authToken.set(null);
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   addUser(Correo:string, Psw:string) {

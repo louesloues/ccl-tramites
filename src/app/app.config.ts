@@ -7,7 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { withInterceptors ,HTTP_INTERCEPTORS } from '@angular/common/http';
+import { withInterceptors ,HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideHttpClient } from '@angular/common/http';
@@ -37,7 +37,7 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
 
 
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor,multi: true }, // Añade el interceptor
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 

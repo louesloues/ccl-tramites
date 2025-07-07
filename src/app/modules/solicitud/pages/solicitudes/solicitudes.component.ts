@@ -14,6 +14,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SolicitanteComponent } from "../../components/solicitante/solicitante.component";
 import { PrecapturaPersona } from '../../../../models/persona.model';
+import { TipopersonaComponent } from "../../../online/components/tipopersona/tipopersona.component";
 
 
 
@@ -55,13 +56,14 @@ export interface CitadoData {
     MatIconModule,
     MatDividerModule,
     MatCheckboxModule,
-    SolicitanteComponent
+    SolicitanteComponent,
+    TipopersonaComponent
 ],
   templateUrl: './solicitudes.component.html',
   styleUrls: ['./solicitudes.component.scss']
 })
 export class SolicitudesComponent implements OnInit {
-
+  tipopersonaForm!: FormGroup;
   solicitanteForm!: FormGroup;
   solicitudForm!: FormGroup;
   citadoForm!: FormGroup;
