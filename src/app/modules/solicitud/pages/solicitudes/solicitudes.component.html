@@ -14,14 +14,20 @@
             <!-- Paso 1: Tipo Persona -->
             <mat-step [stepControl]="tipopersonaForm">
               <ng-template matStepLabel>Tipo persona</ng-template>
-              <br/>
+              
+              <!-- El contenido del paso va aquí, fuera de la etiqueta -->
               <app-tipopersona (tipoChange)="onTipoPersonaChange($event)"></app-tipopersona>
             </mat-step>
 
             <!-- Paso 1: Solicitante -->
             <mat-step [stepControl]="solicitanteForm">
               <ng-template matStepLabel>Solicitante</ng-template>
-              <app-solicitante></app-solicitante>
+              
+              <!-- Envolvemos el contenido en un ng-template con matStepContent -->
+              <ng-template matStepContent>
+                <app-solicitante></app-solicitante>
+              </ng-template>
+            
             </mat-step>
 
             <!-- Paso 2: Datos de la Solicitud -->
