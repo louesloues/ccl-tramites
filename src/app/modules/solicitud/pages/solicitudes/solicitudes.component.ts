@@ -19,12 +19,15 @@ import { TipopersonaComponent } from "../../../online/components/tipopersona/tip
 import { environment } from '../../../../../environments/environment.development';
 
 
-import { TipoPersona } from '../../../../interfaces/interface.tipopersona';
+import { TipoUsuario , TipoPersona } from '../../../../interfaces/interface.tipopersona';
 import { forkJoin } from 'rxjs';
 import { CatalogosService } from '../../../../services/catalogos.service';
 import { Escolaridad } from '../../../../models/escolaridad.model';
 import { Nacionalidad } from '../../../../models/nacionalidad.model';
 import { Sexo } from '../../../../models/genero.model';
+import { Router } from '@angular/router';
+import { NotificationService } from '../../../../services/notification.service';
+import { LoaderService } from '../../../../services/loader.service';
 
 
 
@@ -74,6 +77,7 @@ export class SolicitudesComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
 
   // Signals
+
   tipoPersonaSeleccionada = signal<string | null>(null);
 
   masterForm: FormGroup;
@@ -82,10 +86,10 @@ export class SolicitudesComponent implements OnInit {
   citadoForm: FormGroup;
   tipopersonaForm: FormGroup;
 
- 
+
 
   datosCompletos = {
-    tipopersona:{} as TipoPersona, 
+    tipopersona:{} as TipoUsuario,
     solicitante: {} as PrecapturaPersona,
     solicitud: {} as SolicitudData,
     citado: {} as CitadoData
@@ -94,24 +98,28 @@ export class SolicitudesComponent implements OnInit {
   // CORRECCIÓN: Usar la función inject() con 'i' minúscula.
   private _authService = inject(AuthService);
   private fb = inject(FormBuilder);
-  
+  private _routerService = inject(Router);
+  private _notificascionesServices = inject(NotificationService);
+  private _loaderService = inject(LoaderService);
   constructor() {}
 
   ngOnInit() {
     this.initForms();
-
+    this._loaderService.show();
     this._authService.login_tramites_usu(environment.usrOnline.Usr, environment.usrOnline.Psw, false).subscribe({
-      next: (response) => {
-        if (response.success) {
-          console.log('Login exitoso:', response.data);
-          // this._authService.authToken.set(response.data.token);
-          // this._authService.userProfile.set(response.data.persona);
+      next:(response) => {
+        if (response['token']) {
+          console.log('Login exitoso:', response['token']);
+          this._loaderService.hide();
         } else {
-          console.error('Error en el login:', response.message);
+          this._notificascionesServices.showError('Error al iniciar sesión. Reportar a CCL.','Error de inicio de sesión');
+          this._routerService.navigate(['/']);
+          this._loaderService.hide();
         }
       },
       error: (error) => {
-        console.error('Error al realizar el login:', error);
+        console.log('Error al realizar el login:', error);
+        this._loaderService.hide();
       }
     });
   }
@@ -150,8 +158,9 @@ export class SolicitudesComponent implements OnInit {
   }
 
 
-  
+
   onTipoPersonaChange(tipo: string): void {
+    console.log('tipo',tipo)
     this.masterForm.get('tipoPersonaSeleccionada')?.setValue(tipo);
     this.tipoPersonaSeleccionada.set(tipo);
     setTimeout(() => {

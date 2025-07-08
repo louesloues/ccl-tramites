@@ -14,5 +14,5 @@ export const environment = {
     Usr: 'enlinea',
     Psw: 'cc1_3n1in34'
   }
-  
+
 };

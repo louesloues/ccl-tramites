@@ -23,6 +23,7 @@ import { Escolaridad } from '../../../../models/escolaridad.model';
 import { Nacionalidad } from '../../../../models/nacionalidad.model';
 import { Sexo } from '../../../../models/genero.model';
 import { AuthService } from '../../../../services/auth.service';
+import { AppRegex } from '../../../../shared/validators/regex';
 
 
 
@@ -50,6 +51,8 @@ import { AuthService } from '../../../../services/auth.service';
 })
 export class SolicitanteComponent implements OnInit, OnChanges {
   @Input() precapturaPersonaID: string | null = null;
+  @Input() tipoPersona: string; // Default to 'persona', can be 'empresa' or 'otro'
+
 
   solicitanteForm!: FormGroup;
   isEditMode = false; // Flag to control form editability and button visibility
@@ -66,36 +69,61 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   private _catalogosService = inject(CatalogosService);
   private _precapturaService = inject(PrecapturaPersonaService);
 
+
+  internalPersonTypes: TipoPersona[] = [
+    { id: 1, nombre: 'Física' },
+    { id: 2, nombre: 'Moral' }
+  ];
+
+  selectedInternalPersonType: TipoPersona = this.internalPersonTypes[0];
+
   constructor() {}
 
   ngOnInit() {
-    this.initForms();
-    // Initial check if ID is already provided (e.g. if component is initialized with it)
-    this.loadDataOrEnableForm();
-
-    this.loadCatalogs();
+    this.initForms(); // Initialize the form group first and synchronously
+    this.updateInternalPersonTypeLogic(); // Sets initial value and validators for internalPersonTypeId, CURP/RFC
+    this.loadCatalogs(); // Asynchronous catalog loading
+    this.loadDataOrEnableForm(); // Asynchronous data loading
   }
 
   ngOnChanges(changes: SimpleChanges) {
+   if (!this.solicitanteForm) {
+      return; // Exit if the form is not yet ready
+    }
+
     if (changes['precapturaPersonaID']) {
       this.loadDataOrEnableForm();
+    }
+    // Only call updateInternalPersonTypeLogic if tipoPersona input actually changed
+    // The previous check (&& changes['tipoPersona'].currentValue !== changes['tipoPersona'].previousValue) is good practice,
+    // you can re-enable it if needed.
+    if (changes['tipoPersona']) {
+        console.log('ngOnChanges: tipoPersona detected a change.'); // This should always log if a change is detected
+      if (changes['tipoPersona'].currentValue !== changes['tipoPersona'].previousValue) {
+          console.log('ngOnChanges: tipoPersona actual value change:', this.tipoPersona);
+          this.updateInternalPersonTypeLogic();
+      } else {
+          console.log('ngOnChanges: tipoPersona value is the same as before.');
+      }
     }
   }
 
   initForms() {
     this.solicitanteForm = this.fb.group({
       // Aligning with PrecapturaPersona fields
+     internalPersonTypeId: [this.selectedInternalPersonType.id],
       nombre: ['', Validators.required],
       primerApellido: ['', Validators.required], // Changed from apellidoPaterno
       segundoApellido: [''], // Changed from apellidoMaterno, optional
-      telefonoCel: ['', Validators.required], // Changed from telefono
-      correo: ['', [Validators.required, Validators.email]], // Changed from email
+      telefonoCel: ['', [Validators.required, Validators.pattern(AppRegex.TELEFONO)]], // Changed from telefono
+      correo: ['', [Validators.required, , Validators.email, Validators.pattern(AppRegex.CORREO)]], // Changed from email
       // 'direccion' is not in PrecapturaPersona, we'll keep it for now.
       // It might need to be handled differently or removed if not part of the core model.
       direccion: ['', Validators.required], // Stays as a local form field, not in PrecapturaPersona mapping for load/save
 
       // Fields from PrecapturaPersona
-      curp: [''], // Optional in model
+      curp: ['', Validators.pattern(AppRegex.CURP)], // Optional in model
+      rfc:['', Validators.pattern(AppRegex.RFC)],
       fechaNacimiento: ['', Validators.required], // Required in model
       numeroIdentificacion: [''], // Optional
       generoID: [null], // Optional number
@@ -108,8 +136,7 @@ export class SolicitanteComponent implements OnInit, OnChanges {
       ocupacionID: [null], // Optional number
       grupoVulnerableID: [null] // Optional number
     });
-    // By default, the form is for adding new, so it's enabled.
-    // If an ID comes, loadDataOrEnableForm will disable it.
+
   }
 
   loadCatalogs() {
@@ -126,7 +153,28 @@ export class SolicitanteComponent implements OnInit, OnChanges {
         this.generos = resultados.generosRes.data;
 
         this.catalogosCargados = true; // Puedes usar esto para mostrar un spinner
-        console.log('¡Todos los catálogos cargados en paralelo!');
+        if (this._authService.userProfile()){
+          console.log('Se cargara el perfil');
+          this._precapturaService.getPrecapturaPersonaById(this._authService.userProfile().PrecapturaPersonaID).subscribe({
+            next: (data) => {
+              if (data) {
+                this.precapturaPersonaID = data.PrecapturaPersonaID; // Asignar el ID del perfil cargado
+                this.loadDataOrEnableForm(); // Cargar datos del perfil
+              } else {
+                console.warn('No se encontró el perfil de usuario.');
+                this.solicitanteForm.enable(); // Habilitar formulario si no hay perfil
+              }
+            }
+            ,
+            error: (err) => {
+              console.error('Error al cargar el perfil de usuario:', err);
+              this.solicitanteForm.enable(); // Habilitar formulario en caso de error
+            }
+          });
+
+
+        }
+
       },
       error: (err) => {
         console.error('Error al cargar uno de los catálogos', err);
@@ -145,14 +193,14 @@ export class SolicitanteComponent implements OnInit, OnChanges {
       this._precapturaService.getPrecapturaPersonaById(this.precapturaPersonaID).subscribe({
         next: (data) => {
           if (data) {
+            let loadedInternalTypeId = 1;
             this.solicitanteForm.patchValue({
+              internalPersonTypeId:loadedInternalTypeId,
               nombre: data.nombre,
               primerApellido: data.primerApellido,
               segundoApellido: data.segundoApellido || '',
               telefonoCel: data.telefonoCel || '',
               correo: data.correo || '',
-              // direccion: this.solicitanteForm.value.direccion, // Keep local value if any, or clear it
-
               curp: data.curp || '',
               fechaNacimiento: data.fechaNacimiento, // MatDatepicker should handle ISO string
               numeroIdentificacion: data.numeroIdentificacion || '',
@@ -218,4 +266,72 @@ export class SolicitanteComponent implements OnInit, OnChanges {
     }
     // TODO: Handle stepper progression or other actions after save
   }
+
+
+  toggleCurpRfcValidation(type: TipoPersona): void {
+    const curpControl = this.solicitanteForm.get('curp');
+    const rfcControl = this.solicitanteForm.get('rfc');
+
+    if (type.nombre === 'Física') {
+      // Set validators for CURP: REQUIRED + PATTERN
+      curpControl?.setValidators([Validators.required, Validators.pattern(AppRegex.CURP)]);
+      // Clear validators for RFC
+      rfcControl?.clearValidators();
+      rfcControl?.setValue('');
+    } else if (type.nombre === 'Moral') {
+      // Set validators for RFC: REQUIRED + PATTERN
+      rfcControl?.setValidators([Validators.required, Validators.pattern(AppRegex.RFC)]);
+      // Clear validators for CURP
+      curpControl?.clearValidators();
+      curpControl?.setValue('');
+    }
+
+    // Always call updateValueAndValidity to re-evaluate the control's validity
+    curpControl?.updateValueAndValidity();
+    rfcControl?.updateValueAndValidity();
+  }
+  isPatron(): boolean {
+    return this.tipoPersona === 'Soy patron';
+  }
+
+   onInternalPersonTypeChange(selectedId: number): void {
+    const selectedType = this.internalPersonTypes.find(type => type.id === selectedId);
+    if (selectedType) {
+      this.selectedInternalPersonType = selectedType;
+      this.toggleCurpRfcValidation(selectedType);
+    }
+  }
+
+
+  private updateInternalPersonTypeLogic(): void {
+    const internalPersonTypeIdControl = this.solicitanteForm.get('internalPersonTypeId');
+
+    if (this.isPatron()) {
+      // If 'Soy patron', default to Moral (ID 2) as per previous implicit logic for RFC showing initially
+      // Or default to Física (ID 1) if that's the intended initial state for Patrones
+      internalPersonTypeIdControl?.enable();
+      this.selectedInternalPersonType = this.internalPersonTypes.find(t => t.id === 2) || this.internalPersonTypes[0]; // Default to Moral if found, else Física
+    } else {
+      // If NOT 'Soy patron' (e.g., 'Soy trabajador'), force to Física (ID 1)
+      internalPersonTypeIdControl?.disable();
+      this.selectedInternalPersonType = this.internalPersonTypes.find(t => t.id === 1) || this.internalPersonTypes[0]; // Force to Física
+    }
+    // Set the form control value immediately
+    this.solicitanteForm.get('internalPersonTypeId')?.setValue(this.selectedInternalPersonType.id, { emitEvent: false });
+    // Apply validations based on the now set selectedInternalPersonType
+    this.toggleCurpRfcValidation(this.selectedInternalPersonType);
+
+
+  }
+
+
+  get shouldShowCurp(): boolean {
+    return this.selectedInternalPersonType.nombre === 'Física';
+  }
+
+  get shouldShowRfc(): boolean {
+    return this.selectedInternalPersonType.nombre === 'Moral';
+  }
+
+
 }

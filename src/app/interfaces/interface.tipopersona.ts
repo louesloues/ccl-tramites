@@ -1,3 +1,9 @@
+export interface TipoUsuario {
+    nombre:'Soy trabajador'|'Soy patrón';
+}
+
+
 export interface TipoPersona {
-    nombre:'patron'|'trabajador';
+  id: number;
+  nombre: string;
 }

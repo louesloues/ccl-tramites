@@ -4,8 +4,8 @@
         <div class="col">
           <mat-card
             class="person-card worker-card"
-            [class.selected]="selectedTipo === 'trabajador'"
-            (click)="onTipoPersonaChange('trabajador')">
+            [class.selected]="selectedTipo === 'Soy trabajador'"
+            (click)="onTipoPersonaChange('Soy trabajador')">
             <mat-card-content class="text-center p-4">
               <mat-icon class="person-icon mb-3">engineering</mat-icon>
               <h3 class="card-title mb-2">Eres Trabajador</h3>
@@ -17,8 +17,8 @@
         <div class="col">
           <mat-card
             class="person-card patron-card"
-            [class.selected]="selectedTipo === 'patron'"
-            (click)="onTipoPersonaChange('patron')">
+            [class.selected]="selectedTipo === 'Soy patron'"
+            (click)="onTipoPersonaChange('Soy patron')">
             <mat-card-content class="text-center p-4">
               <mat-icon class="person-icon mb-3">business</mat-icon>
               <h3 class="card-title mb-2">Eres Patrón</h3>
