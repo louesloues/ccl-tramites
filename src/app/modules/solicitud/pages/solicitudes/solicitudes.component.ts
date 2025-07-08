@@ -18,6 +18,17 @@ import { PrecapturaPersona } from '../../../../models/persona.model';
 import { TipopersonaComponent } from "../../../online/components/tipopersona/tipopersona.component";
 import { environment } from '../../../../../environments/environment.development';
 
+
+import { TipoPersona } from '../../../../interfaces/interface.tipopersona';
+import { forkJoin } from 'rxjs';
+import { CatalogosService } from '../../../../services/catalogos.service';
+import { Escolaridad } from '../../../../models/escolaridad.model';
+import { Nacionalidad } from '../../../../models/nacionalidad.model';
+import { Sexo } from '../../../../models/genero.model';
+
+
+
+
 export interface SolicitudData {
   tipoSolicitud: string;
   motivo: string;
@@ -69,8 +80,12 @@ export class SolicitudesComponent implements OnInit {
   solicitanteForm: FormGroup;
   solicitudForm: FormGroup;
   citadoForm: FormGroup;
+  tipopersonaForm: FormGroup;
+
+ 
 
   datosCompletos = {
+    tipopersona:{} as TipoPersona, 
     solicitante: {} as PrecapturaPersona,
     solicitud: {} as SolicitudData,
     citado: {} as CitadoData
@@ -79,7 +94,7 @@ export class SolicitudesComponent implements OnInit {
   // CORRECCIÓN: Usar la función inject() con 'i' minúscula.
   private _authService = inject(AuthService);
   private fb = inject(FormBuilder);
-
+  
   constructor() {}
 
   ngOnInit() {
@@ -134,6 +149,8 @@ export class SolicitudesComponent implements OnInit {
     });
   }
 
+
+  
   onTipoPersonaChange(tipo: string): void {
     this.masterForm.get('tipoPersonaSeleccionada')?.setValue(tipo);
     this.tipoPersonaSeleccionada.set(tipo);

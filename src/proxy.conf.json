@@ -1,6 +1,6 @@
 {
   "/api":{
-      "target": "http://localhost:5000",
+      "target":"https://sistemaconciliaciongto.guanajuato.gob.mx/APICore.CCL/api", 
       "secure": false,
       "changeOrigin": true
     },

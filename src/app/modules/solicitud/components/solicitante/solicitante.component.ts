@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -15,6 +15,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PrecapturaPersona } from '../../../../models/persona.model';
 import { PrecapturaPersonaService } from '../../../../services/precaptura-persona.service';
 import {MatExpansionModule} from '@angular/material/expansion';// Import a placeholder service
+
+import { TipoPersona } from '../../../../interfaces/interface.tipopersona';
+import { forkJoin } from 'rxjs';
+import { CatalogosService } from '../../../../services/catalogos.service';
+import { Escolaridad } from '../../../../models/escolaridad.model';
+import { Nacionalidad } from '../../../../models/nacionalidad.model';
+import { Sexo } from '../../../../models/genero.model';
+import { AuthService } from '../../../../services/auth.service';
+
 
 
 @Component({
@@ -45,19 +54,26 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   solicitanteForm!: FormGroup;
   isEditMode = false; // Flag to control form editability and button visibility
   isLoading = false; // Flag for loading state
+  escolaridades: Escolaridad[] = [];
+  nacionalidades: Nacionalidad[] = [];
+  generos: Sexo[] = [];
+  catalogosCargados = false;
 
   // We will use PrecapturaPersona as the main model
   // The local SolicitanteData interface might be removed or merged later if not needed.
+  private _authService = inject(AuthService);
+  private fb = inject(FormBuilder);
+  private _catalogosService = inject(CatalogosService);
+  private _precapturaService = inject(PrecapturaPersonaService);
 
-  constructor(
-    private fb: FormBuilder,
-    private _precapturaService: PrecapturaPersonaService // Inject the service
-  ) {}
+  constructor() {}
 
   ngOnInit() {
     this.initForms();
     // Initial check if ID is already provided (e.g. if component is initialized with it)
     this.loadDataOrEnableForm();
+
+    this.loadCatalogs();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -95,6 +111,31 @@ export class SolicitanteComponent implements OnInit, OnChanges {
     // By default, the form is for adding new, so it's enabled.
     // If an ID comes, loadDataOrEnableForm will disable it.
   }
+
+  loadCatalogs() {
+    // forkJoin recibe un objeto. Las claves son los nombres que tú elijas.
+    forkJoin({
+      escolaridadesRes: this._catalogosService.getEscolaridades(),
+      nacionalidadesRes: this._catalogosService.getNacionalidades(),
+      generosRes: this._catalogosService.getGeneros()
+    }).subscribe({
+      next: (resultados) => {
+        // 'resultados' es un objeto con las respuestas, usando las claves que definiste.
+        this.escolaridades = resultados.escolaridadesRes.data;
+        this.nacionalidades = resultados.nacionalidadesRes.data;
+        this.generos = resultados.generosRes.data;
+
+        this.catalogosCargados = true; // Puedes usar esto para mostrar un spinner
+        console.log('¡Todos los catálogos cargados en paralelo!');
+      },
+      error: (err) => {
+        console.error('Error al cargar uno de los catálogos', err);
+        // Importante: Si UNA de las peticiones falla, forkJoin falla por completo.
+        // Aquí deberías mostrar un mensaje de error al usuario.
+      }
+    });
+  }
+
 
   loadDataOrEnableForm() {
     if (this.precapturaPersonaID) {
