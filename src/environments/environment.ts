@@ -9,5 +9,10 @@ export const environment = {
       storageBucket: "ccl-login-afc54.firebasestorage.app",
       messagingSenderId: "780161636507",
       appId: "1:780161636507:web:4ac8b4595149d588964e3e"
+  },
+  usrOnline:{
+    Usr: 'enlinea',
+    Psw: 'cc1_3n1in34'
   }
+  
 };

@@ -1,4 +1,5 @@
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
@@ -15,9 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SolicitanteComponent } from "../../components/solicitante/solicitante.component";
 import { PrecapturaPersona } from '../../../../models/persona.model';
 import { TipopersonaComponent } from "../../../online/components/tipopersona/tipopersona.component";
-
-
-
+import { environment } from '../../../../../environments/environment.development';
 
 export interface SolicitudData {
   tipoSolicitud: string;
@@ -36,8 +35,6 @@ export interface CitadoData {
   direccionCitado: string;
   relacion: string;
 }
-
-/* Quitar TODO */
 
 @Component({
   selector: 'app-solicitudes',
@@ -58,7 +55,7 @@ export interface CitadoData {
     MatCheckboxModule,
     SolicitanteComponent,
     TipopersonaComponent
-],
+  ],
   templateUrl: './solicitudes.component.html',
   styleUrls: ['./solicitudes.component.scss']
 })
@@ -69,11 +66,9 @@ export class SolicitudesComponent implements OnInit {
   tipoPersonaSeleccionada = signal<string | null>(null);
 
   masterForm: FormGroup;
-
-  tipopersonaForm!: FormGroup;
-  solicitanteForm!: FormGroup;
-  solicitudForm!: FormGroup;
-  citadoForm!: FormGroup;
+  solicitanteForm: FormGroup;
+  solicitudForm: FormGroup;
+  citadoForm: FormGroup;
 
   datosCompletos = {
     solicitante: {} as PrecapturaPersona,
@@ -81,20 +76,37 @@ export class SolicitudesComponent implements OnInit {
     citado: {} as CitadoData
   };
 
-  constructor(private fb: FormBuilder) {}
+  // CORRECCIÓN: Usar la función inject() con 'i' minúscula.
+  private _authService = inject(AuthService);
+  private fb = inject(FormBuilder);
+
+  constructor() {}
 
   ngOnInit() {
     this.initForms();
+
+    this._authService.login_tramites_usu(environment.usrOnline.Usr, environment.usrOnline.Psw, false).subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('Login exitoso:', response.data);
+          // this._authService.authToken.set(response.data.token);
+          // this._authService.userProfile.set(response.data.persona);
+        } else {
+          console.error('Error en el login:', response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error al realizar el login:', error);
+      }
+    });
   }
 
   initForms() {
     this.masterForm = this.fb.group({
       tipoPersonaSeleccionada: [null, Validators.required]
-
     });
 
-
-     this.solicitanteForm = this.fb.group({
+    this.solicitanteForm = this.fb.group({
       nombre: ['', Validators.required],
       apellidoPaterno: ['', Validators.required],
       apellidoMaterno: ['', Validators.required],
@@ -120,34 +132,20 @@ export class SolicitudesComponent implements OnInit {
       direccionCitado: ['', Validators.required],
       relacion: ['', Validators.required]
     });
-
   }
 
-
-
-
   onTipoPersonaChange(tipo: string): void {
-    // 1. Actualizamos el valor en nuestro FormGroup principal.
-    this.masterForm.get('tipoPersona.tipo')?.setValue(tipo);
-
-    // 2. Actualizamos el signal para que la UI pueda reaccionar.
+    this.masterForm.get('tipoPersonaSeleccionada')?.setValue(tipo);
     this.tipoPersonaSeleccionada.set(tipo);
     setTimeout(() => {
-       this.stepper.next();
-    }, 150); //
+      this.stepper.next();
+    }, 150);
     console.log('Tipo de persona seleccionado en el padre:', this.tipoPersonaSeleccionada());
     console.log('Estado del formulario:', this.masterForm.value);
   }
 
-
-
-
-
   guardarSolicitud() {
-  //   if (this.solicitudForm.valid) {
-  //     this.datosCompletos.solicitud = this.solicitudForm.value;
-  //     console.log('Datos de la solicitud guardados:', this.datosCompletos.solicitud);
-  //   }
+    // Implementar lógica
   }
 
   guardarCitado() {
@@ -158,14 +156,11 @@ export class SolicitudesComponent implements OnInit {
   }
 
   editarPaso(stepIndex: number) {
-    // Implementar lógica para regresar al paso específico
     console.log(`Editando paso ${stepIndex}`);
   }
 
   enviarSolicitud() {
     console.log('Enviando solicitud completa:', this.datosCompletos);
-    // Aquí implementarías la lógica para enviar los datos al backend
     alert('Solicitud enviada correctamente!');
   }
-
 }

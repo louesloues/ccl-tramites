@@ -110,6 +110,53 @@ export class AuthService {
   );
 }
 
+
+public login_tramites_usu(Usr: string, Psw: string, Auth: boolean): Observable<ApiResponse<LoginResponse>> {
+  const body = { Usr, Psw, Auth, urlOrigin: '' };
+
+  return this.http.post<ApiResponse<LoginResponse>>(`${this.baseUrl}UsuarioWeb/LoginWebCCL/`, body, { headers: this.headers })
+    .pipe(
+      // Usamos switchMap para encadenar la siguiente acción.
+      switchMap(loginResponse => {
+        // Si el login NO fue exitoso, o no hay ID, simplemente devolvemos la respuesta original.
+        if (!loginResponse.success) {
+          console.warn('Login fallido o sin ID de usuario. Respuesta original:', loginResponse);
+          return of(loginResponse); // 'of' crea un observable que emite el valor y se completa.
+        }
+
+        // Si hay ID, preparamos la sesión y DISPARAMOS la carga de datos del perfil.
+        const token_new: Token = {
+          id: loginResponse.data.token,
+          PrecapturaPersonaID: loginResponse.data.precapturaPersonaID,
+          usuarioID: loginResponse.data.usuarioID,
+          correo: loginResponse.data.usr
+        };
+        this.setSessionInfo(token_new);
+
+        if (!loginResponse.data.precapturaPersonaID) {
+          console.warn('Usuario no tiene PrecapturaPersonaID. Redirigiendo a completar registro.');
+          // Si no hay PrecapturaPersonaID, redirigimos al usuario a completar su registro.
+          this.router.navigate(['/tramiteonline/completar-registro']);
+          return of(loginResponse); // Retornamos la respuesta original.
+        }
+
+
+
+        // Llamamos a un nuevo método para cargar el perfil y lo retornamos.
+        // switchMap espera que retornemos un Observable.
+        console.log(`Login exitoso. Cargando perfil de usuario con ID: ${loginResponse.data.precapturaPersonaID}`);
+        return this.fetchAndSetUserProfile(loginResponse.data.precapturaPersonaID).pipe(
+           // Cuando fetchAndSetUserProfile termine, retornamos la respuesta del login original
+           // para que el componente que se suscribió la reciba.
+          map(() => loginResponse)
+        );
+      })
+    );
+}
+
+
+
+
   logout(): void {
     console.log('AuthService logout');
     // Limpiamos el storage
