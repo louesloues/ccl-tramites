@@ -54,6 +54,7 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   @Input() tipoPersona: string; // Default to 'persona', can be 'empresa' or 'otro'
 
 
+
   solicitanteForm!: FormGroup;
   isEditMode = false; // Flag to control form editability and button visibility
   isLoading = false; // Flag for loading state
@@ -80,10 +81,12 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit() {
+    console.log('Desde ngOnInit:', this.tipoPersona);
     this.initForms(); // Initialize the form group first and synchronously
+    this.loadDataOrEnableForm(); // Asynchronous data loading
     this.updateInternalPersonTypeLogic(); // Sets initial value and validators for internalPersonTypeId, CURP/RFC
     this.loadCatalogs(); // Asynchronous catalog loading
-    this.loadDataOrEnableForm(); // Asynchronous data loading
+
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -38,16 +38,16 @@
             <mat-form-field appearance="outline" *ngIf="shouldShowCurp">
               <mat-label>CURP</mat-label>
               <input matInput formControlName="curp" placeholder="Ingrese su CURP" [readonly]="!isEditMode">
-              <mat-error *ngIf="solicitanteForm.get('curp')?.hasError('required') && solicitanteForm.get('curp')?.touched">
-                El CURP es obligatorio.
+              <mat-error *ngIf="solicitanteForm.get('curp')?.hasError('pattern')  && solicitanteForm.get('curp')?.touched">
+                El CURP no novalido.
               </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" *ngIf="shouldShowRfc">
               <mat-label>RFC</mat-label>
               <input matInput formControlName="rfc" placeholder="Ingrese su RFC" [readonly]="!isEditMode">
-              <mat-error *ngIf="solicitanteForm.get('rfc')?.hasError('required') && solicitanteForm.get('rfc')?.touched">
-                El RFC es obligatorio.
+              <mat-error *ngIf="solicitanteForm.get('rfc')?.hasError('pattern') && solicitanteForm.get('rfc')?.touched">
+                El RFC no valido.
               </mat-error>
             </mat-form-field>
 
@@ -76,21 +76,35 @@
             <mat-label>Segundo Apellido (Opcional)</mat-label>
             <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
           </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Genero*</mat-label>
+            <mat-select
+                formControlName="generoID"
+                name="generoID"
+            >
+                <mat-option *ngFor="let gen of generosRes" [value]="gen.sexoID">
+                    {{gen.nombre}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 
+        </div>
+
+
+        <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Teléfono Celular</mat-label>
             <input matInput formControlName="telefonoCel" placeholder="Número de teléfono celular" [readonly]="!isEditMode">
             <mat-error *ngIf="solicitanteForm.get('telefonoCel')?.hasError('pattern') && solicitanteForm.get('telefonoCel')?.touched">
-              Formato de teléfono no válido (ej. 10 dígitos).
+              Formato de teléfono no válido (10 dígitos).
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Correo Electrónico</mat-label>
-          <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Correo Electrónico</mat-label>
+            <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
           </mat-form-field>
-
+        </div>
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Dirección</mat-label>
           <textarea matInput formControlName="direccion" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
