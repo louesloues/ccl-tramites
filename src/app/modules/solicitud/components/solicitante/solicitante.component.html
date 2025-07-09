@@ -76,13 +76,15 @@
             <mat-label>Segundo Apellido (Opcional)</mat-label>
             <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
           </mat-form-field>
+
+
           <mat-form-field appearance="outline">
             <mat-label>Genero*</mat-label>
             <mat-select
                 formControlName="generoID"
                 name="generoID"
             >
-                <mat-option *ngFor="let gen of generosRes" [value]="gen.sexoID">
+                <mat-option *ngFor="let gen of generos" [value]="gen.id">
                     {{gen.nombre}}
                 </mat-option>
             </mat-select>
@@ -100,30 +102,82 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline">
             <mat-label>Correo Electrónico</mat-label>
             <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
           </mat-form-field>
         </div>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Dirección</mat-label>
-          <textarea matInput formControlName="direccion" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
-          <mat-error *ngIf="solicitanteForm.get('direccion')?.hasError('required') && solicitanteForm.get('direccion')?.touched">
-            La dirección es requerida
-          </mat-error>
-        </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline">
-              <mat-label>Escolaridad ID</mat-label>
-              <input matInput type="number" formControlName="escolaridadID" placeholder="ID Escolaridad" [readonly]="!isEditMode">
+                <mat-label>Escolaridad</mat-label>
+                 <mat-select
+                formControlName="escolaridadID"
+                name="escolaridadID"
+                >
+                    <mat-option *ngFor="let esc of escolaridades" [value]="esc.id">
+                        {{esc.nombre}}
+                    </mat-option>
+                </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+                <mat-label>Nacionalidad</mat-label>
+                 <mat-select
+                    formControlName="nacionalidadID"
+                    name="nacionalidadID"
+                  >
+                    <mat-option *ngFor="let nac of nacionalidades" [value]="nac.id">
+                        {{nac.nombre}}
+                    </mat-option>
+                </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Estado Civil</mat-label>
+            <mat-select
+                    formControlName="nacionalidadID"
+                    name="nacionalidadID"
+                  >
+                    <mat-option *ngFor="let civ of civil" [value]="civ.id">
+                        {{civ.nombre}}
+                    </mat-option>
+                </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-              <mat-label>Estado Civil ID</mat-label>
-              <input matInput type="number" formControlName="estadoCivilID" placeholder="ID Estado Civil" [readonly]="!isEditMode">
+            <mat-label>Grupo en situación de vulnerabilidad*</mat-label>
+            <mat-select
+                    formControlName="grupoVulnerableID"
+                    name="grupoVulnerableID"
+                  >
+                    <mat-option *ngFor="let gru of gruposv" [value]="gru.id">
+                        {{gru.nombre}}
+                    </mat-option>
+                </mat-select>
           </mat-form-field>
+
         </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Cargo</mat-label>
+            <input matInput formControlName="nombreOcupacion" type="nombreOcupacion" placeholder="Cargo">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo Identificación*</mat-label>
+              <mat-select
+                formControlName="tipoIdentificacionID"
+                name="tipoIdentificacionID"
+                >
+                <mat-option *ngFor="let ids of identifs" [value]="ids.id">
+                    {{ids.nombre}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+
+        </div>
+
 
       </mat-expansion-panel>
 
@@ -136,27 +190,17 @@
         </mat-expansion-panel-header>
 
         <div class="form-row">
-
-
-            <mat-form-field appearance="outline">
-                <mat-label>Fecha de Nacimiento</mat-label>
-                <input matInput [matDatepicker]="pickerFechaNacimiento" formControlName="fechaNacimiento" placeholder="YYYY-MM-DD" [readonly]="!isEditMode">
-                <mat-datepicker-toggle matSuffix [for]="pickerFechaNacimiento"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFechaNacimiento [disabled]="!isEditMode"></mat-datepicker>
-            </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Dirección</mat-label>
+              <textarea matInput formControlName="direccion" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
+              <mat-error *ngIf="solicitanteForm.get('direccion')?.hasError('required') && solicitanteForm.get('direccion')?.touched">
+                La dirección es requerida
+              </mat-error>
+          </mat-form-field>
         </div>
         </mat-expansion-panel>
 
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <strong>Información Socioeconómica</strong>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-
-        </mat-expansion-panel>
 
     </mat-accordion>
 

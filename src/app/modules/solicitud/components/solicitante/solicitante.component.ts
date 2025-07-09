@@ -24,6 +24,7 @@ import { Nacionalidad } from '../../../../models/nacionalidad.model';
 import { Sexo } from '../../../../models/genero.model';
 import { AuthService } from '../../../../services/auth.service';
 import { AppRegex } from '../../../../shared/validators/regex';
+import { CatalogoItem } from '../../../../interfaces/interface.catalogoitem';
 
 
 
@@ -58,9 +59,12 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   solicitanteForm!: FormGroup;
   isEditMode = false; // Flag to control form editability and button visibility
   isLoading = false; // Flag for loading state
-  escolaridades: Escolaridad[] = [];
-  nacionalidades: Nacionalidad[] = [];
-  generos: Sexo[] = [];
+  escolaridades: CatalogoItem[] = [];
+  nacionalidades: CatalogoItem[] = [];
+  generos: CatalogoItem[] = [];
+  civil: CatalogoItem[] = [];
+  gruposv: CatalogoItem[] = [];
+  identifs:CatalogoItem[] = [];
   catalogosCargados = false;
 
   // We will use PrecapturaPersona as the main model
@@ -147,37 +151,38 @@ export class SolicitanteComponent implements OnInit, OnChanges {
     forkJoin({
       escolaridadesRes: this._catalogosService.getEscolaridades(),
       nacionalidadesRes: this._catalogosService.getNacionalidades(),
-      generosRes: this._catalogosService.getGeneros()
+      generosRes: this._catalogosService.getGeneros(),
+      estadoCivilRes: this._catalogosService.getEstadoCivil(),
+      gruposRes: this._catalogosService.getGrupoVulnerable(),
+      identifRes: this._catalogosService.getTipoIdentificacion()
     }).subscribe({
       next: (resultados) => {
         // 'resultados' es un objeto con las respuestas, usando las claves que definiste.
-        this.escolaridades = resultados.escolaridadesRes.data;
-        this.nacionalidades = resultados.nacionalidadesRes.data;
-        this.generos = resultados.generosRes.data;
-
+        this.escolaridades = resultados.escolaridadesRes;
+        this.nacionalidades = resultados.nacionalidadesRes;
+        this.generos = resultados.generosRes;
+        this.civil = resultados.estadoCivilRes;
+        this.gruposv = resultados.gruposRes;
+        this.identifs = resultados.identifRes;
         this.catalogosCargados = true; // Puedes usar esto para mostrar un spinner
         if (this._authService.userProfile()){
-          console.log('Se cargara el perfil');
           this._precapturaService.getPrecapturaPersonaById(this._authService.userProfile().PrecapturaPersonaID).subscribe({
-            next: (data) => {
-              if (data) {
-                this.precapturaPersonaID = data.PrecapturaPersonaID; // Asignar el ID del perfil cargado
-                this.loadDataOrEnableForm(); // Cargar datos del perfil
-              } else {
-                console.warn('No se encontró el perfil de usuario.');
-                this.solicitanteForm.enable(); // Habilitar formulario si no hay perfil
+              next: (data) => {
+                if (data) {
+                  this.precapturaPersonaID = data.PrecapturaPersonaID; // Asignar el ID del perfil cargado
+                  this.loadDataOrEnableForm(); // Cargar datos del perfil
+                } else {
+                  console.warn('No se encontró el perfil de usuario.');
+                  this.solicitanteForm.enable(); // Habilitar formulario si no hay perfil
+                }
               }
-            }
-            ,
-            error: (err) => {
-              console.error('Error al cargar el perfil de usuario:', err);
-              this.solicitanteForm.enable(); // Habilitar formulario en caso de error
-            }
+              ,
+              error: (err) => {
+                console.error('Error al cargar el perfil de usuario:', err);
+                this.solicitanteForm.enable(); // Habilitar formulario en caso de error
+              }
           });
-
-
         }
-
       },
       error: (err) => {
         console.error('Error al cargar uno de los catálogos', err);
