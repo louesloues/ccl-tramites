@@ -2,207 +2,176 @@
 
   <div *ngIf="isLoading" class="loading-indicator">
     <p>Cargando datos del solicitante...</p>
-    </div>
+  </div>
 
   <form [formGroup]="solicitanteForm" class="step-form" *ngIf="!isLoading">
 
-    <mat-accordion>
+    <h3 class="form-section-title">
+        <strong>Datos del Solicitante</strong>
+    </h3>
 
-      <mat-expansion-panel [expanded]="true"> <mat-expansion-panel-header>
-          <mat-panel-title>
-            <strong>Datos del Solicitante</strong>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de Persona</mat-label>
+        <mat-select
+            formControlName="internalPersonTypeId"
+            (selectionChange)="onInternalPersonTypeChange($event.value)"
+            name="internalPersonType"
+          >
+            <mat-option *ngFor="let type of internalPersonTypes" [value]="type.id">
+              {{type.nombre}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
 
-         <!-- <div class="full-row">
-           <div *ngIf="!isPatron()" class="elegant-label">
-             <mat-label>Tipo de persona:</mat-label>
-             <span class="type-value">Física</span>
-           </div>
-         </div> -->
+      <mat-form-field appearance="outline" *ngIf="shouldShowCurp">
+        <mat-label>CURP</mat-label>
+        <input matInput formControlName="curp" placeholder="Ingrese su CURP" [readonly]="!isEditMode">
+        <mat-error *ngIf="solicitanteForm.get('curp')?.hasError('pattern')  && solicitanteForm.get('curp')?.touched">
+          El CURP no es válido.
+        </mat-error>
+      </mat-form-field>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline">
-              <mat-label>Tipo de Persona</mat-label>
-              <mat-select
-                  formControlName="internalPersonTypeId"
-                  (selectionChange)="onInternalPersonTypeChange($event.value)"
-                  name="internalPersonType"
-                >
-                  <mat-option *ngFor="let type of internalPersonTypes" [value]="type.id">
-                    {{type.nombre}}
-                  </mat-option>
-                </mat-select>
-            </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="shouldShowRfc">
+        <mat-label>RFC</mat-label>
+        <input matInput formControlName="rfc" placeholder="Ingrese su RFC" [readonly]="!isEditMode">
+        <mat-error *ngIf="solicitanteForm.get('rfc')?.hasError('pattern') && solicitanteForm.get('rfc')?.touched">
+          El RFC no es válido.
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-            <mat-form-field appearance="outline" *ngIf="shouldShowCurp">
-              <mat-label>CURP</mat-label>
-              <input matInput formControlName="curp" placeholder="Ingrese su CURP" [readonly]="!isEditMode">
-              <mat-error *ngIf="solicitanteForm.get('curp')?.hasError('pattern')  && solicitanteForm.get('curp')?.touched">
-                El CURP no novalido.
-              </mat-error>
-            </mat-form-field>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" placeholder="Ingrese su nombre" [readonly]="!isEditMode">
+        <mat-error *ngIf="solicitanteForm.get('nombre')?.hasError('required') && solicitanteForm.get('nombre')?.touched">
+          El nombre es requerido
+        </mat-error>
+      </mat-form-field>
 
-            <mat-form-field appearance="outline" *ngIf="shouldShowRfc">
-              <mat-label>RFC</mat-label>
-              <input matInput formControlName="rfc" placeholder="Ingrese su RFC" [readonly]="!isEditMode">
-              <mat-error *ngIf="solicitanteForm.get('rfc')?.hasError('pattern') && solicitanteForm.get('rfc')?.touched">
-                El RFC no valido.
-              </mat-error>
-            </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Primer Apellido</mat-label>
+        <input matInput formControlName="primerApellido" placeholder="Primer apellido" [readonly]="!isEditMode">
+        <mat-error *ngIf="solicitanteForm.get('primerApellido')?.hasError('required') && solicitanteForm.get('primerApellido')?.touched">
+          El primer apellido es requerido
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-          </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Segundo Apellido (Opcional)</mat-label>
+        <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
+      </mat-form-field>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombre" placeholder="Ingrese su nombre" [readonly]="!isEditMode">
-            <mat-error *ngIf="solicitanteForm.get('nombre')?.hasError('required') && solicitanteForm.get('nombre')?.touched">
-              El nombre es requerido
-            </mat-error>
-          </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Género*</mat-label>
+        <mat-select
+            formControlName="generoID"
+            name="generoID"
+          >
+            <mat-option *ngFor="let gen of generos" [value]="gen.id">
+                {{gen.nombre}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+    </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Primer Apellido</mat-label>
-            <input matInput formControlName="primerApellido" placeholder="Primer apellido" [readonly]="!isEditMode">
-            <mat-error *ngIf="solicitanteForm.get('primerApellido')?.hasError('required') && solicitanteForm.get('primerApellido')?.touched">
-              El primer apellido es requerido
-            </mat-error>
-          </mat-form-field>
-        </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono Celular</mat-label>
+        <input matInput formControlName="telefonoCel" placeholder="Número de teléfono celular" [readonly]="!isEditMode">
+        <mat-error *ngIf="solicitanteForm.get('telefonoCel')?.hasError('pattern') && solicitanteForm.get('telefonoCel')?.touched">
+          Formato de teléfono no válido (10 dígitos).
+        </mat-error>
+      </mat-form-field>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Segundo Apellido (Opcional)</mat-label>
-            <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
-          </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Correo Electrónico</mat-label>
+        <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
+      </mat-form-field>
+    </div>
 
-
-          <mat-form-field appearance="outline">
-            <mat-label>Genero*</mat-label>
-            <mat-select
-                formControlName="generoID"
-                name="generoID"
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+          <mat-label>Escolaridad</mat-label>
+           <mat-select
+            formControlName="escolaridadID"
+            name="escolaridadID"
             >
-                <mat-option *ngFor="let gen of generos" [value]="gen.id">
-                    {{gen.nombre}}
-                </mat-option>
+              <mat-option *ngFor="let esc of escolaridades" [value]="esc.id">
+                  {{esc.nombre}}
+              </mat-option>
             </mat-select>
-        </mat-form-field>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>Nacionalidad</mat-label>
+           <mat-select
+              formControlName="nacionalidadID"
+              name="nacionalidadID"
+            >
+              <mat-option *ngFor="let nac of nacionalidades" [value]="nac.id">
+                  {{nac.nombre}}
+              </mat-option>
+            </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Estado Civil</mat-label>
+        <mat-select
+              formControlName="estadoCivilID"
+              name="estadoCivilID"
+            >
+              <mat-option *ngFor="let civ of civil" [value]="civ.id">
+                  {{civ.nombre}}
+              </mat-option>
+            </mat-select>
+      </mat-form-field>
 
-        </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Grupo en situación de vulnerabilidad*</mat-label>
+        <mat-select
+              formControlName="grupoVulnerableID"
+              name="grupoVulnerableID"
+            >
+              <mat-option *ngFor="let gru of gruposv" [value]="gru.id">
+                  {{gru.nombre}}
+              </mat-option>
+            </mat-select>
+      </mat-form-field>
+    </div>
 
-
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Teléfono Celular</mat-label>
-            <input matInput formControlName="telefonoCel" placeholder="Número de teléfono celular" [readonly]="!isEditMode">
-            <mat-error *ngIf="solicitanteForm.get('telefonoCel')?.hasError('pattern') && solicitanteForm.get('telefonoCel')?.touched">
-              Formato de teléfono no válido (10 dígitos).
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Correo Electrónico</mat-label>
-            <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
-          </mat-form-field>
-        </div>
-
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-                <mat-label>Escolaridad</mat-label>
-                 <mat-select
-                formControlName="escolaridadID"
-                name="escolaridadID"
-                >
-                    <mat-option *ngFor="let esc of escolaridades" [value]="esc.id">
-                        {{esc.nombre}}
-                    </mat-option>
-                </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-                <mat-label>Nacionalidad</mat-label>
-                 <mat-select
-                    formControlName="nacionalidadID"
-                    name="nacionalidadID"
-                  >
-                    <mat-option *ngFor="let nac of nacionalidades" [value]="nac.id">
-                        {{nac.nombre}}
-                    </mat-option>
-                </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Estado Civil</mat-label>
-            <mat-select
-                    formControlName="nacionalidadID"
-                    name="nacionalidadID"
-                  >
-                    <mat-option *ngFor="let civ of civil" [value]="civ.id">
-                        {{civ.nombre}}
-                    </mat-option>
-                </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Grupo en situación de vulnerabilidad*</mat-label>
-            <mat-select
-                    formControlName="grupoVulnerableID"
-                    name="grupoVulnerableID"
-                  >
-                    <mat-option *ngFor="let gru of gruposv" [value]="gru.id">
-                        {{gru.nombre}}
-                    </mat-option>
-                </mat-select>
-          </mat-form-field>
-
-        </div>
-
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Cargo</mat-label>
-            <input matInput formControlName="nombreOcupacion" type="nombreOcupacion" placeholder="Cargo">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Tipo Identificación*</mat-label>
-              <mat-select
-                formControlName="tipoIdentificacionID"
-                name="tipoIdentificacionID"
-                >
-                <mat-option *ngFor="let ids of identifs" [value]="ids.id">
-                    {{ids.nombre}}
-                </mat-option>
-              </mat-select>
-          </mat-form-field>
-
-        </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Cargo</mat-label>
+        <input matInput formControlName="nombreOcupacion" type="nombreOcupacion" placeholder="Cargo">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo Identificación*</mat-label>
+          <mat-select
+            formControlName="tipoIdentificacionID"
+            name="tipoIdentificacionID"
+            >
+            <mat-option *ngFor="let ids of identifs" [value]="ids.id">
+                {{ids.nombre}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+    </div>
 
 
-      </mat-expansion-panel>
+    <h3 class="form-section-title">
+        <strong>Domicilio del solicitante</strong>
+        <span class="small">Se recomienda poner un domicilio dentro de la zona de atención de la delegación que te corresponda por ubicación.</span>
+    </h3>
 
+    <app-direccion
+        [initialData]="datosDelDomicilio"
+        (formUpdate)="onDomicilioChange($event)">Algo..
+    </app-direccion>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <strong>Domicilio del solicitante</strong>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Dirección</mat-label>
-              <textarea matInput formControlName="direccion" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
-              <mat-error *ngIf="solicitanteForm.get('direccion')?.hasError('required') && solicitanteForm.get('direccion')?.touched">
-                La dirección es requerida
-              </mat-error>
-          </mat-form-field>
-        </div>
-        </mat-expansion-panel>
-
-
-
-    </mat-accordion>
 
     <div class="step-actions">
         <button *ngIf="precapturaPersonaID && !isEditMode"

@@ -13,13 +13,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { SolicitanteComponent } from "../../components/solicitante/solicitante.component";
 import { PrecapturaPersona } from '../../../../models/persona.model';
-import { TipopersonaComponent } from "../../../online/components/tipopersona/tipopersona.component";
 import { environment } from '../../../../../environments/environment.development';
 
 
-import { TipoUsuario , TipoPersona } from '../../../../interfaces/interface.tipopersona';
 import { forkJoin } from 'rxjs';
 import { CatalogosService } from '../../../../services/catalogos.service';
 import { Escolaridad } from '../../../../models/escolaridad.model';
@@ -28,9 +25,11 @@ import { Sexo } from '../../../../models/genero.model';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../../services/notification.service';
 import { LoaderService } from '../../../../services/loader.service';
+import { TipoUsuario , TipoPersona } from '../../../../interfaces/interface.tipopersona';
 
 
-
+import { TipopersonaComponent } from "../../../online/components/tipopersona/tipopersona.component";
+import { SolicitanteComponent } from "../../components/solicitante/solicitante.component";
 
 export interface SolicitudData {
   tipoSolicitud: string;

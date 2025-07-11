@@ -25,13 +25,13 @@ import { Sexo } from '../../../../models/genero.model';
 import { AuthService } from '../../../../services/auth.service';
 import { AppRegex } from '../../../../shared/validators/regex';
 import { CatalogoItem } from '../../../../interfaces/interface.catalogoitem';
-
+import { DireccionComponent } from '../direccion/direccion.component';
 
 
 @Component({
   selector: 'app-solicitante',
   standalone: true,
-   imports: [
+  imports: [
     CommonModule,
     ReactiveFormsModule,
     MatStepperModule,
@@ -45,7 +45,9 @@ import { CatalogoItem } from '../../../../interfaces/interface.catalogoitem';
     MatIconModule,
     MatDividerModule,
     MatCheckboxModule,
-    MatExpansionModule
+    MatExpansionModule,
+    DireccionComponent
+     // Assuming this is the correct import for the Domicilio component
   ],
   templateUrl: './solicitante.component.html',
   styleUrl: './solicitante.component.scss'
@@ -65,6 +67,7 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   civil: CatalogoItem[] = [];
   gruposv: CatalogoItem[] = [];
   identifs:CatalogoItem[] = [];
+  codigoPostals: CatalogoItem[] = [];
   catalogosCargados = false;
 
   // We will use PrecapturaPersona as the main model
@@ -117,15 +120,12 @@ export class SolicitanteComponent implements OnInit, OnChanges {
 
   initForms() {
     this.solicitanteForm = this.fb.group({
-      // Aligning with PrecapturaPersona fields
      internalPersonTypeId: [this.selectedInternalPersonType.id],
       nombre: ['', Validators.required],
       primerApellido: ['', Validators.required], // Changed from apellidoPaterno
       segundoApellido: [''], // Changed from apellidoMaterno, optional
       telefonoCel: ['', [Validators.required, Validators.pattern(AppRegex.TELEFONO)]], // Changed from telefono
       correo: ['', [Validators.required, , Validators.email, Validators.pattern(AppRegex.CORREO)]], // Changed from email
-      // 'direccion' is not in PrecapturaPersona, we'll keep it for now.
-      // It might need to be handled differently or removed if not part of the core model.
       direccion: ['', Validators.required], // Stays as a local form field, not in PrecapturaPersona mapping for load/save
 
       // Fields from PrecapturaPersona

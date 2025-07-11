@@ -9,7 +9,9 @@ import { Sexo } from '../models/genero.model';
 import { EstadoCivil } from '../models/estadocivil.model';
 import { GrupoVulnerable } from '../models/grupo.model';
 import { TipoIdentificacion} from '../models/tipoidentificacion.model';
-import { CatalogoItem } from '../interfaces/interface.catalogoitem';
+import { CatalogoItem, CatalogoItemCP } from '../interfaces/interface.catalogoitem';
+import { Entidad } from '../models/entidad';
+import { Cp } from '../interfaces/interface.cp';
 
 @Injectable({
   providedIn: 'root'
@@ -73,4 +75,38 @@ export class CatalogosService {
       })
     );
   }
+
+  getEstados(): Observable<CatalogoItem[]> {
+    return this.http.get<Entidad[]>(`${this.baseUrl}Entidad`, { headers: this.headers }).pipe(
+      map(response => {
+        return response?.map(item => ({ id: item.entidadID, nombre: item.nombre } as CatalogoItem)) || [];
+      })
+    );
+  }
+
+  getMunicipios(estadoId: number): Observable<CatalogoItem[]> {
+    return this.http.get<CatalogoItem[]>(`${this.baseUrl}Municipio/${estadoId}`, { headers: this.headers }).pipe(
+      map(response => {
+        return response?.map(item => ({ id: item.id, nombre: item.nombre } as CatalogoItem)) || [];
+      })
+    );
+  }
+
+  getColonias(municipioId: number): Observable<CatalogoItem[]> {
+    return this.http.get<CatalogoItem[]>(`${this.baseUrl}Colonia/${municipioId}`, { headers: this.headers }).pipe(
+      map(response => {
+        return response?.map(item => ({ id: item.id, nombre: item.nombre } as CatalogoItem)) || [];
+      })
+    );
+  }
+
+  getCodigosPostales(cp:string):Observable<CatalogoItemCP[]> {
+    return this.http.get<Cp[]>(`${this.baseUrl}CP/ByCP/${cp}`, { headers: this.headers }).pipe(
+      map(response => {
+        return response?.map(item => ({ codPost:item.codPos, municipioID:item.cveMnpio,cveEstado:item.cveEstado} as CatalogoItemCP)) || [];
+      })
+    );
+  }
+
+
 }

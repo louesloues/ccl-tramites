@@ -1,0 +1,41 @@
+ <h2 mat-dialog-title>Búsqueda de Código Postal</h2>
+    <mat-dialog-content>
+      <form [formGroup]="searchForm">
+
+        <div class="form-row">
+           <mat-form-field appearance="outline">
+              <mat-label>Código Postal</mat-label>
+              <input matInput formControlName="cp" placeholder="Ej. 37000" required>
+              <mat-error *ngIf="searchForm.get('cp')?.hasError('required')">
+                El código postal es requerido.
+              </mat-error>
+           </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estadoID" name="estadoID">
+              <mat-option *ngFor="let estado of estados" [value]="estado.id">
+                {{ estado.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Municipio</mat-label>
+            <mat-select formControlName="municipioID" name="municipioID">
+              <mat-option *ngFor="let municipio of municipios" [value]="municipio.id">
+                {{ municipio.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <button mat-raised-button color="primary" (click)="buscarCodigoPostal()">Buscar</button>
+        </div>
+
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancelar</button>
+    </mat-dialog-actions>
