@@ -14,7 +14,8 @@ import { filter, map, switchMap } from 'rxjs/operators';
 })
 export class BreadcrumbsComponent implements OnInit {
   breadcrumb: string = '';
-  ver_breadcrumb: boolean = true; // Controla la visibilidad del breadcrumb
+  icon_bread: string = '';
+  ver_breadcrumb: boolean = true;
 
   constructor(
     private router: Router,
@@ -23,24 +24,31 @@ export class BreadcrumbsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => this.activatedRoute),
-      map(route => {
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-        return route;
-      }),
-      switchMap(route => route.data),
-      map(data => data['breadcrumb'])
-    ).subscribe(breadcrumb => {
-      this.breadcrumb = breadcrumb;
-      if (!breadcrumb) {
-        this.ver_breadcrumb = false; // Si no hay breadcrumb, ocultarlo
-        this.breadcrumb = 'Inicio'; // Valor por defecto
+  this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(() => this.activatedRoute),
+    map(route => {
+      while (route.firstChild) {
+        route = route.firstChild;
       }
-      else this.ver_breadcrumb = true; // Si hay breadcrumb, mostrarlo
+      return route;
+    }),
+    switchMap(route => route.data)
+    // ELIMINA la siguiente línea para que el objeto 'data' completo llegue al subscribe
+    // map(data => data['breadcrumb'])
+  ).subscribe(data => { // <-- Ahora recibes el objeto 'data' completo
+
+    if (data && data.breadcrumb) {
+        // Si hay data y un breadcrumb definido en la ruta
+        this.breadcrumb = data.breadcrumb;
+        this.icon_bread = data.icon || ''; // Obtiene el ícono, si no existe, lo deja vacío
+        this.ver_breadcrumb = true;
+      } else {
+        // Si la ruta no tiene data.breadcrumb, usa valores por defecto
+        this.breadcrumb = 'Inicio';
+        this.icon_bread = 'home'; // Un ícono por defecto para 'Inicio'
+        this.ver_breadcrumb = true; // Opcional: decide si quieres mostrar 'Inicio' siempre
+      }
     });
   }
 

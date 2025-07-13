@@ -27,17 +27,21 @@ body {
 }
 
 .solicitudes-container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
+      max-width: 100%!important;
+      height: auto;
     }
 
-    .main-card {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.solicitudes-container .main-card {
+      border: 0px!important;
+  }
+.solicitudes-container mat-card {
+  box-shadow: 0!important;
+  border: 0px;
     }
+
 
     .step-form {
-      padding: 20px 0;
+      padding: 0 0;
     }
 
     .form-row {

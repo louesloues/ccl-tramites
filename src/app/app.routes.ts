@@ -18,7 +18,7 @@ export const routes: Routes = [
   {
     path: 'solicitud',
     loadComponent : ()=> import('./modules/solicitud/pages/solicitudes/solicitudes.component').then(c => c.SolicitudesComponent), // Asegúrate que el nombre y la ruta coincidan con tu archivo real
-    data: { breadcrumb: 'Solicitud' }
+    data: { breadcrumb: 'Nueva solicitud' , icon: 'assignment', help:'Ejemplo de ayuda para Nueva Solicitud' }
   },
   {
     path: 'ratificacion',
@@ -63,12 +63,12 @@ export const routes: Routes = [
       {
         path: 'login', // Ruta para el login de Buzón (ej. /buzon/login)
         loadComponent:()=>import('./modules/auth/login/login.component').then(c=>c.LoginComponent) , // Usa LoginComponent para esta ruta
-        data: { breadcrumb: 'Iniciar Sesión Buzón' }
+        data: { breadcrumb: 'Solicitar tramite online' }
       },
       {
         path: 'registro',
         loadComponent: ()=>import('./modules/auth/register/register.component').then(c=>c.default) , // Componente que mostrará el registro
-        data: { breadcrumb: 'Registro Tramite Online' }
+        data: { breadcrumb: ' Registro tramite online' }
       },
       {
         path: 'completar-registro',

@@ -1,11 +1,11 @@
 <div class="wrap-direccion">
     <form [formGroup]="direccionForm">
         <div class="form-row">
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline">
               <mat-label>Código Postal</mat-label>
               <input matInput formControlName="cp" placeholder="37000" [readonly]="!isEditMode"
-                    (blur)="onCpBlur()"
-                    (change)="escucharCambiosCp()"
+                (keydown.enter.prevent)="onCpChange()"
+                (blur)="onCpChange()"
               >
 
                <button mat-icon-button matSuffix
@@ -22,45 +22,119 @@
               <mat-error *ngIf="direccionForm.get('cp')?.hasError('pattern')">
                 El formato del código postal no es **válido**.
               </mat-error>
-          </mat-form-field>
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-              <mat-label>Estado</mat-label>
+            <mat-form-field appearance="outline">
+                <mat-label>Entidad</mat-label>
                 <mat-select formControlName="entidadID" name="entidadID">
                     <mat-option *ngFor="let estado of estados" [value]="estado.id">
                       {{ estado.nombre }}
                     </mat-option>
-                  </mat-select>
-              </mat-form-field>
-          </div>
-          <div class="form-row">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Municipio</mat-label>
-                <mat-select formControlName="municipioID" name="municipioID">
-                  <mat-option *ngFor="let municipio of municipios" [value]="municipio.id">
-                    {{ municipio.nombre }}
-                  </mat-option>
                 </mat-select>
-              </mat-form-field>
+                <mat-error *ngIf="direccionForm.get('entidadID')?.hasError('required')">
+                  Entidad federativa **requerido**.
+                </mat-error>
+            </mat-form-field>
 
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Municipio</mat-label>
+              <mat-select formControlName="municipioID" name="municipioID">
+                <mat-option *ngFor="let municipio of municipios" [value]="municipio.id">
+                  {{ municipio.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+         <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Colonia</mat-label>
-                  <input matInput formControlName="colonia" placeholder="Colonia" [readonly]="!isEditMode">
-                  <mat-error *ngIf="direccionForm.get('colonia')?.hasError('required') && direccionForm.get('colonia')?.touched">
+                <mat-label>Colonia</mat-label>
+                <input
+                    type="text"
+                    matInput
+                    formControlName="colonia"
+                    placeholder="Escribe para buscar tu colonia"
+                    [matAutocomplete]="autoColonia"
+                    [readonly]="!isEditMode">
+
+                <mat-autocomplete #autoColonia="matAutocomplete">
+                    <mat-option *ngFor="let colonia of filteredColonias | async" [value]="colonia">
+                        {{ colonia }}
+                    </mat-option>
+                </mat-autocomplete>
+
+                <mat-error *ngIf="direccionForm.get('colonia')?.hasError('required') && direccionForm.get('colonia')?.touched">
                     La colonia es requerida
+                </mat-error>
+            </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Calle</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="calle"
+                  placeholder="Calle"
+                  [readonly]="!isEditMode"
+                  >
+                  <mat-error *ngIf="direccionForm.get('calle')?.hasError('required') && direccionForm.get('calle')?.touched">
+                    La calle es requerida
                   </mat-error>
-              </mat-form-field>
+                </mat-form-field>
+                <mat-form-field appearance="outline" clas="full-width">
+                  <mat-label>No. Ext</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="numeroExterior"
+                    placeholder="No. Exterior"
+                    [readonly]="!isEditMode"
+                    >
+                    <mat-error *ngIf="direccionForm.get('numeroExterior')?.hasError('required') && direccionForm.get('numeroExterior')?.touched">
+                      No. exterior requerido
+                    </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-row">
+
+
+                <mat-form-field appearance="outline">
+                  <mat-label>No. Int</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="numeroInterior"
+                    placeholder="No. Interior"
+                    [readonly]="!isEditMode"
+                    >
+                </mat-form-field>
+
+                <mat-form-field appearance="outline"  class="select-pequeno">
+                  <mat-label>Tipo de vialidad</mat-label>
+                  <mat-select formControlName="tipoVialidadID" name="tipoVialidadID" style="height: 1rem!important;">
+                    <mat-option *ngFor="let tipo of tiposVialidad" [value]="tipo.id" style="height: 1rem!important;">
+                      {{ tipo.nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="direccionForm.get('tipoVialidadID')?.hasError('required') && direccionForm.get('tipoVialidadID')?.touched">
+                    El tipo de vialidad es requerido
+                  </mat-error>
+               </mat-form-field>
+
+            </div>
+            <div class="form-row">
+
+
+
+               <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Poner referencia, entre que y que calles esta.</mat-label>
+                <textarea matInput formControlName="referenciaCalles" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
+                <mat-error *ngIf="direccionForm.get('referenciaCalles')?.hasError('required') && direccionForm.get('referenciaCalles')?.touched">
+                  La dirección es requerida
+                </mat-error>
+            </mat-form-field>
             </div>
 
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Poner referencia, entre que y que calles esta.</mat-label>
-                  <textarea matInput formControlName="referenciaCalles" rows="3" placeholder="Dirección completa" [readonly]="!isEditMode"></textarea>
-                  <mat-error *ngIf="direccionForm.get('referenciaCalles')?.hasError('required') && direccionForm.get('referenciaCalles')?.touched">
-                    La dirección es requerida
-                  </mat-error>
-              </mat-form-field>
-          </div>
     </form>
 
 </div>

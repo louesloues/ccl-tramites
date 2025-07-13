@@ -10,18 +10,18 @@
   padding: 0!important;
 
   .login-card {
-    width: 100%;
-    max-width: 400px;
+    width: 25rem;
+    // max-width: 25rem;
 
     mat-form-field {
       width: 100%;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem!important;
     }
 
     button[type="submit"] {
       width: 100%;
-      margin-top: 1rem;
-      height: 44px;
+      margin-top: 0.5rem;
+      height: 2.8rem;
     }
 
     .separator {
@@ -52,7 +52,7 @@
       align-items: center;
       justify-content: center;
       margin-top: 1rem;
-      height: 44px;
+      height: 2.75rem;
       transition: background-color 0.3s ease;
 
       &:hover {
@@ -135,12 +135,8 @@
   /* Borde sutil */
   border: 3px solid rgba(255, 255, 255, 0.2);
 
-  /* Animación de entrada */
   animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Efecto de resplandor sutil */
-  // position: relative;
-  // overflow: hidden;
 }
 
 /* Efecto de brillo en la tarjeta */
@@ -178,8 +174,9 @@
 
 /* Estilos para el header de la tarjeta */
 .login-card mat-card-header {
+  justify-content: center;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.7rem;
 }
 
 /* Título principal */
@@ -254,7 +251,7 @@
 
   .login-card {
     max-width: 100%;
-    padding: 1.25rem !important;
+    padding: 0.5rem !important;
     border-radius: 12px !important;
   }
 
@@ -278,4 +275,8 @@
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+.mat-raised-button{
+  margin-top: -3rem;
 }

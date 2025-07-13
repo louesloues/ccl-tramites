@@ -1,4 +1,4 @@
-.wrap-botones {
+.wrap-tipopersona {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,6 +7,7 @@
   height: 100%;
   background-color: var(--background-color);
   margin-bottom: 3rem!important;
+  border: 0px;
 }
 
 
@@ -19,7 +20,7 @@
     height: 100%;
     background-color: var(--background-color);
     justify-content: space-around;
-    margin-top: 3rem!important;
+    margin-top: 1rem!important;
 }
 /* Navigation Buttons */
 .navigation-buttons {

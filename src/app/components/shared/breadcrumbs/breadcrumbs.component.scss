@@ -1,8 +1,6 @@
 .breadcrumbs-container {
     display: flex;
     align-items: center;
-   //padding: 8px 16px;
-   // background-color: #ffffff; // Un color de fondo suave, ajustar según el tema
     border: 0px; // Un borde sutil
   }
 
@@ -14,8 +12,6 @@
     font-weight: bolder;
   }
 
-  // Estilos adicionales para el botón si es necesario,
-  // aunque MatButtonModule ya proporciona estilos base.
   button[mat-icon-button] {
     // Ejemplo: cambiar el color del ícono si se desea
      color: goldenrod;

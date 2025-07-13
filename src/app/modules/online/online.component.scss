@@ -1,6 +1,8 @@
 .container-fluid {
-    max-width: 1200px;
+    max-width: 100%!important;
     margin: 0 auto;
+    height: 60rem!important;
+    border: 0px;
   }
 
   /* Info Balloon Styles */
@@ -60,7 +62,7 @@
     margin-bottom: 3rem;
   }
 
-  
+
   /* Material Stepper Customization */
   ::ng-deep .mat-stepper-horizontal {
     margin-bottom: 2rem;
@@ -92,29 +94,34 @@
   /* Responsive Design */
   @media (max-width: 768px) {
     .person-card {
-      min-height: 220px;
+      min-height: 14rem;
       margin-bottom: 1rem;
     }
-    
+
     .person-icon {
       font-size: 3rem !important;
       width: 3rem !important;
       height: 3rem !important;
     }
-    
+
     .card-title {
       font-size: 1.3rem;
     }
-    
+
     .card-subtitle {
       font-size: 0.9rem;
     }
-    
+
     .step-title {
       font-size: 1.5rem;
     }
-    
+
     .step-subtitle {
       font-size: 1rem;
     }
   }
+
+.main-card {
+  border:0px;
+  box-shadow: 0!important;
+}

@@ -7,10 +7,12 @@ export interface CatalogoItem {
 
 
 export interface CatalogoItemCP {
-  codPost: number|string;
+  codPos: number|string;
   municipioID: string;
-  Municipio: string;
+  municipio: string;
   cveEstado: string;
+  estado: string;
+  colonias: string[];
 }
 
 

@@ -1,19 +1,9 @@
  <div class="solicitudes-container">
-      <mat-card class="main-card">
-        <mat-card-header>
-            <mat-card-title>
-              <mat-icon>assignment</mat-icon>
-              Nueva Solicitud
-            </mat-card-title>
-          <mat-card-subtitle>Complete todos los pasos para enviar su solicitud</mat-card-subtitle>
-        </mat-card-header>
-
+      <mat-card class="main-card sin-sombra">
         <mat-card-content>
           <mat-stepper [linear]="true" #stepper>
-
-            <!-- Paso 1: Tipo Persona -->
             <mat-step [stepControl]="tipopersonaForm">
-              <ng-template matStepLabel>Tipo persona</ng-template>
+              <ng-template matStepLabel>Para comenzar, ¿cómo te identificas?</ng-template>
 
               <!-- El contenido del paso va aquí, fuera de la etiqueta -->
               <app-tipopersona (tipoChange)="onTipoPersonaChange($event)"></app-tipopersona>

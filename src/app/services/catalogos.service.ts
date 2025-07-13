@@ -11,7 +11,8 @@ import { GrupoVulnerable } from '../models/grupo.model';
 import { TipoIdentificacion} from '../models/tipoidentificacion.model';
 import { CatalogoItem, CatalogoItemCP } from '../interfaces/interface.catalogoitem';
 import { Entidad } from '../models/entidad';
-import { Cp } from '../interfaces/interface.cp';
+import { Cp, Municipio } from '../interfaces/interface.cp';
+import { TipoVialidad } from '../models/tipovialiadad';
 
 @Injectable({
   providedIn: 'root'
@@ -84,26 +85,50 @@ export class CatalogosService {
     );
   }
 
-  getMunicipios(estadoId: number): Observable<CatalogoItem[]> {
-    return this.http.get<CatalogoItem[]>(`${this.baseUrl}Municipio/${estadoId}`, { headers: this.headers }).pipe(
-      map(response => {
-        return response?.map(item => ({ id: item.id, nombre: item.nombre } as CatalogoItem)) || [];
-      })
-    );
-  }
+  // getMunicipios(estadoId: number): Observable<CatalogoItem[]> {
+  //   return this.http.get<CatalogoItem[]>(`${this.baseUrl}Municipio/${estadoId}`, { headers: this.headers }).pipe(
+  //     map(response => {
+  //       return response?.map(item => ({ id: item.id, nombre: item.nombre } as CatalogoItem)) || [];
+  //     })
+  //   );
+  // }
 
   getColonias(municipioId: number): Observable<CatalogoItem[]> {
-    return this.http.get<CatalogoItem[]>(`${this.baseUrl}Colonia/${municipioId}`, { headers: this.headers }).pipe(
+    return this.http.get<Municipio[]>(`${this.baseUrl}Colonia/${municipioId}`, { headers: this.headers }).pipe(
       map(response => {
-        return response?.map(item => ({ id: item.id, nombre: item.nombre } as CatalogoItem)) || [];
+        return response?.map(item => ({ id: item.municipioID, nombre: item.nombre } as CatalogoItem)) || [];
       })
     );
   }
 
-  getCodigosPostales(cp:string):Observable<CatalogoItemCP[]> {
+  getCodigosPostales(cp: string): Observable<CatalogoItemCP[]> {
     return this.http.get<Cp[]>(`${this.baseUrl}CP/ByCP/${cp}`, { headers: this.headers }).pipe(
       map(response => {
-        return response?.map(item => ({ codPost:item.codPos, municipioID:item.cveMnpio,cveEstado:item.cveEstado} as CatalogoItemCP)) || [];
+        if (!response || response.length === 0) {
+          return [];
+        }
+
+        const primerElemento = response[0];
+        const listaColonias = response.map(item => item.asenta);
+
+        const resultado: CatalogoItemCP = {
+          codPos: primerElemento.codPos,
+          municipio: primerElemento.descMnpio,
+          municipioID: primerElemento.cveMnpio,
+          estado: primerElemento.descEstado,
+          cveEstado: primerElemento.cveEstado,
+          colonias: listaColonias
+        };
+
+        return [resultado];
+      })
+    );
+  }
+
+  getTiposVialidad(): Observable<CatalogoItem[]> {
+    return this.http.get<TipoVialidad[]>(`${this.baseUrl}TipoVialidad`, { headers: this.headers }).pipe(
+      map(response => {
+        return response?.map(item => ({ id: item.tipoVialidadID, nombre: item.nombre } as CatalogoItem)) || [];
       })
     );
   }

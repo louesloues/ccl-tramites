@@ -9,12 +9,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIcon } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { AppRegex } from '../../../../shared/validators/regex';
 import { CatalogoItem } from '../../../../interfaces/interface.catalogoitem';
 import { CatalogosService } from '../../../../services/catalogos.service';
 import { LoaderService } from '../../../../services/loader.service';
 import { NotificationService } from '../../../../services/notification.service';
-import { debounceTime, distinctUntilChanged, filter, forkJoin, Subject, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, forkJoin, Subject, switchMap, takeUntil , Observable, startWith, map} from 'rxjs';
 import { BusquedaCpDialogComponent } from '../busqueda-cp-dialog/busqueda-cp-dialog.component';
 
 @Component({
@@ -26,6 +27,7 @@ import { BusquedaCpDialogComponent } from '../busqueda-cp-dialog/busqueda-cp-dia
     MatStepperModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatAutocompleteModule,
     MatInputModule,
     MatSelectModule,
     MatIcon,
@@ -38,9 +40,11 @@ export class DireccionComponent implements OnInit {
   isEditMode: boolean = true;
   catalogosCargados: boolean = false;
   direccionForm: FormGroup;
-  estados:CatalogoItem[];
-  paises: CatalogoItem[];
-  municipios: CatalogoItem[];
+  estados: CatalogoItem[]=[];
+  paises: CatalogoItem[]=[];
+  municipios: CatalogoItem[]=[];
+  tiposVialidad: CatalogoItem[] = [];
+  filteredColonias!: Observable<string[]>;
 
 
   private destroy$ = new Subject<void>();
@@ -60,6 +64,7 @@ export class DireccionComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.loadCatalogs();
+    this.setupColoniaAutocomplete();
   }
 
   initForm() {
@@ -74,16 +79,33 @@ export class DireccionComponent implements OnInit {
         referenciaCalles: ['', [Validators.maxLength(100)]]
      });
   }
+  setupColoniaAutocomplete(): void {
+    // Para mayor seguridad, comprueba que el control existe antes de usarlo
+    const coloniaControl = this.direccionForm.get('colonia');
+    if (coloniaControl) {
+      this.filteredColonias = coloniaControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterColonias(value || ''))
+      );
+    }
+  }
 
+  private _filterColonias(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.colonias.filter(colonia => colonia.toLowerCase().includes(filterValue));
+  }
 
   loadCatalogs() {
       // forkJoin recibe un objeto. Las claves son los nombres que tú elijas.
       forkJoin({
         estadoRes: this._catalogosService.getEstados(),
+        tipoVialidadRes: this._catalogosService.getTiposVialidad(),
+
       }).subscribe({
         next: (resultados) => {
           // 'resultados' es un objeto con las respuestas, usando las claves que definiste.
-          this.estados = resultados.estadoRes;
+          this.estados = resultados.estadoRes || [];
+          this.tiposVialidad = resultados.tipoVialidadRes || [];
         },
         error: (err) => {
           console.error('Error al cargar uno de los catálogos', err);
@@ -105,8 +127,8 @@ export class DireccionComponent implements OnInit {
             // Actualiza los valores del formulario con los datos recibidos
             this.direccionForm.patchValue({
               cp: resultado.codigoPostal,
-              entidad: resultado.entidadID,
-              municipio: resultado.municipioID,
+              entidadID: resultado.entidadID,
+              municipioID: resultado.municipioID,
               // También puedes rellenar colonia, etc.
               colonia: resultado.colonia
             });
@@ -119,58 +141,75 @@ export class DireccionComponent implements OnInit {
       }
 
 
-  public escucharCambiosCp(): void {
-    const cpControl = this.direccionForm.get('cp');
-    if (!cpControl) return;
+      colonias: string[] = [];
 
-    cpControl.valueChanges.pipe(
-      // Wait for 300ms after the user stops typing
-      debounceTime(300),
-      // Only proceed if the value is new
-      distinctUntilChanged(),
-      // Only search if the length is exactly 5
-      filter((cp: string) => cp && cp.length === 5),
-      // Switch to the new service call, cancelling previous ones
-      switchMap(cp => this._catalogosService.getCodigosPostales(cp)),
-      // Ensure we unsubscribe when the component is destroyed
-      takeUntil(this.destroy$)
-    ).subscribe(resultado => {
-      // The logic to update the form fields
-      this.actualizarCamposConResultado(resultado);
-    });
-  }
+      // ... dentro de tu clase de componente
 
-  onCpBlur(): void {
-    const cpControl = this.direccionForm.get('cp');
-    // Check if the control is valid and has 5 characters
-    if (cpControl?.valid && cpControl.value?.length === 5) {
-      console.log('Buscando por CP al perder el foco...');
-      // this.direccionService.buscarPorCp(cpControl.value).subscribe(resultado => {
-      //   this.actualizarCamposConResultado(resultado);
-      // });
-    }
-  }
+      onCpChange() {
+        const cpControl = this.direccionForm.get('cp');
 
-  private actualizarCamposConResultado(resultado: any): void {
-    if (resultado) {
-      this.direccionForm.patchValue({
-        // Map the result to your form fields
-        entidad: resultado.entidadID,
-        municipio: resultado.municipioID,
-        colonia: resultado.colonia,
-        calle: '' // Clear street so the user can type it
-      });
-      // Disable fields if needed
-      this.direccionForm.get('entidad')?.disable();
-      this.direccionForm.get('municipio')?.disable();
-    }
-  }
+        // 1. Validar antes de llamar al servicio
+        //    Verifica que el control sea válido y que el usuario haya interactuado con él.
+        if (cpControl && cpControl.valid && cpControl.dirty) {
 
+          const cpValue = cpControl.value;
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+          // 2. Llamar al servicio
+          this._catalogosService.getCodigosPostales(cpValue).subscribe({
+            next: (response) => {
+              // 3. Procesar la respuesta
+              console.log('Respuesta CP:', response);
+              if (response && response.length > 0) {
+                const data = response[0]; // Obtenemos el primer (y único) elemento
+
+                console.log('Colonias encontradas:', data.colonias);
+
+                // Asignamos la lista de colonias a nuestra variable local
+                this.colonias = data.colonias;
+
+                if (!this.municipios.some(m => m.id === data.municipioID)) {
+                  this.municipios.push({ id: data.municipioID, nombre: data.municipio });
+                }
+
+                // Autocompletamos otros campos del formulario
+                this.direccionForm.patchValue({
+                  municipioID: data.municipioID, // Asegúrate que tu formGroup tenga estos controles
+                  entidadID: data.cveEstado,
+                  // ... otros campos que quieras autocompletar
+                });
+
+              } else {
+                // Si el CP es válido pero no se encuentra, limpiamos los campos
+                console.warn('Código postal no encontrado.');
+                this.colonias = [];
+                this.direccionForm.patchValue({
+                  municipioID: '',
+                  entidadID: '',
+                  colonia: '' // Limpia también la colonia seleccionada
+                });
+              }
+            },
+            error: (err) => {
+              console.error('Error al obtener el código postal:', err);
+              // Aquí podrías mostrar una notificación de error al usuario
+            }
+          });
+
+          // Marcar el control como "no sucio" para evitar llamadas repetidas si se vuelve a perder el foco
+          cpControl.markAsPristine();
+        }
+      }
+
+      private resetDireccionFields(): void {
+        this.colonias = [];
+        this.direccionForm.patchValue({
+          entidadID: null,
+          municipioID: null,
+          colonia: ''
+        });
+        this.direccionForm.get('entidadID')?.enable();
+        this.direccionForm.get('municipioID')?.enable();
+      }
 
 }
 

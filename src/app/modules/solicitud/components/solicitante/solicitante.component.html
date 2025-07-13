@@ -4,200 +4,228 @@
     <p>Cargando datos del solicitante...</p>
   </div>
 
-  <form [formGroup]="solicitanteForm" class="step-form" *ngIf="!isLoading">
 
-    <h3 class="form-section-title">
-        <strong>Datos del Solicitante</strong>
-    </h3>
+
+  <div class="step-form" *ngIf="!isLoading">
 
     <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Tipo de Persona</mat-label>
-        <mat-select
-            formControlName="internalPersonTypeId"
-            (selectionChange)="onInternalPersonTypeChange($event.value)"
-            name="internalPersonType"
-          >
-            <mat-option *ngFor="let type of internalPersonTypes" [value]="type.id">
-              {{type.nombre}}
-            </mat-option>
-          </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" *ngIf="shouldShowCurp">
-        <mat-label>CURP</mat-label>
-        <input matInput formControlName="curp" placeholder="Ingrese su CURP" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('curp')?.hasError('pattern')  && solicitanteForm.get('curp')?.touched">
-          El CURP no es válido.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" *ngIf="shouldShowRfc">
-        <mat-label>RFC</mat-label>
-        <input matInput formControlName="rfc" placeholder="Ingrese su RFC" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('rfc')?.hasError('pattern') && solicitanteForm.get('rfc')?.touched">
-          El RFC no es válido.
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre" placeholder="Ingrese su nombre" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('nombre')?.hasError('required') && solicitanteForm.get('nombre')?.touched">
-          El nombre es requerido
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Primer Apellido</mat-label>
-        <input matInput formControlName="primerApellido" placeholder="Primer apellido" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('primerApellido')?.hasError('required') && solicitanteForm.get('primerApellido')?.touched">
-          El primer apellido es requerido
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Segundo Apellido (Opcional)</mat-label>
-        <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Género*</mat-label>
-        <mat-select
-            formControlName="generoID"
-            name="generoID"
-          >
-            <mat-option *ngFor="let gen of generos" [value]="gen.id">
-                {{gen.nombre}}
-            </mat-option>
-          </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Teléfono Celular</mat-label>
-        <input matInput formControlName="telefonoCel" placeholder="Número de teléfono celular" [readonly]="!isEditMode">
-        <mat-error *ngIf="solicitanteForm.get('telefonoCel')?.hasError('pattern') && solicitanteForm.get('telefonoCel')?.touched">
-          Formato de teléfono no válido (10 dígitos).
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Correo Electrónico</mat-label>
-        <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
-      </mat-form-field>
-    </div>
-
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-          <mat-label>Escolaridad</mat-label>
-           <mat-select
-            formControlName="escolaridadID"
-            name="escolaridadID"
-            >
-              <mat-option *ngFor="let esc of escolaridades" [value]="esc.id">
-                  {{esc.nombre}}
-              </mat-option>
-            </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-          <mat-label>Nacionalidad</mat-label>
-           <mat-select
-              formControlName="nacionalidadID"
-              name="nacionalidadID"
-            >
-              <mat-option *ngFor="let nac of nacionalidades" [value]="nac.id">
-                  {{nac.nombre}}
-              </mat-option>
-            </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Estado Civil</mat-label>
-        <mat-select
-              formControlName="estadoCivilID"
-              name="estadoCivilID"
-            >
-              <mat-option *ngFor="let civ of civil" [value]="civ.id">
-                  {{civ.nombre}}
-              </mat-option>
-            </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Grupo en situación de vulnerabilidad*</mat-label>
-        <mat-select
-              formControlName="grupoVulnerableID"
-              name="grupoVulnerableID"
-            >
-              <mat-option *ngFor="let gru of gruposv" [value]="gru.id">
-                  {{gru.nombre}}
-              </mat-option>
-            </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Cargo</mat-label>
-        <input matInput formControlName="nombreOcupacion" type="nombreOcupacion" placeholder="Cargo">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Tipo Identificación*</mat-label>
-          <mat-select
-            formControlName="tipoIdentificacionID"
-            name="tipoIdentificacionID"
-            >
-            <mat-option *ngFor="let ids of identifs" [value]="ids.id">
-                {{ids.nombre}}
-            </mat-option>
-          </mat-select>
-      </mat-form-field>
+      <div class="person-type-selection" *ngIf="isPatron()">
+          <label class="selection-label">Selecciona el Tipo de Persona?</label>
+          <div class="type-chips-container">
+              <button
+                *ngFor="let type of internalPersonTypes"
+                type="button"
+                class="type-chip"
+                [class.selected]="selectedPersonTypeId === type.id"
+                (click)="selectPersonType(type.id)"
+              >
+                <span>{{type.nombre}}</span>
+                <mat-icon class="check-icon" *ngIf="selectedPersonTypeId === type.id">check</mat-icon>
+              </button>
+          </div>
+      </div>
     </div>
 
 
-    <h3 class="form-section-title">
-        <strong>Domicilio del solicitante</strong>
-        <span class="small">Se recomienda poner un domicilio dentro de la zona de atención de la delegación que te corresponda por ubicación.</span>
-    </h3>
+    <div class="datos-solicitante" *ngIf="selectedPersonTypeId!=null">
+      <div class="show-person" *ngIf="selectedPersonTypeId==1">
+        <form [formGroup]="solicitanteForm">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>CURP</mat-label>
+                <input matInput formControlName="curp" placeholder="Ingrese su CURPs" [readonly]="!isEditMode" maxlength="18">
+                  <button mat-icon-button matSuffix
+                        type="button"
+                        (click)="abrirDialogoBusqueda()"
+                        [disabled]="!isEditMode"
+                        >
+                        <mat-icon>search</mat-icon>
+                  </button>
+                  <mat-error *ngIf="solicitanteForm.get('curp')?.hasError('pattern')  && solicitanteForm.get('curp')?.touched">
+                    El CURP no es válido.
+                  </mat-error>
+              </mat-form-field>
 
-    <app-direccion
-        [initialData]="datosDelDomicilio"
-        (formUpdate)="onDomicilioChange($event)">Algo..
-    </app-direccion>
+              <mat-form-field appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" placeholder="Ingrese su nombre" [readonly]="!isEditMode">
+                <mat-error *ngIf="solicitanteForm.get('nombre')?.hasError('required') && solicitanteForm.get('nombre')?.touched">
+                  El nombre es requerido
+                </mat-error>
+              </mat-form-field>
 
 
-    <div class="step-actions">
-        <button *ngIf="precapturaPersonaID && !isEditMode"
-                mat-stroked-button color="accent"
-                (click)="enableEditMode()"
-                class="edit-button">
-            <mat-icon>edit</mat-icon>
-            Habilitar Edición
-        </button>
+              <!-- <mat-form-field appearance="outline" *ngIf="shouldShowRfc">
+                <mat-label>RFC</mat-label>
+                <input matInput formControlName="rfc" placeholder="Ingrese su RFC" [readonly]="!isEditMode" maxlength="13">
+                <mat-error *ngIf="solicitanteForm.get('rfc')?.hasError('pattern') && solicitanteForm.get('rfc')?.touched">
+                  El RFC no es válido.
+                </mat-error>
+              </mat-form-field>
+              -->
 
-        <button *ngIf="isEditMode"
-                mat-raised-button color="primary"
-                [disabled]="solicitanteForm.invalid"
-                (click)="guardarSolicitante()">
-            {{ precapturaPersonaID ? 'Guardar Cambios' : 'Siguiente' }}
-            <mat-icon>{{ precapturaPersonaID ? 'save' : 'navigate_next' }}</mat-icon>
-        </button>
 
-        <button *ngIf="!precapturaPersonaID && !isEditMode"
-                mat-raised-button color="primary"
-                (click)="enableEditMode()">
-            Agregar Solicitante
-            <mat-icon>add</mat-icon>
-        </button>
+
+            </div>
+
+            <div class="form-row">
+
+              <mat-form-field appearance="outline">
+                <mat-label>Primer Apellido</mat-label>
+                <input matInput formControlName="primerApellido" placeholder="Primer apellido" [readonly]="!isEditMode">
+                <mat-error *ngIf="solicitanteForm.get('primerApellido')?.hasError('required') && solicitanteForm.get('primerApellido')?.touched">
+                  El primer apellido es requerido
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Segundo Apellido (Opcional)</mat-label>
+                <input matInput formControlName="segundoApellido" placeholder="Segundo apellido" [readonly]="!isEditMode">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Teléfono Celular</mat-label>
+                <input matInput formControlName="telefonoCel" placeholder="Número de teléfono celular" [readonly]="!isEditMode">
+                <mat-error *ngIf="solicitanteForm.get('telefonoCel')?.hasError('pattern') && solicitanteForm.get('telefonoCel')?.touched">
+                  Formato de teléfono no válido (10 dígitos).
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Correo Electrónico</mat-label>
+                <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
+              </mat-form-field>
+            </div>
+
+
+            <div class="form-row">
+
+              <mat-form-field appearance="outline">
+                <mat-label>Género*</mat-label>
+                <mat-select
+                    formControlName="generoID"
+                    name="generoID"
+                  >
+                    <mat-option *ngFor="let gen of generos" [value]="gen.id">
+                        {{gen.nombre}}
+                    </mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                  <mat-label>Escolaridad</mat-label>
+                  <mat-select
+                    formControlName="escolaridadID"
+                    name="escolaridadID"
+                    >
+                      <mat-option *ngFor="let esc of escolaridades" [value]="esc.id">
+                          {{esc.nombre}}
+                      </mat-option>
+                    </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                  <mat-label>Nacionalidad</mat-label>
+                  <mat-select
+                      formControlName="nacionalidadID"
+                      name="nacionalidadID"
+                    >
+                      <mat-option *ngFor="let nac of nacionalidades" [value]="nac.id">
+                          {{nac.nombre}}
+                      </mat-option>
+                    </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Estado Civil</mat-label>
+                <mat-select
+                      formControlName="estadoCivilID"
+                      name="estadoCivilID"
+                    >
+                      <mat-option *ngFor="let civ of civil" [value]="civ.id">
+                          {{civ.nombre}}
+                      </mat-option>
+                    </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Grupo en situación de vulnerabilidad*</mat-label>
+                <mat-select
+                      formControlName="grupoVulnerableID"
+                      name="grupoVulnerableID"
+                    >
+                      <mat-option *ngFor="let gru of gruposv" [value]="gru.id">
+                          {{gru.nombre}}
+                      </mat-option>
+                    </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Cargo</mat-label>
+                <input matInput formControlName="nombreOcupacion" type="nombreOcupacion" placeholder="Cargo">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Tipo Identificación*</mat-label>
+                  <mat-select
+                    formControlName="tipoIdentificacionID"
+                    name="tipoIdentificacionID"
+                    >
+                    <mat-option *ngFor="let ids of identifs" [value]="ids.id">
+                        {{ids.nombre}}
+                    </mat-option>
+                  </mat-select>
+              </mat-form-field>
+            </div>
+          </form>
+
+      </div>
+
+
+
+
+      <h3 class="form-section-title">
+          <strong>Domicilio del solicitante</strong>
+          <span class="small">Se recomienda poner un domicilio dentro de la zona de atención de la delegación que te corresponda por ubicación.</span>
+      </h3>
+
+      <app-direccion
+          [initialData]="datosDelDomicilio"
+          (formUpdate)="onDomicilioChange($event)">Algo..
+      </app-direccion>
+
+
+      <div class="step-actions">
+          <button *ngIf="precapturaPersonaID && !isEditMode"
+                  mat-stroked-button color="accent"
+                  (click)="enableEditMode()"
+                  class="edit-button">
+              <mat-icon>edit</mat-icon>
+              Habilitar Edición
+          </button>
+
+          <button *ngIf="isEditMode"
+                  mat-raised-button color="primary"
+                  [disabled]="solicitanteForm.invalid"
+                  (click)="guardarSolicitante()">
+              {{ precapturaPersonaID ? 'Guardar Cambios' : 'Siguiente' }}
+              <mat-icon>{{ precapturaPersonaID ? 'save' : 'navigate_next' }}</mat-icon>
+          </button>
+
+          <button *ngIf="!precapturaPersonaID && !isEditMode"
+                  mat-raised-button color="primary"
+                  (click)="enableEditMode()">
+              Agregar Solicitante
+              <mat-icon>add</mat-icon>
+          </button>
+      </div>
+
+
+
+
     </div>
 
-  </form>
 
 </div>

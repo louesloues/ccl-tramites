@@ -26,7 +26,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { AppRegex } from '../../../../shared/validators/regex';
 import { CatalogoItem } from '../../../../interfaces/interface.catalogoitem';
 import { DireccionComponent } from '../direccion/direccion.component';
-
+import { PersonaComponent } from '../persona/persona.component';
 
 @Component({
   selector: 'app-solicitante',
@@ -46,7 +46,8 @@ import { DireccionComponent } from '../direccion/direccion.component';
     MatDividerModule,
     MatCheckboxModule,
     MatExpansionModule,
-    DireccionComponent
+    DireccionComponent,
+    PersonaComponent
      // Assuming this is the correct import for the Domicilio component
   ],
   templateUrl: './solicitante.component.html',
@@ -54,7 +55,7 @@ import { DireccionComponent } from '../direccion/direccion.component';
 })
 export class SolicitanteComponent implements OnInit, OnChanges {
   @Input() precapturaPersonaID: string | null = null;
-  @Input() tipoPersona: string; // Default to 'persona', can be 'empresa' or 'otro'
+  @Input() tipoPersona: string;
 
 
 
@@ -76,11 +77,12 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
   private _catalogosService = inject(CatalogosService);
   private _precapturaService = inject(PrecapturaPersonaService);
+  selectedPersonTypeId: number | null = null;
 
 
   internalPersonTypes: TipoPersona[] = [
-    { id: 1, nombre: 'Física' },
-    { id: 2, nombre: 'Moral' }
+    { id: 1, nombre: 'Persona física' },
+    { id: 2, nombre: 'Persona moral' }
   ];
 
   selectedInternalPersonType: TipoPersona = this.internalPersonTypes[0];
@@ -89,6 +91,7 @@ export class SolicitanteComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     console.log('Desde ngOnInit:', this.tipoPersona);
+    if (this.tipoPersona==='Soy trabajador') this.selectedPersonTypeId = 1;
     this.initForms(); // Initialize the form group first and synchronously
     this.loadDataOrEnableForm(); // Asynchronous data loading
     this.updateInternalPersonTypeLogic(); // Sets initial value and validators for internalPersonTypeId, CURP/RFC
@@ -118,6 +121,24 @@ export class SolicitanteComponent implements OnInit, OnChanges {
     }
   }
 
+  getPersonTypeIcon(): string {
+    return this.selectedInternalPersonType.nombre === 'Física' ? 'person' : 'business';
+  }
+
+  selectPersonType(typeId: number) {
+    this.selectedPersonTypeId = typeId;
+
+    // Actualizar el FormControl si usas Reactive Forms
+    this.solicitanteForm.get('internalPersonTypeId')?.setValue(typeId);
+
+    // Llamar al método original si lo necesitas
+    this.onInternalPersonTypeChange(typeId);
+  }
+
+
+
+
+
   initForms() {
     this.solicitanteForm = this.fb.group({
      internalPersonTypeId: [this.selectedInternalPersonType.id],
@@ -126,22 +147,21 @@ export class SolicitanteComponent implements OnInit, OnChanges {
       segundoApellido: [''], // Changed from apellidoMaterno, optional
       telefonoCel: ['', [Validators.required, Validators.pattern(AppRegex.TELEFONO)]], // Changed from telefono
       correo: ['', [Validators.required, , Validators.email, Validators.pattern(AppRegex.CORREO)]], // Changed from email
-      direccion: ['', Validators.required], // Stays as a local form field, not in PrecapturaPersona mapping for load/save
-
+      // direccion: ['', Validators.required],
       // Fields from PrecapturaPersona
-      curp: ['', Validators.pattern(AppRegex.CURP)], // Optional in model
-      rfc:['', Validators.pattern(AppRegex.RFC)],
-      fechaNacimiento: ['', Validators.required], // Required in model
-      numeroIdentificacion: [''], // Optional
-      generoID: [null], // Optional number
-      nombreOcupacion: [''], // Optional
-      esRepProcurador: [false], // Optional boolean
-      tipoIdentificacionID: [null], // Optional number
-      nacionalidadID: [null], // Optional number
-      escolaridadID: [null], // Optional number
-      estadoCivilID: [null], // Optional number
-      ocupacionID: [null], // Optional number
-      grupoVulnerableID: [null] // Optional number
+      curp: ['MOMD931207HBCRLN01', Validators.pattern(AppRegex.CURP)],
+      rfc:['MOM931207132', Validators.pattern(AppRegex.RFC)],
+      fechaNacimiento: ['', Validators.required],
+      numeroIdentificacion: [''],
+      generoID: [null],
+      nombreOcupacion: [''],
+      esRepProcurador: [false],
+      tipoIdentificacionID: [null],
+      nacionalidadID: [null],
+      escolaridadID: [null],
+      estadoCivilID: [null],
+      ocupacionID: [null],
+      grupoVulnerableID: [null]
     });
 
   }
@@ -302,7 +322,7 @@ export class SolicitanteComponent implements OnInit, OnChanges {
     return this.tipoPersona === 'Soy patron';
   }
 
-   onInternalPersonTypeChange(selectedId: number): void {
+  onInternalPersonTypeChange(selectedId: number): void {
     const selectedType = this.internalPersonTypes.find(type => type.id === selectedId);
     if (selectedType) {
       this.selectedInternalPersonType = selectedType;
