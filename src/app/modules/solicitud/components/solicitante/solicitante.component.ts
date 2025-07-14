@@ -28,6 +28,7 @@ import { CatalogoItem } from '../../../../interfaces/interface.catalogoitem';
 import { DireccionComponent } from '../direccion/direccion.component';
 import { PersonaComponent } from '../persona/persona.component';
 
+import {FormUtils} from '../../../../shared/utils/form-utils';
 @Component({
   selector: 'app-solicitante',
   standalone: true,
@@ -77,6 +78,9 @@ export class SolicitanteComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
   private _catalogosService = inject(CatalogosService);
   private _precapturaService = inject(PrecapturaPersonaService);
+
+  formUtils = FormUtils;
+
   selectedPersonTypeId: number | null = null;
 
 

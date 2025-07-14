@@ -15,8 +15,8 @@ export interface PrecapturaDomicilio {
     latitud:               string;
     longitud:              string;
     usuarioCaptura:        string;
-    fechaCaptura:          string | Date; // Usar string es más seguro para la deserialización inicial
+    fechaCaptura:          string | Date;
     usuarioModifico:       string;
     fechaModifico:         string | Date;
-    activo:                number; // Podría ser un booleano (0 o 1), pero 'number' es más seguro
+    activo:                number;
   }
