@@ -4,31 +4,9 @@
     <p>Cargando datos del solicitante...</p>
   </div>
 
-
-
   <div class="step-form" *ngIf="!isLoading">
-
-    <div class="form-row">
-      <div class="person-type-selection" *ngIf="isPatron()">
-          <label class="selection-label">Selecciona el Tipo de Persona?</label>
-          <div class="type-chips-container">
-              <button
-                *ngFor="let type of internalPersonTypes"
-                type="button"
-                class="type-chip"
-                [class.selected]="selectedPersonTypeId === type.id"
-                (click)="selectPersonType(type.id)"
-              >
-                <span>{{type.nombre}}</span>
-                <mat-icon class="check-icon" *ngIf="selectedPersonTypeId === type.id">check</mat-icon>
-              </button>
-          </div>
-      </div>
-    </div>
-
-
-    <div class="datos-solicitante" *ngIf="selectedPersonTypeId!=null">
-      <div class="show-person" *ngIf="selectedPersonTypeId==1">
+    <div class="datos-solicitante">
+      <div class="show-person">
         <form [formGroup]="solicitanteForm">
             <div class="form-row">
               <mat-form-field appearance="outline">
@@ -186,22 +164,9 @@
                   </mat-select>
               </mat-form-field>
             </div>
-          </form>
+        </form>
 
       </div>
-
-
-
-
-      <h3 class="form-section-title">
-          <strong>Domicilio del solicitante</strong>
-          <span class="small">Se recomienda poner un domicilio dentro de la zona de atención de la delegación que te corresponda por ubicación.</span>
-      </h3>
-
-      <app-direccion
-          [initialData]="datosDelDomicilio"
-          (formUpdate)="onDomicilioChange($event)">Algo..
-      </app-direccion>
 
 
       <div class="step-actions">

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject,Input, OnInit, signal, ViewChild } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -30,6 +30,8 @@ import { TipoUsuario , TipoPersona } from '../../../../interfaces/interface.tipo
 
 import { TipopersonaComponent } from "../../../online/components/tipopersona/tipopersona.component";
 import { SolicitanteComponent } from "../../components/solicitante/solicitante.component";
+import { DireccionComponent } from '../../components/direccion/direccion.component';
+import { EmpresaComponent } from '../../components/empresa/empresa.component';
 
 export interface SolicitudData {
   tipoSolicitud: string;
@@ -67,7 +69,9 @@ export interface CitadoData {
     MatDividerModule,
     MatCheckboxModule,
     SolicitanteComponent,
-    TipopersonaComponent
+    TipopersonaComponent,
+    DireccionComponent,
+    EmpresaComponent
   ],
   templateUrl: './solicitudes.component.html',
   styleUrls: ['./solicitudes.component.scss']
@@ -75,16 +79,20 @@ export interface CitadoData {
 export class SolicitudesComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
 
+
+  capturaDireccion:boolean = false;
+
   // Signals
 
   tipoPersonaSeleccionada = signal<string | null>(null);
+  precapturaPersonaID = signal<string | null>(null);
 
   masterForm: FormGroup;
   solicitanteForm: FormGroup;
   solicitudForm: FormGroup;
   citadoForm: FormGroup;
   tipopersonaForm: FormGroup;
-
+  datosDelDomicilio: FormGroup;
 
 
   datosCompletos = {
@@ -159,14 +167,11 @@ export class SolicitudesComponent implements OnInit {
 
 
   onTipoPersonaChange(tipo: string): void {
-    console.log('tipo',tipo)
     this.masterForm.get('tipoPersonaSeleccionada')?.setValue(tipo);
     this.tipoPersonaSeleccionada.set(tipo);
     setTimeout(() => {
       this.stepper.next();
     }, 150);
-    console.log('Tipo de persona seleccionado en el padre:', this.tipoPersonaSeleccionada());
-    console.log('Estado del formulario:', this.masterForm.value);
   }
 
   guardarSolicitud() {

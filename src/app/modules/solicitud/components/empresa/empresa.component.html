@@ -1,1 +1,133 @@
-<p>empresa works!</p>
+<div class="grap-form" [formGroup]="empresaForm">
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Cargando datos de la empresa...</p>
+  </div>
+
+  <div class="form-row">
+      <div class="person-type-selection">
+          <label class="selection-label">Selecciona el Tipo de Persona?</label>
+          <div class="type-chips-container">
+              <button
+                *ngFor="let type of internalPersonTypes"
+                type="button"
+                class="type-chip"
+                [class.selected]="selectedPersonTypeId === type.id"
+                (click)="selectPersonType(type.id)"
+              >
+                <span>{{type.nombre}}</span>
+                <mat-icon class="check-icon" *ngIf="selectedPersonTypeId === type.id">check</mat-icon>
+              </button>
+          </div>
+      </div>
+  </div>
+  <div class="step-form" *ngIf="!isLoading">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>RFC</mat-label>
+        <input matInput formControlName="rfc" placeholder="Ingrese el RFC" [readonly]="!isEditMode" maxlength="13">
+        @if(formUtils.isValidField(empresaForm,'rfc')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'rfc')}}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Razón Social</mat-label>
+        <input matInput formControlName="razonSocial" placeholder="Ingrese la Razón Social" [readonly]="!isEditMode">
+        @if(formUtils.isValidField(empresaForm,'razonSocial')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'razonSocial')}}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre Comercial</mat-label>
+        <input matInput formControlName="nombreComercial" placeholder="Ingrese el Nombre Comercial" [readonly]="!isEditMode">
+        @if(formUtils.isValidField(empresaForm,'nombreComercial')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'nombreComercial')}}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Régimen Jurídico</mat-label>
+        <mat-select formControlName="regimenJuridicoID">
+          <mat-option *ngFor="let regimen of regimenesJuridicos" [value]="regimen.id">
+            {{regimen.nombre}}
+          </mat-option>
+        </mat-select>
+        @if(formUtils.isValidField(empresaForm,'regimenJuridicoID')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'regimenJuridicoID')}}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Rama</mat-label>
+        <mat-select formControlName="ramaID">
+          <mat-option *ngFor="let rama of ramas" [value]="rama.id">
+            {{rama.nombre}}
+          </mat-option>
+        </mat-select>
+        @if(formUtils.isValidField(empresaForm,'ramaID')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'ramaID')}}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Giro</mat-label>
+        <mat-select formControlName="giroID">
+          <mat-option *ngFor="let giro of giros" [value]="giro.id">
+            {{giro.nombre}}
+          </mat-option>
+        </mat-select>
+        @if(formUtils.isValidField(empresaForm,'giroID')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'giroID')}}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Correo Electrónico</mat-label>
+        <input matInput formControlName="correo" type="email" placeholder="correo@ejemplo.com" [readonly]="!isEditMode">
+        @if(formUtils.isValidField(empresaForm,'correo')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'correo')}}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono" placeholder="Número de teléfono" [readonly]="!isEditMode">
+        @if(formUtils.isValidField(empresaForm,'telefono')){
+          <mat-error>{{formUtils.getFieldError(empresaForm,'telefono')}}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="step-actions">
+      <button *ngIf="precapturaEmpresaID && !isEditMode"
+              mat-stroked-button color="accent"
+              (click)="enableEditMode()"
+              class="edit-button">
+          <mat-icon>edit</mat-icon>
+          Habilitar Edición
+      </button>
+
+      <button *ngIf="isEditMode"
+              mat-raised-button color="primary"
+              [disabled]="empresaForm.invalid"
+              (click)="guardarEmpresa()">
+          {{ precapturaEmpresaID ? 'Guardar Cambios' : 'Siguiente' }}
+          <mat-icon>{{ precapturaEmpresaID ? 'save' : 'navigate_next' }}</mat-icon>
+      </button>
+
+      <button *ngIf="!precapturaEmpresaID && !isEditMode"
+              mat-raised-button color="primary"
+              (click)="enableEditMode()">
+          Agregar Empresa
+          <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

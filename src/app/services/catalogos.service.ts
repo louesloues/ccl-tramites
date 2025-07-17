@@ -133,5 +133,43 @@ export class CatalogosService {
     );
   }
 
+    getRegimenJuridico(): Observable<CatalogoItem[]> {
+    // Mock data, replace with actual HTTP call
+    const mockRegimen: CatalogoItem[] = [
+      { id: 1, nombre: 'Sociedad Anónima' },
+      { id: 2, nombre: 'Sociedad de Responsabilidad Limitada' },
+      { id: 3, nombre: 'Persona Física con Actividad Empresarial' }
+    ];
+    return new Observable(observer => {
+      observer.next(mockRegimen);
+      observer.complete();
+    });
+  }
+
+  getRamas(): Observable<CatalogoItem[]> {
+    // Mock data, replace with actual HTTP call
+    const mockRamas: CatalogoItem[] = [
+      { id: 1, nombre: 'Industria Manufacturera' },
+      { id: 2, nombre: 'Comercio' },
+      { id: 3, nombre: 'Servicios' }
+    ];
+    return new Observable(observer => {
+      observer.next(mockRamas);
+      observer.complete();
+    });
+  }
+
+  getGiros(): Observable<CatalogoItem[]> {
+    // Mock data, replace with actual HTTP call
+    const mockGiros: CatalogoItem[] = [
+      { id: 1, nombre: 'Fabricación de Alimentos' },
+      { id: 2, nombre: 'Venta al por Menor' },
+      { id: 3, nombre: 'Consultoría' }
+    ];
+    return new Observable(observer => {
+      observer.next(mockGiros);
+      observer.complete();
+    });
+  }
 
 }

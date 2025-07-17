@@ -1,271 +1,276 @@
- <div class="solicitudes-container">
-      <mat-card class="main-card sin-sombra">
+<div class="solicitudes-container">
+    <mat-card class="main-card sin-sombra">
         <mat-card-content>
-          <mat-stepper [linear]="true" #stepper>
-            <mat-step [stepControl]="tipopersonaForm">
-              <ng-template matStepLabel>Para comenzar, ¿cómo te identificas?</ng-template>
+            <mat-stepper [linear]="true" #stepper>
+                <mat-step [stepControl]="tipopersonaForm">
+                    <ng-template matStepLabel>Para comenzar, ¿cómo te identificas?</ng-template>
+                    <app-tipopersona (tipoChange)="onTipoPersonaChange($event)"></app-tipopersona>
+                </mat-step>
 
-              <!-- El contenido del paso va aquí, fuera de la etiqueta -->
-              <app-tipopersona (tipoChange)="onTipoPersonaChange($event)"></app-tipopersona>
-            </mat-step>
+                <mat-step [stepControl]="solicitanteForm">
+                    <ng-template matStepLabel>Solicitante</ng-template>
+                    <ng-template matStepContent>
+                        @if (tipoPersonaSeleccionada()==='Soy patron') {
+                          <app-empresa [precapturaPersonaID]="precapturaPersonaID()"></app-empresa>
+                        }
+                        @else {
+                          <app-solicitante [precapturaPersonaID]="precapturaPersonaID()"></app-solicitante>
+                        }
+                        <h3 class="form-section-title">
+                            <strong>Domicilio del solicitante</strong>
+                            <span class="small">Se recomienda poner un domicilio dentro de la zona de atención de la
+                                delegación que te corresponda por ubicación.</span>
+                        </h3>
+                        <app-direccion></app-direccion>
+                    </ng-template>
+                </mat-step>
 
-            <!-- Paso 1: Solicitante -->
-            <mat-step [stepControl]="solicitanteForm">
-              <ng-template matStepLabel>Solicitante</ng-template>
+                <mat-step [stepControl]="solicitudForm">
+                    <ng-template matStepLabel>Datos de la Solicitud</ng-template>
+                    <form [formGroup]="solicitudForm" class="step-form">
+                        <h3>Información de la Solicitud</h3>
 
-              <!-- Envolvemos el contenido en un ng-template con matStepContent -->
-              <ng-template matStepContent>
-                <app-solicitante [tipoPersona]="tipoPersonaSeleccionada()"></app-solicitante>
-              </ng-template>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Tipo de Solicitud</mat-label>
+                                <mat-select formControlName="tipoSolicitud">
+                                    <mat-option value="administrativa">Administrativa</mat-option>
+                                    <mat-option value="tecnica">Técnica</mat-option>
+                                    <mat-option value="comercial">Comercial</mat-option>
+                                    <mat-option value="soporte">Soporte</mat-option>
+                                    <mat-option value="otros">Otros</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="solicitudForm.get('tipoSolicitud')?.hasError('required')">
+                                    Seleccione un tipo de solicitud
+                                </mat-error>
+                            </mat-form-field>
 
-            </mat-step>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Prioridad</mat-label>
+                                <mat-select formControlName="prioridad">
+                                    <mat-option value="baja">Baja</mat-option>
+                                    <mat-option value="media">Media</mat-option>
+                                    <mat-option value="alta">Alta</mat-option>
+                                    <mat-option value="urgente">Urgente</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="solicitudForm.get('prioridad')?.hasError('required')">
+                                    Seleccione una prioridad
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
 
-            <!-- Paso 2: Datos de la Solicitud -->
-            <mat-step [stepControl]="solicitudForm">
-              <ng-template matStepLabel>Datos de la Solicitud</ng-template>
-              <form [formGroup]="solicitudForm" class="step-form">
-                <h3>Información de la Solicitud</h3>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Fecha de Solicitud</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="fechaSolicitud">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="solicitudForm.get('fechaSolicitud')?.hasError('required')">
+                                La fecha es requerida
+                            </mat-error>
+                        </mat-form-field>
 
-                <div class="form-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Tipo de Solicitud</mat-label>
-                    <mat-select formControlName="tipoSolicitud">
-                      <mat-option value="administrativa">Administrativa</mat-option>
-                      <mat-option value="tecnica">Técnica</mat-option>
-                      <mat-option value="comercial">Comercial</mat-option>
-                      <mat-option value="soporte">Soporte</mat-option>
-                      <mat-option value="otros">Otros</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="solicitudForm.get('tipoSolicitud')?.hasError('required')">
-                      Seleccione un tipo de solicitud
-                    </mat-error>
-                  </mat-form-field>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Motivo de la Solicitud</mat-label>
+                            <textarea matInput formControlName="motivo" rows="4"
+                                placeholder="Describa detalladamente el motivo de su solicitud"></textarea>
+                            <mat-error *ngIf="solicitudForm.get('motivo')?.hasError('required')">
+                                El motivo es requerido
+                            </mat-error>
+                        </mat-form-field>
 
-                  <mat-form-field appearance="outline">
-                    <mat-label>Prioridad</mat-label>
-                    <mat-select formControlName="prioridad">
-                      <mat-option value="baja">Baja</mat-option>
-                      <mat-option value="media">Media</mat-option>
-                      <mat-option value="alta">Alta</mat-option>
-                      <mat-option value="urgente">Urgente</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="solicitudForm.get('prioridad')?.hasError('required')">
-                      Seleccione una prioridad
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Observaciones</mat-label>
+                            <textarea matInput formControlName="observaciones" rows="3"
+                                placeholder="Observaciones adicionales (opcional)"></textarea>
+                        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Fecha de Solicitud</mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="fechaSolicitud">
-                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                  <mat-error *ngIf="solicitudForm.get('fechaSolicitud')?.hasError('required')">
-                    La fecha es requerida
-                  </mat-error>
-                </mat-form-field>
+                        <div class="step-actions">
+                            <button mat-button (click)="stepper.previous()">
+                                <mat-icon>navigate_before</mat-icon>
+                                Anterior
+                            </button>
+                            <button mat-raised-button color="primary" [disabled]="!solicitudForm.valid"
+                                (click)="guardarSolicitud(); stepper.next()">
+                                Siguiente
+                                <mat-icon>navigate_next</mat-icon>
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
 
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Motivo de la Solicitud</mat-label>
-                  <textarea matInput formControlName="motivo" rows="4"
-                            placeholder="Describa detalladamente el motivo de su solicitud"></textarea>
-                  <mat-error *ngIf="solicitudForm.get('motivo')?.hasError('required')">
-                    El motivo es requerido
-                  </mat-error>
-                </mat-form-field>
+                <mat-step [stepControl]="citadoForm">
+                    <ng-template matStepLabel>Citado</ng-template>
+                    <form [formGroup]="citadoForm" class="step-form">
+                        <h3>Datos del Citado</h3>
 
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Observaciones</mat-label>
-                  <textarea matInput formControlName="observaciones" rows="3"
-                            placeholder="Observaciones adicionales (opcional)"></textarea>
-                </mat-form-field>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Nombre</mat-label>
+                                <input matInput formControlName="nombreCitado" placeholder="Nombre del citado">
+                                <mat-error *ngIf="citadoForm.get('nombreCitado')?.hasError('required')">
+                                    El nombre es requerido
+                                </mat-error>
+                            </mat-form-field>
 
-                <div class="step-actions">
-                  <button mat-button (click)="stepper.previous()">
-                    <mat-icon>navigate_before</mat-icon>
-                    Anterior
-                  </button>
-                  <button mat-raised-button color="primary"
-                          [disabled]="!solicitudForm.valid"
-                          (click)="guardarSolicitud(); stepper.next()">
-                    Siguiente
-                    <mat-icon>navigate_next</mat-icon>
-                  </button>
-                </div>
-              </form>
-            </mat-step>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Apellido Paterno</mat-label>
+                                <input matInput formControlName="apellidoPaternoCitado" placeholder="Apellido paterno">
+                                <mat-error *ngIf="citadoForm.get('apellidoPaternoCitado')?.hasError('required')">
+                                    El apellido paterno es requerido
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
 
-            <!-- Paso 3: Citado -->
-            <mat-step [stepControl]="citadoForm">
-              <ng-template matStepLabel>Citado</ng-template>
-              <form [formGroup]="citadoForm" class="step-form">
-                <h3>Datos del Citado</h3>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Apellido Materno</mat-label>
+                                <input matInput formControlName="apellidoMaternoCitado" placeholder="Apellido materno">
+                                <mat-error *ngIf="citadoForm.get('apellidoMaternoCitado')?.hasError('required')">
+                                    El apellido materno es requerido
+                                </mat-error>
+                            </mat-form-field>
 
-                <div class="form-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Nombre</mat-label>
-                    <input matInput formControlName="nombreCitado" placeholder="Nombre del citado">
-                    <mat-error *ngIf="citadoForm.get('nombreCitado')?.hasError('required')">
-                      El nombre es requerido
-                    </mat-error>
-                  </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Teléfono</mat-label>
+                                <input matInput formControlName="telefonoCitado" placeholder="Número de teléfono">
+                                <mat-error *ngIf="citadoForm.get('telefonoCitado')?.hasError('required')">
+                                    El teléfono es requerido
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
 
-                  <mat-form-field appearance="outline">
-                    <mat-label>Apellido Paterno</mat-label>
-                    <input matInput formControlName="apellidoPaternoCitado" placeholder="Apellido paterno">
-                    <mat-error *ngIf="citadoForm.get('apellidoPaternoCitado')?.hasError('required')">
-                      El apellido paterno es requerido
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput formControlName="emailCitado" type="email"
+                                    placeholder="correo@ejemplo.com">
+                                <mat-error *ngIf="citadoForm.get('emailCitado')?.hasError('required')">
+                                    El email es requerido
+                                </mat-error>
+                                <mat-error *ngIf="citadoForm.get('emailCitado')?.hasError('email')">
+                                    Ingrese un email válido
+                                </mat-error>
+                            </mat-form-field>
 
-                <div class="form-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Apellido Materno</mat-label>
-                    <input matInput formControlName="apellidoMaternoCitado" placeholder="Apellido materno">
-                    <mat-error *ngIf="citadoForm.get('apellidoMaternoCitado')?.hasError('required')">
-                      El apellido materno es requerido
-                    </mat-error>
-                  </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Relación</mat-label>
+                                <mat-select formControlName="relacion">
+                                    <mat-option value="familiar">Familiar</mat-option>
+                                    <mat-option value="amigo">Amigo</mat-option>
+                                    <mat-option value="conocido">Conocido</mat-option>
+                                    <mat-option value="colega">Colega</mat-option>
+                                    <mat-option value="otro">Otro</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="citadoForm.get('relacion')?.hasError('required')">
+                                    Seleccione una relación
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
 
-                  <mat-form-field appearance="outline">
-                    <mat-label>Teléfono</mat-label>
-                    <input matInput formControlName="telefonoCitado" placeholder="Número de teléfono">
-                    <mat-error *ngIf="citadoForm.get('telefonoCitado')?.hasError('required')">
-                      El teléfono es requerido
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Dirección</mat-label>
+                            <textarea matInput formControlName="direccionCitado" rows="3"
+                                placeholder="Dirección completa"></textarea>
+                            <mat-error *ngIf="citadoForm.get('direccionCitado')?.hasError('required')">
+                                La dirección es requerida
+                            </mat-error>
+                        </mat-form-field>
 
-                <div class="form-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName="emailCitado" type="email" placeholder="correo@ejemplo.com">
-                    <mat-error *ngIf="citadoForm.get('emailCitado')?.hasError('required')">
-                      El email es requerido
-                    </mat-error>
-                    <mat-error *ngIf="citadoForm.get('emailCitado')?.hasError('email')">
-                      Ingrese un email válido
-                    </mat-error>
-                  </mat-form-field>
+                        <div class="step-actions">
+                            <button mat-button (click)="stepper.previous()">
+                                <mat-icon>navigate_before</mat-icon>
+                                Anterior
+                            </button>
+                            <button mat-raised-button color="primary" [disabled]="!citadoForm.valid"
+                                (click)="guardarCitado(); stepper.next()">
+                                Siguiente
+                                <mat-icon>navigate_next</mat-icon>
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
 
-                  <mat-form-field appearance="outline">
-                    <mat-label>Relación</mat-label>
-                    <mat-select formControlName="relacion">
-                      <mat-option value="familiar">Familiar</mat-option>
-                      <mat-option value="amigo">Amigo</mat-option>
-                      <mat-option value="conocido">Conocido</mat-option>
-                      <mat-option value="colega">Colega</mat-option>
-                      <mat-option value="otro">Otro</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="citadoForm.get('relacion')?.hasError('required')">
-                      Seleccione una relación
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                <mat-step>
+                    <ng-template matStepLabel>Resumen</ng-template>
+                    <div class="resumen-container">
+                        <h3>Resumen de la Solicitud</h3>
+                        <p class="resumen-subtitle">Revise toda la información antes de enviar</p>
 
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Dirección</mat-label>
-                  <textarea matInput formControlName="direccionCitado" rows="3" placeholder="Dirección completa"></textarea>
-                  <mat-error *ngIf="citadoForm.get('direccionCitado')?.hasError('required')">
-                    La dirección es requerida
-                  </mat-error>
-                </mat-form-field>
+                        <mat-card class="resumen-card">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>person</mat-icon>
+                                    Datos del Solicitante
+                                </mat-card-title>
+                                <button mat-icon-button (click)="editarPaso(0)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <p><strong>Nombre:</strong> {{ datosCompletos.solicitante.nombre }} {{
+                                    datosCompletos.solicitante.primerApellido }} {{
+                                    datosCompletos.solicitante.segundoApellido }}</p>
+                                <p><strong>Teléfono:</strong> {{ datosCompletos.solicitante.telefonoCel }}</p>
+                                <p><strong>Email:</strong> {{ datosCompletos.solicitante.correo }}</p>
+                            </mat-card-content>
+                        </mat-card>
 
-                <div class="step-actions">
-                  <button mat-button (click)="stepper.previous()">
-                    <mat-icon>navigate_before</mat-icon>
-                    Anterior
-                  </button>
-                  <button mat-raised-button color="primary"
-                          [disabled]="!citadoForm.valid"
-                          (click)="guardarCitado(); stepper.next()">
-                    Siguiente
-                    <mat-icon>navigate_next</mat-icon>
-                  </button>
-                </div>
-              </form>
-            </mat-step>
+                        <mat-card class="resumen-card">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>assignment</mat-icon>
+                                    Datos de la Solicitud
+                                </mat-card-title>
+                                <button mat-icon-button (click)="editarPaso(1)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <p><strong>Tipo:</strong> {{ datosCompletos.solicitud.tipoSolicitud | titlecase }}</p>
+                                <p><strong>Prioridad:</strong> {{ datosCompletos.solicitud.prioridad | titlecase }}</p>
+                                <p><strong>Fecha:</strong> {{ datosCompletos.solicitud.fechaSolicitud |
+                                    date:'dd/MM/yyyy' }}</p>
+                                <p><strong>Motivo:</strong> {{ datosCompletos.solicitud.motivo }}</p>
+                                <p *ngIf="datosCompletos.solicitud.observaciones"><strong>Observaciones:</strong> {{
+                                    datosCompletos.solicitud.observaciones }}</p>
+                            </mat-card-content>
+                        </mat-card>
 
-            <!-- Paso 4: Resumen -->
-            <mat-step>
-              <ng-template matStepLabel>Resumen</ng-template>
-              <div class="resumen-container">
-                <h3>Resumen de la Solicitud</h3>
-                <p class="resumen-subtitle">Revise toda la información antes de enviar</p>
+                        <mat-card class="resumen-card">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>person_outline</mat-icon>
+                                    Datos del Citado
+                                </mat-card-title>
+                                <button mat-icon-button (click)="editarPaso(2)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <p><strong>Nombre:</strong> {{ datosCompletos.citado.nombreCitado }} {{
+                                    datosCompletos.citado.apellidoPaternoCitado }} {{
+                                    datosCompletos.citado.apellidoMaternoCitado }}</p>
+                                <p><strong>Teléfono:</strong> {{ datosCompletos.citado.telefonoCitado }}</p>
+                                <p><strong>Email:</strong> {{ datosCompletos.citado.emailCitado }}</p>
+                                <p><strong>Relación:</strong> {{ datosCompletos.citado.relacion | titlecase }}</p>
+                                <p><strong>Dirección:</strong> {{ datosCompletos.citado.direccionCitado }}</p>
+                            </mat-card-content>
+                        </mat-card>
 
-                <!-- Resumen Solicitante -->
-                <mat-card class="resumen-card">
-                  <mat-card-header>
-                    <mat-card-title>
-                      <mat-icon>person</mat-icon>
-                      Datos del Solicitante
-                    </mat-card-title>
-                    <button mat-icon-button (click)="editarPaso(0)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </mat-card-header>
-                  <mat-card-content>
-                    <p><strong>Nombre:</strong> {{ datosCompletos.solicitante.nombre }} {{ datosCompletos.solicitante.primerApellido }} {{ datosCompletos.solicitante.segundoApellido }}</p>
-                    <p><strong>Teléfono:</strong> {{ datosCompletos.solicitante.telefonoCel }}</p>
-                    <p><strong>Email:</strong> {{ datosCompletos.solicitante.correo }}</p>
-                  </mat-card-content>
-                </mat-card>
+                        <div class="step-actions final-actions">
+                            <button mat-button (click)="stepper.previous()">
+                                <mat-icon>navigate_before</mat-icon>
+                                Anterior
+                            </button>
+                            <button mat-raised-button color="accent" (click)="enviarSolicitud()">
+                                <mat-icon>send</mat-icon>
+                                Enviar Solicitud
+                            </button>
+                        </div>
+                    </div>
+                </mat-step>
 
-                <!-- Resumen Solicitud -->
-                <mat-card class="resumen-card">
-                  <mat-card-header>
-                    <mat-card-title>
-                      <mat-icon>assignment</mat-icon>
-                      Datos de la Solicitud
-                    </mat-card-title>
-                    <button mat-icon-button (click)="editarPaso(1)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </mat-card-header>
-                  <mat-card-content>
-                    <p><strong>Tipo:</strong> {{ datosCompletos.solicitud.tipoSolicitud | titlecase }}</p>
-                    <p><strong>Prioridad:</strong> {{ datosCompletos.solicitud.prioridad | titlecase }}</p>
-                    <p><strong>Fecha:</strong> {{ datosCompletos.solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}</p>
-                    <p><strong>Motivo:</strong> {{ datosCompletos.solicitud.motivo }}</p>
-                    <p *ngIf="datosCompletos.solicitud.observaciones"><strong>Observaciones:</strong> {{ datosCompletos.solicitud.observaciones }}</p>
-                  </mat-card-content>
-                </mat-card>
-
-                <!-- Resumen Citado -->
-                <mat-card class="resumen-card">
-                  <mat-card-header>
-                    <mat-card-title>
-                      <mat-icon>person_outline</mat-icon>
-                      Datos del Citado
-                    </mat-card-title>
-                    <button mat-icon-button (click)="editarPaso(2)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </mat-card-header>
-                  <mat-card-content>
-                    <p><strong>Nombre:</strong> {{ datosCompletos.citado.nombreCitado }} {{ datosCompletos.citado.apellidoPaternoCitado }} {{ datosCompletos.citado.apellidoMaternoCitado }}</p>
-                    <p><strong>Teléfono:</strong> {{ datosCompletos.citado.telefonoCitado }}</p>
-                    <p><strong>Email:</strong> {{ datosCompletos.citado.emailCitado }}</p>
-                    <p><strong>Relación:</strong> {{ datosCompletos.citado.relacion | titlecase }}</p>
-                    <p><strong>Dirección:</strong> {{ datosCompletos.citado.direccionCitado }}</p>
-                  </mat-card-content>
-                </mat-card>
-
-                <div class="step-actions final-actions">
-                  <button mat-button (click)="stepper.previous()">
-                    <mat-icon>navigate_before</mat-icon>
-                    Anterior
-                  </button>
-                  <button mat-raised-button color="accent" (click)="enviarSolicitud()">
-                    <mat-icon>send</mat-icon>
-                    Enviar Solicitud
-                  </button>
-                </div>
-              </div>
-            </mat-step>
-
-          </mat-stepper>
+            </mat-stepper>
         </mat-card-content>
-      </mat-card>
-  </div>
+    </mat-card>
+</div>

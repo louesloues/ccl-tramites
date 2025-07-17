@@ -34,9 +34,8 @@ export class AuthInterceptor implements HttpInterceptor {
     const authToken = this.authService.authToken(); // Obtenemos el valor del signal
 
     // 3. Si hay token, clonamos la petición y añadimos la cabecera.
-    console.log(`Añadiendo token de autenticación: ${authToken}`);
     if (authToken) {
-      console.log(`Añadiendo token de autenticación: ${authToken}`);
+      // console.log(`Añadiendo token de autenticación: ${authToken}`);
       const authReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${authToken}`,

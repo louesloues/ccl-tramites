@@ -6,6 +6,15 @@ mat-card-content{
   box-shadow: none !important;
 }
 
+.small{
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: bold;
+  font-style: italic;
+}
+
+
  @media (max-width: 768px) {
       .form-row {
         flex-direction: column;
@@ -17,3 +26,5 @@ mat-card-content{
         padding: 0.7rem;
       }
     }
+
+
